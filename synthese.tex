@@ -1,0 +1,386 @@
+\documentclass[10pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage[french]{babel}
+\usepackage{amssymb}
+
+\usepackage[cm]{fullpage}
+
+\usepackage{listings}
+\usepackage{color}
+\usepackage{verbatim}
+\usepackage{framed}
+\usepackage{ulem}
+
+\usepackage{graphicx}
+\newcommand{\ens}[1]{\lbrace #1 \rbrace}
+\newcommand{\abs}[1]{\vert #1 \vert}
+
+\newcommand{\union}{\cup}
+\newcommand{\intersection}{\cap}
+\newcommand{\mand}{\wedge}
+\newcommand{\mor}{\vee}
+
+\newcommand{\bigoh}{\mathcal{O}}
+
+\newcommand{\dessin}[1]{\begin{center}\includegraphics[scale=0.6]{images/#1.png}\end{center}}
+\newcommand{\dessinS}[2]{\begin{center}\includegraphics[scale=#2]{images/#1.png}\end{center}}
+
+\newtheorem{theorem}{Théorème}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\newcommand{\qed}{\nobreak \ifvmode \relax \else
+      \ifdim\lastskip<1.5em \hskip-\lastskip
+      \hskip1.5em plus0em minus0.5em \fi \nobreak
+      \vrule height0.75em width0.5em depth0.25em\fi}
+
+
+\newenvironment{proof}[1][Preuve]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}]}{\qed\end{trivlist}}
+\newenvironment{definition}[1][Définition]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+\newenvironment{example}[1][Exemple]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+\newenvironment{remark}[1][Remark]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+
+\title{Synthèse Apprentissage inductif appliqué}
+\author{Jean-Philippe Collette}
+
+\makeindex
+\begin{document}	
+	\maketitle
+	\tableofcontents
+	
+\chapter{Introduction}
+
+L'apprentissage consiste à
+
+\begin{itemize}
+	\item améliorer les performances d'un ordinateur dans certaines tâches, avec de l'expérience ;
+	\item extraire un modèle d'un système en se basant sur les observations de ce systèmes dans certaines situations ;
+	\item créer un modèle, c'est-à-dire une relation entre les variables utilisées pour décrire le système.
+\end{itemize}
+
+Les deux buts principaux de l'apprentissage sont la prédiction et la meilleure compréhension d'un système.
+
+L'apprentissage est utilise quand il n'y a pas d'expertise humaine, quand les humains ne sont pas capables d'expliquer leur expertise, quand les solutions changent au cours du temps ou quand les solutions nécessitent d'être adaptées à des cas particuliers.
+
+\dessin{1}
+
+L'exploration de données se déroulent en plusieurs étapes :
+
+\begin{enumerate}
+	\item Génération de données ;
+	\item Préprocessing : normalisation des valeurs, traitement des valeurs manquantes, sélections d'une composante, etc ;
+	\item Apprentissage : développement d'une hypothèse, choix d'un algorithme d'apprentissage, etc ;
+	\item Validation d'hypothèse : validation croisée, déploiement du modèle, etc.
+\end{enumerate}
+
+	\section{Glossaire}
+	
+	\dessin{2}
+
+
+\chapter*{Apprentissage supervisé}
+	
+	\section{Introduction}
+L'apprentissage supervisé consiste, à partir de la base de donnée (learning sample, échantillon de test), à trouver une fonction $f$ qui prend entrée les variables du problème et qui approxime au mieux la sortie :
+
+$$\hat{Y} = f(X_1, X_2, X_3, X_4)$$
+
+Plus formellement, l'apprentissage consiste, à partir d'un échantillon d'apprentissage $\ens{(x_i, y_i) \vert i = 1, \dots , N}$, avec $x_i \in \mathcal{X}$ et $y_i \in \mathcal{Y}$, à trouver une fonction $f : \mathcal{X} \rightarrow \mathcal{Y}$ qui minimise la fonction de probabilité de perte $l : \mathcal{Y} \times \mathcal{Y} \rightarrow \mathbb{R}$ sur la distribution jointe des paires d'entrées sorties : $E_{x, y} \ens{l(f(x), y)}$.
+
+Cette fonction de perte $l$ prend en entrée deux sorties $Y$ et retourne 1 si elles sont équivalentes, 0 sinon.
+
+Lorsque la sortie est une valeur symbolique, on parle de classification. Si la sortie est une valeur numérique, on parle de régression.
+
+Un modèle sera déterministe s'il est parfait, c'est-à-dire s'il a une règle de classification qui ne commet par d'erreur.
+
+	\section{Sélection de modèle}
+	
+	Un algorithme d'apprentissage est défini par
+	
+	\begin{itemize}
+		\item une famille de modèles candidats (un espace d'hypothèses $H$),
+		\item une mesure de la qualité d'un modèle, et
+		\item une stratégie d'optimisation.
+	\end{itemize}
+	
+	L'algorithme va ainsi, à partir de l'échantillon d'apprentissage, retourner la fonction $h$ de $H$ de meilleur qualité.
+	
+		\subsection{Modèle linéaire}
+		
+		\dessin{3}
+		
+		On a par exemple
+		
+		$$h(X_1, X_2) = \left\{
+    \begin{array}{ll}
+        \text{malade} & \text{si } w_0 + w_1X_1 + w_2X_2 > 0 \\
+        \text{sain} & \text{sinon.}
+    \end{array}
+\right.$$
+
+		La phase d'apprentissage aura pour but de trouver les meilleurs $w_0$, $w_1$ et $w_2$ ; un modèle linéaire ne possède que trois paramètres.
+		
+		\subsection{Modèle quadratique}
+		\dessin{4}
+		
+		$$h(X_1, X_2) = \left\{
+    \begin{array}{ll}
+        \text{malade} & \text{si } w_0 + w_1X_1 + w_2X_2 + \textcolor{red}{w_3 X_1^2 + W_4X_2^2} > 0 \\
+        \text{sain} & \text{sinon.}
+    \end{array}
+\right.$$
+
+		La phase d'apprentissage aura pour but de trouver les meilleurs $w_0$, $w_1$, $w_2$, $w_3$ et $w_4$.
+		
+		Par facilité, on peut étendre la base de données, en ajoutant des colonnes contenant $X_1^2$ et $X_2^2$.
+		
+		Un modèle quadratique est au moins aussi bon que le meilleur modèle linéaire, car on peut rendre un modèle quadratique linéaire avec $w_3 = w_4 = 0$.
+
+
+		\subsection{Modèle d'un réseau de neurones artificiels}
+		\dessin{5}
+		$$h(X_1, X_2) = \left\{
+    \begin{array}{ll}
+        \text{malade} & \text{si une fonction complexe de } X_1, X_2 > 0 \\
+        \text{sain} & \text{sinon.}
+    \end{array}
+\right.$$
+		La phase d'apprentissage aura pour but de trouver les paramètres numériques de cette fonction.
+		
+	\section{Méthodes de validation}
+	
+	Plusieurs modèles sont possibles, le tout est de sélectionner le bon. On peut s'arranger pour qu'il minimise l'erreur de re-substitution, ou l'erreur de généralisation.
+	
+	L'erreur de re-substitution (LS error) est l'erreur obtenue en appliquant le modèle à l'échantillon d'apprentissage. Plus le modèle est complexe et plus cette erreur sera proche de 0.
+	
+	L'erreur de généralisation est l'erreur obtenue sur la prédiction de nouvelles données.
+	
+		\subsection{Méthode test-set}
+		
+		L'idée est de choisir 30\% des données , ce qui constituera l'échantillon de test. Le reste est utilisé comme échantillon d'apprentissage. Ensuite, le modèle est créé sur base de l'échantillon d'apprentissage, et les performances sont testées sur l'échantillon de test.
+		
+		\begin{itemize}
+			\item[+] très simple à mettre en place ;
+			\item[+] efficace ;
+			\item[-] les données d'apprentissage sont moindres ;
+			\item[-] instable lorsque la base de données est petite.
+		\end{itemize}
+		
+		Cette méthode est à utiliser pour des très petits ensembles de données ($< 100)$).
+		
+		En comparant les modèles précédents, on a les résultats suivants.
+		
+		\dessin{6}
+		
+		On voit que le meilleur modèle d'apprentissage sur l'échantillon de test n'est pas nécessairement le meilleur en général.
+		
+		Il y a un phénomène d'overfitting avec le réseau de neurones artificiels. Il se produit quand l'algorithme d'apprentissage apprend sur du bruit.
+		
+		\subsection{Validation Leave-one-out Cross}
+		
+		Pour $k = 1$ jusqu'à $N$ :
+		
+		\begin{enumerate}
+			\item retirer le $k$ème objet de l'échantillon d'apprentissage ;
+			\item apprendre le modèle ;
+			\item appliquer le modèle pour avoir une prédiction sur le $k$ème objet.
+		\end{enumerate}
+		
+		L'erreur est reportée.
+		
+		\begin{itemize}
+			\item[+] ne gaspille pas les données ;
+			\item[+] très coûteux, car il faut entraîner $N$ modèles ;
+			\item[+] la variance est grande.
+		\end{itemize}
+		
+		Cette méthode est à utiliser pour des grands ensembles de données ($> 1000$).
+		
+		\subsection{Validation $k$-fold Cross}
+		
+		L'idée est de partitionner l'ensemble des données en $k$ sous-ensembles.
+		
+		Pour chaque sous-ensemble :
+		
+		\begin{itemize}
+			\item on apprend le modèle sur les objets qui ne sont pas dans le sous-ensemble ;
+			\item on calcule le taux d'erreur sur les objets du sous-ensemble.
+		\end{itemize}
+		
+		Ensuite, on reporte l'erreur moyenne sur les $k$ sous-ensembles.
+		
+		A noter que si $k = $ le nombre d'objets, on a une validation de type leave-one-out cross.
+		
+		Cette méthode est un compromis entre les deux précédentes. Elle est à utiliser pour des petits ensembles de données (100 - 1000).
+		
+		\subsection{Impact de la complexité d'un modèle avec une validation croisée}
+		
+		\dessin{7}
+		
+		Il vaut mieux utilise rune petite complexité si on ne dispose pas de beaucoup d'échantillons.
+		
+		Avec une complexité fixe, on obtient le comportement suivant.
+		
+		\dessin{8}
+		
+		Le contrôle de la complexité s'appelle la régulation ou le lissage (smoothing). Il peut être contrôlé de plusieurs façons :
+		
+		\begin{itemize}
+			\item en variant la taille de l'espace d'hypothèse, autrement dit le nombre de modèles candidats, la valeur des paramètres, etc ;
+			\item avec un critère de performance : on oppose les performances de l'ensemble d'apprentissage et la valeur des paramètres, autrement dit minimiser
+			
+			$$\text{Err}(LS) + \lambda C(\text{model})$$
+			
+			\item avec des algorithmes d'optimisation : le nombre d'itération, la nature du problème d'optimisation, etc.
+		\end{itemize}
+		
+		Le choix d'un algorithme se fait en comparant leur taux d'erreur avec une méthode de type cross-validation, sur des sous-échantillons. Ensuite, l'algorithme avec le plus petit taux est utilisé comme modèle prédicatif, sur toutes les données.
+		
+		L'utilisation intensive de la méthode CV peut entraîner du sur-apprentissage. En effet, plus on compare de modèles complexes, plus on a une chance d'en trouver un qui convient pour les données.
+		
+		La solution pour éviter cela est de réserver un ensemble de test additionnel (ou de les générer), et de l'utiliser pour tester les performances du modèle final.
+		
+		\subsection{Mesure de performances}
+		
+		Le choix d'une mesure de l'erreur ou de la qualité dépend fortement de l'application. On peut également définir des autres critères pour évaluer un modèle.
+		
+		Par exemple, en classification binaire, on peut définir une tableau de contingence/matrice de confusion.
+		
+		\dessin{9}
+		
+		On peut alors définir plusieurs critères :
+		
+		\begin{itemize}
+			\item le taux d'erreur : $\frac{FP + FN}{N + P}$
+			\item l'exactitude : $\frac{TP + TN}{N + P} = 1 - \text{taux d'erreur}$
+			\item la sensibilité (ou le rappel/recall) : $\frac{TP}{P}$
+			\item la spécificité : $\frac{TN}{TN + FP}$
+			\item la précision (PPV) : $\frac{TP}{TP + FP}$
+		\end{itemize}
+		
+		\dessin{10}
+		
+	\section{Algorithmes d'apprentissage supervisé}
+	
+	Pour comparer des algorithmes d'apprentissage, on définit trois critères :
+	
+	\begin{itemize}
+		\item l'exactitude, mesurée par l'erreur de généralisation (et estimée par une méthode CV) ;
+		\item l'efficacité, mesurée par les temps de calcul et l'aspect scalaire de l'apprentissage et du test ;
+		\item l'interprétabilité, la compréhension apportée par le modèle de la relation entre les entrées et la sortie.
+	\end{itemize}
+	
+	Malheureusement, il y a généralement un tradeoff à faire entre ces critères.
+		\subsection{$k$-NN - méthode des $k$ème plus proche voisin}
+		
+		Cette méthode consiste à prédire la sortie en se basant sur les plus proches voisins de l'entrée.
+		
+		\dessin{11}
+		
+		Pour ce faire, on trouve les $k$ plus proches voisins, en utilisant la distance euclidienne. La sortie sera,
+		
+		\begin{itemize}
+			\item dans le cadre d'une classification, la classe la plus fréquente,
+			\item dans le cadre d'une régression, la valeur moyenne.
+		\end{itemize}
+		
+		\dessin{12}
+		
+		\begin{itemize}
+			\item[+] très simple ;
+			\item[+] peut être adapté pour tout type de données, en changeant la mesure de la distance ;
+			\item[-] choisir une bonne mesure de la distance est un problème compliqué ;
+			\item[-] cet algorithme est très sensible à la présence de bruit ;
+			\item[-] lent.
+		\end{itemize}
+	
+		\subsection{Méthodes linéaires}
+		
+		Le but est de trouver un modèle qui est combinaison linéaire des entrées.
+		
+		\begin{itemize}
+			\item Pour une régression, $y = w_0 + w_1 x_1 + w_2 x_2 + \dots + w_n x_n$
+			\item Pour une classification, $y = c_1$ si $w_0 + w_1 x_1 + w_2 x_2 + \dots + w_n x_n > 0$, $c_2$ sinon.
+		\end{itemize}
+		
+		\dessin{13}
+		
+		Plusieurs méthodes existent pour trouver les coefficients $w_i$ : 
+		
+		\begin{itemize}
+			\item Régression : least-square regression, ridge regression, partial least square, support vector regression, LASSO, \dots
+			\item Classification : linear discriminant analysis, PLS-discriminant analysis, support vector machines, \dots \\
+		\end{itemize} 
+		
+		\begin{itemize}
+			\item[+] simple ;
+			\item[+] il existe des variantes rapides et scalable ;
+			\item[+] cette méthode offre des modèles interprétatifs, à travers des poids variables (magnitude et signe) ;
+			\item[-] parfois pas aussi précis que des autres méthodes (non linéaires).
+		\end{itemize}
+		
+			\subsubsection{Ridge regression}
+			
+			On doit trouver $w$ qui minimise (avec $\lambda > 0$) :
+			
+			$$\sum_i (y_i - wx_i)^2 + \lambda \vert \vert w \vert \vert^2$$
+			
+			Dans le cadre d'un algèbre simple, si $X$ est la matrice d'entrée et $y$ le vecteur de sortie, la solution est donnée par
+			
+			$$w^r = (X^T X + \lambda I)^{-1}X^Ty$$
+			
+			$\lambda$ permet de réguler la complexité, et d'éviter des problèmes liés à la singularité de $X^TX$.
+			
+			\subsubsection{Perceptron}
+			
+			On doit trouver $w$ qui minimise
+			
+			$$\sum_i (y_i - wx_i)^2$$
+			
+			en utilisant une descente de radiant : étant donné un exemple d'entrainement $(x, y)$,
+			
+			$$\delta \leftarrow y - w^Tx$$
+			$$\forall jw_i \leftarrow w_j + \eta \delta x_j$$
+			
+			Il s'agit d'un algorithme de type \textit{online}, c'est-à-dire qu'il traite les exemples un à un, alors qu'un algorithme de type \textit{batch} traite tous les exemples en une seule fois.
+			
+			La complexité est régulée par le taux d'apprentissage $\eta$ et le nombre d'itérations.
+			
+			\subsubsection{Extensions non linéaires}
+			
+			Plusieurs extensions existent :
+			
+			\begin{itemize}
+				\item la généralisation des méthodes linéaires :
+				
+				$$y = w_0 + w_1 \phi_1(x_1) + w_2 \phi_2(x_2) + \dots + w_n \phi_n(x_n)$$
+				
+				N'importe quelle méthode linéaire peut être appliquée, mais la régulation devient plus importante.
+				
+				\item Réseaux de neurones artificiels, avec une seule couche cachée : si $g$ est une fonction non linéaire (par exemple une sigmoid),
+				
+				$$y = g(\sum_j w_J g(\sum_i w_{i, j} x_i))$$
+				
+				C'est une fonction non linéaire d'une combinaison linéaire de fonction non linéaires de combinaisons linéaires d'entrées.
+				
+				\item Méthode à base de noyaux :
+				
+				$$y = \sum_i w_i \phi_i(x) \Leftrightarrow y = \sum_j \alpha_j k(x_j, x)$$
+				
+				où $k(x, x') = \langle \phi(x), \phi(x') \rangle$, le produit scalaire dans l'espace donné et où $j$ indexe les exemples d'entraînement du modèle.
+			\end{itemize}
+	
+		\subsection{Réseaux de neurones artificiels}
+		
+		55 $\rightarrow$ 60
+		
+		\subsection{Machine à support vectoriel}
+	
+\end{document}	
