@@ -400,5 +400,45 @@ Un modèle sera déterministe s'il est parfait, c'est-à-dire s'il a une règle 
 		65 $\rightarrow$ 74
 		
 		\subsection{Arbres de décision}
+		
+		Il s'agit d'un algorithme d'apprentissage qui peut gérer les problèmes de classification (binaire ou avec plusieurs valeurs) et avec des attributs qui peuvent être discrets ou continus.
+		
+		Un arbre de décision est un arbre où
+		
+		\begin{itemize}
+			\item chaque noeud intérieur teste un attribut,
+			\item chaque branche correspond à la valeur d'un attribut, et
+			\item chaque feuille est labellisée par une classe.
+		\end{itemize}
+		
+		\dessin{16}
+		
+			\subsubsection{Création d'un arbre de décision}
+			
+			On a l'algorithme suivant, pour une procédure \textit{learn\_dt($LS$)}, où $LS$ est l'échantillon d'apprentissage.
+			
+			\begin{itemize}
+				\item[$\bullet$] si tous les objets de LS ont la même classe, créer une feuille avec cette classe comme label,
+				\item[$\bullet$] sinon,
+				\begin{itemize}
+					\item trouver le meilleur attribut $A$ pour une séparation,
+					\item créer un noeud de test pour cet attribut, et
+					\item pour chaque valeur $a$ de $A$,
+					\begin{itemize}
+						\item[$\circ$] construire $LS_a = \ens{o \in LS \vert A(o) = a}$, et
+						\item[$\circ$] utiliser \textit{learn\_dt($LS_a$)}, pour créer un sous-arbre à partir de $LS_a$.
+					\end{itemize}
+				\end{itemize}
+			\end{itemize}
+			
+			Pour trouver le meilleur attribut, il faut définir un score afin d'évaluer les séparations possibles. Ce score devra favoriser la séparation en classe, afin de réduire la profondeur de l'arbre.
+			
+			\dessin{17}
+			
+			Une mesure assez commune est celle-ci :
+			
+			$$I(LS, A) = H(LS) - \frac{\vert LS_{\text{left}}\vert}{\vert LS\vert}H(LS_{\text{left}}) - \frac{\vert LS_{\text{right}}\vert}{\vert LS \vert}H(LS_{\text{right}})$$
+			
+			\dessin{18}
 	
 \end{document}	
