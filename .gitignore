@@ -168,3 +168,4 @@ pip-log.txt
 *.log
 *.pdf
 *.toc
+*.synctex.gz
