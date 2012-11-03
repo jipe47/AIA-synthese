@@ -1,0 +1,22 @@
+\subsection{$k$-NN - méthode des $k$ème plus proche voisin}
+		
+Cette méthode consiste à prédire la sortie en se basant sur les plus proches voisins de l'entrée.
+		
+\dessin{11}
+		
+Pour ce faire, on trouve les $k$ plus proches voisins, en utilisant la distance euclidienne. La sortie sera,
+		
+\begin{itemize}
+	\item dans le cadre d'une classification, la classe la plus fréquente,
+	\item dans le cadre d'une régression, la valeur moyenne.
+\end{itemize}
+		
+\dessin{12}
+		
+\begin{itemize}
+	\item[+] très simple ;
+	\item[+] peut être adapté pour tout type de données, en changeant la mesure de la distance ;
+	\item[-] choisir une bonne mesure de la distance est un problème compliqué ;
+	\item[-] cet algorithme est très sensible à la présence de bruit ;
+	\item[-] lent.
+\end{itemize}

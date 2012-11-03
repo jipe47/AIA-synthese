@@ -1,0 +1,33 @@
+\subsection{Méthodes Ensemble}
+
+L'idée est de combiner plusieurs modèles construits avec un algorithme d'apprentissage. Cela permet d'améliorer très fort la précision. Les arbres de décision sont souvent utilisés pour des raisons d'efficacité.
+
+	\subsubsection{Bagging}
+	
+	Différents échantillons d'apprentissage conduisent à différents modèles, surtout si l'algorithme surapprend les données. Vu qu'il n'y a qu'un seul modèle optimal, la variance est la source d'erreur.
+	
+	La solution est d'agréger plusieurs modèles pour en obtenir un qui est stable. Plus il y en a, plus les résultats seront meilleurs.
+	
+	\dessin{21}
+	
+	Un type d'agrégation est le bootstrap aggregating : chaque modèle apprend sur un échantillon où des remplacements ont été effectué, avec des lignes redondantes.
+	
+	\dessin{22}
+	
+	
+	\subsubsection{Boosting}
+	
+	L'idée est de combiner plusieurs modèles "faibles", afin de produire un modèle plus puissant.
+	
+	95 $\rightarrow$ 96
+	
+	\subsubsection{Interprétabilité et efficacité}
+	
+	Lorsque les méthodes ensemble sont combinées avec les arbres de décision, elles perdent de l'interprétabilité et de l'efficacité. En revache, on les utilise toujours pour calculer l'importance des variables, en effectuant la moyenne sur tous les arbres. De plus, les méthodes ensemble peuvent être parallélisée et l'algorithme boosting utilise des petits arbres, ce qui fait que le coût en temps processeur n'est pas important.
+	
+	\subsection{Comparaison des méthodes}
+	
+	\dessin{23}
+
+	A noter que l'importance relative des critères dépend de l'application, et que ce ne sont que des tendances générales.
+	

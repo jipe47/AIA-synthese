@@ -1,0 +1,179 @@
+\section{Introduction}
+L'apprentissage supervisé consiste, à partir de la base de donnée (learning sample, échantillon de test), à trouver une fonction $f$ qui prend entrée les variables du problème et qui approxime au mieux la sortie :
+
+$$\hat{Y} = f(X_1, X_2, X_3, X_4)$$
+
+Plus formellement, l'apprentissage consiste, à partir d'un échantillon d'apprentissage $\ens{(x_i, y_i) \vert i = 1, \dots , N}$, avec $x_i \in \mathcal{X}$ et $y_i \in \mathcal{Y}$, à trouver une fonction $f : \mathcal{X} \rightarrow \mathcal{Y}$ qui minimise la fonction de probabilité de perte $l : \mathcal{Y} \times \mathcal{Y} \rightarrow \mathbb{R}$ sur la distribution jointe des paires d'entrées sorties : $E_{x, y} \ens{l(f(x), y)}$.
+
+Cette fonction de perte $l$ prend en entrée deux sorties $Y$ et retourne 1 si elles sont équivalentes, 0 sinon.
+
+Lorsque la sortie est une valeur symbolique, on parle de classification. Si la sortie est une valeur numérique, on parle de régression.
+
+Un modèle sera déterministe s'il est parfait, c'est-à-dire s'il a une règle de classification qui ne commet par d'erreur.
+
+\section{Sélection de modèle}
+
+Un algorithme d'apprentissage est défini par
+
+\begin{itemize}
+\item une famille de modèles candidats (un espace d'hypothèses $H$),
+\item une mesure de la qualité d'un modèle, et
+\item une stratégie d'optimisation.
+\end{itemize}
+
+L'algorithme va ainsi, à partir de l'échantillon d'apprentissage, retourner la fonction $h$ de $H$ de meilleur qualité.
+
+\subsection{Modèle linéaire}
+
+\dessin{3}
+
+On a par exemple
+
+$$h(X_1, X_2) = \left\{
+\begin{array}{ll}
+\text{malade} & \text{si } w_0 + w_1X_1 + w_2X_2 > 0 \\
+\text{sain} & \text{sinon.}
+\end{array}
+\right.$$
+
+La phase d'apprentissage aura pour but de trouver les meilleurs $w_0$, $w_1$ et $w_2$ ; un modèle linéaire ne possède que trois paramètres.
+
+\subsection{Modèle quadratique}
+\dessin{4}
+
+$$h(X_1, X_2) = \left\{
+\begin{array}{ll}
+\text{malade} & \text{si } w_0 + w_1X_1 + w_2X_2 + \textcolor{red}{w_3 X_1^2 + W_4X_2^2} > 0 \\
+\text{sain} & \text{sinon.}
+\end{array}
+\right.$$
+
+La phase d'apprentissage aura pour but de trouver les meilleurs $w_0$, $w_1$, $w_2$, $w_3$ et $w_4$.
+
+Par facilité, on peut étendre la base de données, en ajoutant des colonnes contenant $X_1^2$ et $X_2^2$.
+
+Un modèle quadratique est au moins aussi bon que le meilleur modèle linéaire, car on peut rendre un modèle quadratique linéaire avec $w_3 = w_4 = 0$.
+
+
+\subsection{Modèle d'un réseau de neurones artificiels}
+\dessin{5}
+$$h(X_1, X_2) = \left\{
+\begin{array}{ll}
+\text{malade} & \text{si une fonction complexe de } X_1, X_2 > 0 \\
+\text{sain} & \text{sinon.}
+\end{array}
+\right.$$
+La phase d'apprentissage aura pour but de trouver les paramètres numériques de cette fonction.
+
+\section{Méthodes de validation}
+
+Plusieurs modèles sont possibles, le tout est de sélectionner le bon. On peut s'arranger pour qu'il minimise l'erreur de re-substitution, ou l'erreur de généralisation.
+
+L'erreur de re-substitution (LS error) est l'erreur obtenue en appliquant le modèle à l'échantillon d'apprentissage. Plus le modèle est complexe et plus cette erreur sera proche de 0.
+
+L'erreur de généralisation est l'erreur obtenue sur la prédiction de nouvelles données.
+
+\subsection{Méthode test-set}
+
+L'idée est de choisir 30\% des données , ce qui constituera l'échantillon de test. Le reste est utilisé comme échantillon d'apprentissage. Ensuite, le modèle est créé sur base de l'échantillon d'apprentissage, et les performances sont testées sur l'échantillon de test.
+
+\begin{itemize}
+	\item[+] très simple à mettre en place ;
+	\item[+] efficace ;
+	\item[-] les données d'apprentissage sont moindres ;
+	\item[-] instable lorsque la base de données est petite.
+\end{itemize}
+
+Cette méthode est à utiliser pour des très petits ensembles de données ($< 100)$).
+
+En comparant les modèles précédents, on a les résultats suivants.
+
+\dessin{6}
+
+On voit que le meilleur modèle d'apprentissage sur l'échantillon de test n'est pas nécessairement le meilleur en général.
+
+Il y a un phénomène d'overfitting avec le réseau de neurones artificiels. Il se produit quand l'algorithme d'apprentissage apprend sur du bruit.
+
+\subsection{Validation Leave-one-out Cross}
+
+Pour $k = 1$ jusqu'à $N$ :
+
+\begin{enumerate}
+	\item retirer le $k$ème objet de l'échantillon d'apprentissage ;
+	\item apprendre le modèle ;
+	\item appliquer le modèle pour avoir une prédiction sur le $k$ème objet.
+\end{enumerate}
+
+L'erreur est reportée.
+
+\begin{itemize}
+	\item[+] ne gaspille pas les données ;
+	\item[+] très coûteux, car il faut entraîner $N$ modèles ;
+	\item[+] la variance est grande.
+\end{itemize}
+
+Cette méthode est à utiliser pour des grands ensembles de données ($> 1000$).
+
+\subsection{Validation $k$-fold Cross}
+
+L'idée est de partitionner l'ensemble des données en $k$ sous-ensembles.
+
+Pour chaque sous-ensemble :
+
+\begin{itemize}
+	\item on apprend le modèle sur les objets qui ne sont pas dans le sous-ensemble ;
+	\item on calcule le taux d'erreur sur les objets du sous-ensemble.
+\end{itemize}
+
+Ensuite, on reporte l'erreur moyenne sur les $k$ sous-ensembles.
+
+A noter que si $k = $ le nombre d'objets, on a une validation de type leave-one-out cross.
+
+Cette méthode est un compromis entre les deux précédentes. Elle est à utiliser pour des petits ensembles de données (100 - 1000).
+
+\subsection{Impact de la complexité d'un modèle avec une validation croisée}
+
+\dessin{7}
+
+Il vaut mieux utilise rune petite complexité si on ne dispose pas de beaucoup d'échantillons.
+
+Avec une complexité fixe, on obtient le comportement suivant.
+
+\dessin{8}
+
+Le contrôle de la complexité s'appelle la régulation ou le lissage (smoothing). Il peut être contrôlé de plusieurs façons :
+
+\begin{itemize}
+	\item en variant la taille de l'espace d'hypothèse, autrement dit le nombre de modèles candidats, la valeur des paramètres, etc ;
+	\item avec un critère de performance : on oppose les performances de l'ensemble d'apprentissage et la valeur des paramètres, autrement dit minimiser
+	
+	$$\text{Err}(LS) + \lambda C(\text{model})$$
+	
+	\item avec des algorithmes d'optimisation : le nombre d'itération, la nature du problème d'optimisation, etc.
+\end{itemize}
+
+Le choix d'un algorithme se fait en comparant leur taux d'erreur avec une méthode de type cross-validation, sur des sous-échantillons. Ensuite, l'algorithme avec le plus petit taux est utilisé comme modèle prédicatif, sur toutes les données.
+
+L'utilisation intensive de la méthode CV peut entraîner du sur-apprentissage. En effet, plus on compare de modèles complexes, plus on a une chance d'en trouver un qui convient pour les données.
+
+La solution pour éviter cela est de réserver un ensemble de test additionnel (ou de les générer), et de l'utiliser pour tester les performances du modèle final.
+
+\subsection{Mesure de performances}
+
+Le choix d'une mesure de l'erreur ou de la qualité dépend fortement de l'application. On peut également définir des autres critères pour évaluer un modèle.
+
+Par exemple, en classification binaire, on peut définir une tableau de contingence/matrice de confusion.
+
+\dessin{9}
+
+On peut alors définir plusieurs critères :
+
+\begin{itemize}
+	\item le taux d'erreur : $\frac{FP + FN}{N + P}$
+	\item l'exactitude : $\frac{TP + TN}{N + P} = 1 - \text{taux d'erreur}$
+	\item la sensibilité (ou le rappel/recall) : $\frac{TP}{P}$
+	\item la spécificité : $\frac{TN}{TN + FP}$
+	\item la précision (PPV) : $\frac{TP}{TP + FP}$
+\end{itemize}
+
+\dessin{10}

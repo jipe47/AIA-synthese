@@ -1,0 +1,71 @@
+\documentclass[10pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage[french]{babel}
+\usepackage{amssymb}
+
+\usepackage[cm]{fullpage}
+
+\usepackage{listings}
+\usepackage{color}
+\usepackage{verbatim}
+\usepackage{framed}
+\usepackage{ulem}
+
+\usepackage{graphicx}
+\newcommand{\ens}[1]{\lbrace #1 \rbrace}
+\newcommand{\abs}[1]{\vert #1 \vert}
+
+\newcommand{\union}{\cup}
+\newcommand{\intersection}{\cap}
+\newcommand{\mand}{\wedge}
+\newcommand{\mor}{\vee}
+
+\newcommand{\bigoh}{\mathcal{O}}
+
+\newcommand{\dessin}[1]{\begin{center}\includegraphics[scale=0.6]{images/#1.png}\end{center}}
+\newcommand{\dessinS}[2]{\begin{center}\includegraphics[scale=#2]{images/#1.png}\end{center}}
+
+\newtheorem{theorem}{Théorème}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\newcommand{\qed}{\nobreak \ifvmode \relax \else
+      \ifdim\lastskip<1.5em \hskip-\lastskip
+      \hskip1.5em plus0em minus0.5em \fi \nobreak
+      \vrule height0.75em width0.5em depth0.25em\fi}
+
+
+\newenvironment{proof}[1][Preuve]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}]}{\qed\end{trivlist}}
+\newenvironment{definition}[1][Définition]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+\newenvironment{example}[1][Exemple]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+\newenvironment{remark}[1][Remark]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+
+\title{Synthèse Apprentissage inductif appliqué}
+\author{Jean-Philippe Collette}
+
+\makeindex
+\begin{document}	
+	\maketitle
+	\tableofcontents
+	\input{intro}
+	
+	\part{Apprentissage supervisé}
+	\input{intro-supervised-learning}
+	\input{decision-tree}
+	\input{knn-kernel-method}	
+	\input{linear-method}
+	\input{neural-network}
+	\input{bayes-model}
+	\input{model-evaluation}		
+	\input{svm}
+	\input{ensemble-method}
+	
+	\part{Apprentissage non supervisé}
+\end{document}	

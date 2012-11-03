@@ -1,0 +1,76 @@
+\subsection{Méthodes linéaires}
+
+Le but est de trouver un modèle qui est combinaison linéaire des entrées.
+
+\begin{itemize}
+	\item Pour une régression, $y = w_0 + w_1 x_1 + w_2 x_2 + \dots + w_n x_n$
+	\item Pour une classification, $y = c_1$ si $w_0 + w_1 x_1 + w_2 x_2 + \dots + w_n x_n > 0$, $c_2$ sinon.
+\end{itemize}
+
+\dessin{13}
+
+Plusieurs méthodes existent pour trouver les coefficients $w_i$ : 
+
+\begin{itemize}
+	\item Régression : least-square regression, ridge regression, partial least square, support vector regression, LASSO, \dots
+	\item Classification : linear discriminant analysis, PLS-discriminant analysis, support vector machines, \dots \\
+\end{itemize} 
+
+\begin{itemize}
+	\item[+] simple ;
+	\item[+] il existe des variantes rapides et scalable ;
+	\item[+] cette méthode offre des modèles interprétatifs, à travers des poids variables (magnitude et signe) ;
+	\item[-] parfois pas aussi précis que des autres méthodes (non linéaires).
+\end{itemize}
+
+	\subsubsection{Ridge regression}
+	
+	On doit trouver $w$ qui minimise (avec $\lambda > 0$) :
+	
+	$$\sum_i (y_i - wx_i)^2 + \lambda \vert \vert w \vert \vert^2$$
+	
+	Dans le cadre d'un algèbre simple, si $X$ est la matrice d'entrée et $y$ le vecteur de sortie, la solution est donnée par
+	
+	$$w^r = (X^T X + \lambda I)^{-1}X^Ty$$
+	
+	$\lambda$ permet de réguler la complexité, et d'éviter des problèmes liés à la singularité de $X^TX$.
+	
+	\subsubsection{Perceptron}
+	
+	On doit trouver $w$ qui minimise
+	
+	$$\sum_i (y_i - wx_i)^2$$
+	
+	en utilisant une descente de radiant : étant donné un exemple d'entrainement $(x, y)$,
+	
+	$$\delta \leftarrow y - w^Tx$$
+	$$\forall jw_i \leftarrow w_j + \eta \delta x_j$$
+	
+	Il s'agit d'un algorithme de type \textit{online}, c'est-à-dire qu'il traite les exemples un à un, alors qu'un algorithme de type \textit{batch} traite tous les exemples en une seule fois.
+	
+	La complexité est régulée par le taux d'apprentissage $\eta$ et le nombre d'itérations.
+	
+	\subsubsection{Extensions non linéaires}
+	
+	Plusieurs extensions existent :
+	
+	\begin{itemize}
+		\item la généralisation des méthodes linéaires :
+		
+		$$y = w_0 + w_1 \phi_1(x_1) + w_2 \phi_2(x_2) + \dots + w_n \phi_n(x_n)$$
+		
+		N'importe quelle méthode linéaire peut être appliquée, mais la régulation devient plus importante.
+		
+		\item Réseaux de neurones artificiels, avec une seule couche cachée : si $g$ est une fonction non linéaire (par exemple une sigmoid),
+		
+		$$y = g(\sum_j w_J g(\sum_i w_{i, j} x_i))$$
+		
+		C'est une fonction non linéaire d'une combinaison linéaire de fonction non linéaires de combinaisons linéaires d'entrées.
+		
+		\item Méthode à base de noyaux :
+		
+		$$y = \sum_i w_i \phi_i(x) \Leftrightarrow y = \sum_j \alpha_j k(x_j, x)$$
+		
+		où $k(x, x') = \langle \phi(x), \phi(x') \rangle$, le produit scalaire dans l'espace donné et où $j$ indexe les exemples d'entraînement du modèle.
+	\end{itemize}
+

@@ -1,0 +1,17 @@
+\subsection{Machine à support vectoriel}
+
+Cette méthode se base sur deux idées :
+
+\begin{enumerate}
+	\item la mise ne place d'un classifieur à large marge, et
+	\item le "noyautage" de l'espace d'entrée.
+\end{enumerate}
+
+\dessin{14}
+Il faut trouver un classifieur linéaire. L'idée va être de trouver celui qui maximise la marge, c'est-à-dire la largeur du bord qui peut être étendue jusqu'à toucher une donnée.
+
+\dessin{15}
+
+C'est une méthode intuitivement sûre, avec une borne théorique sur l'erreur : $E(TS) < \mathcal{O}(\frac{1}{\text{margin}})$.
+
+65 $\rightarrow$ 74

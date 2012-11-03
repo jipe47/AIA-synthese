@@ -1,0 +1,91 @@
+
+		
+		
+		
+\subsection{Arbres de décision}
+
+Il s'agit d'un algorithme d'apprentissage qui peut gérer les problèmes de classification (binaire ou avec plusieurs valeurs) et avec des attributs qui peuvent être discrets ou continus.
+
+Un arbre de décision est un arbre où
+
+\begin{itemize}
+	\item chaque noeud intérieur teste un attribut,
+	\item chaque branche correspond à la valeur d'un attribut, et
+	\item chaque feuille est labellisée par une classe.
+\end{itemize}
+
+\dessin{16}
+
+	\subsubsection{Création d'un arbre de décision}
+	
+	On a l'algorithme suivant, pour une procédure \textit{learn\_dt($LS$)}, où $LS$ est l'échantillon d'apprentissage.
+	
+	\begin{itemize}
+		\item[$\bullet$] si tous les objets de LS ont la même classe, créer une feuille avec cette classe comme label,
+		\item[$\bullet$] sinon,
+		\begin{itemize}
+			\item trouver le meilleur attribut $A$ pour une séparation,
+			\item créer un noeud de test pour cet attribut, et
+			\item pour chaque valeur $a$ de $A$,
+			\begin{itemize}
+				\item[$\circ$] construire $LS_a = \ens{o \in LS \vert A(o) = a}$, et
+				\item[$\circ$] utiliser \textit{learn\_dt($LS_a$)}, pour créer un sous-arbre à partir de $LS_a$.
+			\end{itemize}
+		\end{itemize}
+	\end{itemize}
+	
+	Pour trouver le meilleur attribut, il faut définir un score afin d'évaluer les séparations possibles. Ce score devra favoriser la séparation en classe, afin de réduire la profondeur de l'arbre.
+	
+	\dessin{17}
+	
+	Une mesure assez commune est celle-ci :
+	
+	$$I(LS, A) = H(LS) - \frac{\vert LS_{\text{left}}\vert}{\vert LS\vert}H(LS_{\text{left}}) - \frac{\vert LS_{\text{right}}\vert}{\vert LS \vert}H(LS_{\text{right}})$$
+	
+	\dessin{18}
+	
+	Pour éviter l'overfitting, on a trois façons :
+	
+	\begin{itemize}
+		\item pre-pruning/pré-élagage : arrêter d'étendre l'arbre plus tôt, avant qu'il n'atteigne le point où il classe parfaitement l'échantillon d'apprentissage ;
+		\item post-pruning/post-élagage : permettre à l'arbre de surapprendre et de l'élager ensuite ;
+		\item les méthodes Ensemble.
+	\end{itemize}
+	
+	\dessin{19}
+	
+	\subsubsection{Variables numériques}
+	
+	Deux solutions :
+	\begin{itemize}
+		\item pré-discrétiser, assigner des valeurs symboliques à des ranges (par exemple "froid" si la température est inférieure à 70$\,^{\circ}$F, "normal" si entre 70 et 75$\,^{\circ}$F, "chaud" si plus de 75$\,^{\circ}$F) ;
+		\item discrétiser durant l'opération de construction de l'arbre.
+		
+		\dessin{20}
+	\end{itemize}
+	
+	\subsubsection{Arbre de régression}
+	
+	Un arbre de régression est un arbre de décision où les labels des noeuds sont numériques.
+	
+	\subsubsection{Interprétabilité et sélection d'attribut}
+	
+	Un arbre de décision est très interprétable, il peut être converti facilement en un ensemble de règles "si \dots alors".
+	
+	Si certains attributs ne sont pas nécessaire pour la classification, il n'apparaitront pas dans l'arbre (élagé/pruned). C'est important si la mesure de certaines variables est coûteuse.
+	
+	Les arbres de décision sont souvent utilisés comme pre-processing pour d'autres algorithmes d'apprentissage, qui souffrent de variables inutiles.
+	
+	Certaines variables ont une importance, elles ne contribuent pas toutes de manière égale. Grâce aux arbres, on peut évaluer leur importance.
+	
+	$\longrightarrow$ Comment ?
+	
+	\subsubsection{Avantages et inconvénients}
+	
+	\begin{itemize}
+		\item[+] très rapide et scalabe, on peut traiter d'énorme quantité d'entrées et d'objets ;
+		\item[+] donne une bonne interprétabilité et quantifie l'importance des variables ;
+		\item[-] grande variance ;
+		\item[-] souvent pas aussi précis que d'autres méthodes.
+	\end{itemize}
+	
