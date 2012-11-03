@@ -31,6 +31,7 @@ $$E_{LS}\{Err_{LS}\} = E_{LS}\{E_{x, y} \{L(y, \hat{f}_{LS}(x))\} \}$$
 	\newcommand{\els}[1]{E_{LS}\{#1\}}
 	\newcommand{\yh}{\hat{y}}
 	\newcommand{\vary}[1]{var_y\{#1\}}
+	\newcommand{\varyx}[1]{var_{y\vert \underline{x}}\{#1\}}
 	\newcommand{\varls}[1]{var_{LS}\{#1\}}
 	
 	\dessin{25}
@@ -137,6 +138,10 @@ $$E_{LS}\{Err_{LS}\} = E_{LS}\{E_{x, y} \{L(y, \hat{f}_{LS}(x))\} \}$$
 		
 		\item $\lambda$ : $\yh_2 = \frac{\lambda . 180 + \sum_{i = 1}^N y_i}{\lambda + N}$, avec $\lambda \in [ 0, +\infty [ $
 		
+		$$\text{biais}^2 = \frac{\lambda}{\lambda + N} (\ey{y} - 180)^2$$
+		
+		$$\varls{\yh_2} = \frac{N}{(\lambda + N)^2} \vary{y}$$
+		
 		Caractéristiques :
 		
 		\begin{itemize}
@@ -147,3 +152,109 @@ $$E_{LS}\{Err_{LS}\} = E_{LS}\{E_{x, y} \{L(y, \hat{f}_{LS}(x))\} \}$$
 	\end{itemize}
 	
 	$\yh_1$ et $\yh_2$ sont des estimateurs consistants car lorsque $N$ augmente (donc lorsqu'on a plus d'échantillons), $E$ diminue, ce qui n'est pas toujours le cas. $\yh_2$ combat le sur-apprentissage, on dit que $\lambda$ permet la régulation.
+	
+	
+		\newcommand{\pyb}{P(\overline{y})}
+		\newcommand{\yb}{\overline{y}}
+		\subsection{Approche bayesienne}
+		
+		Supposons que
+		
+		\begin{itemize}
+			\item la taille moyenne est proche de 180 cm, suivant une loi normale :
+			
+			$$\pyb = A.exp(- \frac{(\yb - 180)^2}{2 \sigma_{\yb}})$$
+			
+			\item la taille d'une personne est gaussienne par rapport à la moyenne :
+			
+			$$P(y_i \vert \yb ) = B.exp(- \frac{(y_i - \yb)}{2 \sigma_y})$$
+		\end{itemize}
+		
+		Quelle est la valeur la plus probable $\yb$ en connaissant $LS$ ?
+		
+		$$\yh = arg \: \text{max}_{\yb} P(\yb \vert LS)$$
+		
+		[20]
+	
+	\section{Problème de régression (complet)}
+	
+	On considère qu'on cherche une fonction $\yh(x)$ à plusieurs entrée, on a une moyenne sur tout l'espace d'entrée.
+	
+	L'erreur devient
+	
+	\newcommand{\exy}{E_{\underline{x}, y}}
+	\newcommand{\eyx}{E_{y \vert \underline{x}y}}
+	\newcommand{\ex}{E_{\underline{x}}}
+	\newcommand{\xu}{\underline{x}}
+	
+	$$E = \els{\exy{(y - \yh(\xu))^2}} = \ex{\els{\eyx{(y - \yh(\xu))^2}}}$$
+	$$= \ex{\varyx{y}} + \ex{\text{biais}^2(\xu)} + \ex{\varls{\yh(\xu)}}$$
+	
+	On a finalement l'erreur suivante :
+	
+	$$\els{\eyx{(y - \yh(\xu))^2}} = \text{noise}(\xu) + \text{biais}^2(\xu) + \text{variance}(\xu)$$
+	
+	avec
+	
+	\begin{itemize}
+		\item $\text{noise}(\xu) = \eyx{(y - h_B(\xu))^2}$, qui quantifie de combien $y$ varie de $h_B(\xu) = \eyx{y}$, le modèle de Bayes
+		\item $\text{biais}^2(\xu) = (h_B(\xu) - \els{\yh(\xu)})^2$, qui mesure l'erreur entre le modèle de Bayes et la moyenne du modèle
+		\item $\text{variance}(\xu) = \els{(\yh - \els{\yh(\xu)})^2}$, qui quantifie de combien $\yh(\xu)$ varie d'un échantillon d'apprentissage à un autre.
+	\end{itemize}
+	
+	23 $\rightarrow$ 26
+	
+	24 : le biais est la différence au carré entre les courbes bleu et noire (intégrée).
+	
+	25 : le décalage est faible, mais la variance est haute. La variance est proche du bruit.
+	
+	
+	\section{Problèmes de classification}
+	
+	L'erreur moyenne de mauvaise classification est
+	
+	$$E = \els{E_{\underline{x}, y}\{1 (y \neq \yh(\xu))\}}$$
+	
+	Le meilleur modèle possible est le modèle de Bayes :
+	
+	$$h_B(\xu) = \text{arg } \text{arg }_c P(y = c \vert \xu)$$
+	
+	Le modèle moyen est
+	
+	$$\text{arg } \text{arg }_c P(\yh(\xu) = c \vert \xu)$$
+	
+	Il n'y a pas de décomposition de l'erreur de mauvaise classification moyenne en un biais et une variance, mais on observe les mêmes phénomènes.
+	
+	28 $\rightarrow$ 29
+	
+	\section{Paramètres influençant le biais et la variance}
+	
+		\subsection{Complexité du modèle}
+		[31]
+		
+		\dessin{31}
+		
+		Généralement, le biais est une fonction décroissante de la complexité, tandis que la variance croît.
+		
+		\subsection{Complexité du modèle de Bayes}
+		
+		\dessin{32}
+		\dessin{33}
+		\dessin{34}
+		
+		\subsection{Bruit}
+		
+		\dessin{35}
+		
+		\subsection{Taille de l'échantillon d'apprentissage}
+		
+		\dessin{36}
+		\dessin{37}
+		
+		\subsection{Algorithmes d'apprentissage}
+		
+		\dessin{38}
+		
+	\section{Techniques de réduction du biais et de la variance}
+	
+	43 $\rightarrow$ 51
