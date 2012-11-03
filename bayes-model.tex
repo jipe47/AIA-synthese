@@ -1,1 +1,149 @@
 \chapter{Modèle de Bayes}
+
+Dans le cadre de l'apprentissage supervisé, on cherche une fonction $f : \mathcal{X} \rightarrow \mathcal{Y}$ qui minimise l'erreur de généralisation, soit l'espérance
+
+$$E_{x, y} \{L(y, f(x))\}$$
+
+La fonction $L : \mathcal{Y} \times \mathcal{Y} \rightarrow \mathbb{R}$ mesure la distance entre ses arguments :
+
+\begin{itemize}
+	\item en classification, $L(y, y') = 1$ si $y \neq y'$ (taux d'erreur)
+	\item en régression, $L(y, y') = (y - y')^2$ (erreur quadratique).
+\end{itemize}
+
+Soit la fonction $\hat{f}_{LS}$ apprise à partir de $LS$ à partir d'un algorithme d'apprentissage. Cette fonction (qui dnne la prédiction à un certain point) est une variable aléatoire.
+
+\dessin{24}
+
+On peut définir l'erreur de généralisation, qui est utile pour caractériser et sélectionner un modèle :
+
+$$Err_{LS} = E_{x, y} \{L(y, \hat{f}_{LS}(x))\}$$
+
+Pour un algorithme d'apprentissage donné, l'erreur de généralisation sur des ensembles $LS$ aléatoire de taille $N$ permet de caractériser un algorithme et est donnée par
+
+$$E_{LS}\{Err_{LS}\} = E_{LS}\{E_{x, y} \{L(y, \hat{f}_{LS}(x))\} \}$$
+
+	\section{Problème de régression sans variable d'entrée}
+	
+	Supposons que l'on cherche à prédire le mieux possible la taille d'un mâle adulte belge. On choisit une mesure de l'erreur, comme l'erreur quadratique, et on cherche une estimation $\hat{y}$ tel que l'espérance $E_y\{(y - \hat{y})^2\}$ sur toute la population belge soit minimale.
+	
+	\newcommand{\ey}[1]{E_y\{#1\}}
+	\newcommand{\els}[1]{E_{LS}\{#1\}}
+	\newcommand{\yh}{\hat{y}}
+	\newcommand{\vary}[1]{var_y\{#1\}}
+	\newcommand{\varls}[1]{var_{LS}\{#1\}}
+	
+	\dessin{25}
+	
+	L'estimation qui minimise l'erreur peut être calculée en prenant 
+	
+	$$\frac{\phi}{\phi y'} \ey{(y - y')^2} = 0 \leftrightarrow \ey{-2(y - y')} = 0$$
+	$$\leftrightarrow \ey{y} - \ey{y'} = 0 \leftrightarrow y' = \ey{y}$$
+	
+	Dans un modèle de Bayes, l'estimation qui minimise l'erreur est $\ey{y}$, soit la moyenne sur toute la population.
+	
+	En pratique, ce genre de valeur n'est pas calculable (il faudrait mesurer tous les adultes mâles belges).
+	
+	Vu que $p(y)$ est inconnu, on va trouver une estimation $\yh$ à partir d'un ensemble $LS = \ens{y_1, y_2, \dots , y_N}$, composé d'éléments tirés de manière aléatoire de la population. Autrement dit, on va chercher un algorithme d'apprentissage, par exemple
+	
+	\begin{enumerate}
+		\item la moyenne : $\yh_1 = \frac{1}{N} \sum_{i = 1}^N y_i$
+		\item en pondérant la valeur qu'on attend, avec $\lambda$ : $\yh_2 = \frac{\lambda . 180 + \sum_{i = 1}^N y_i}{\lambda + N}$, avec $\lambda \in [ 0, +\infty [ $
+	\end{enumerate}
+	
+	\section{Décomposition biais/variance}
+	
+	Vu que $LS$ est tiré aléatoirement de la population, la prédiction $\yh$ est aussi une variable aléatoire. La distribution dépend de l'ensemble de l'apprentissage.
+	
+	\dessin{26}
+	
+	Un bon algorithme d'apprentissage doit être bon sur un seul $LS$, mais aussi en moyenne sur plusieurs échantillons d'apprentissage. On veut minimiser 
+	
+	$$E = \els{\ey{(y - \yh)^2}}$$
+	
+	On ajoute/retire $\ey{y}$.
+	
+	$$= \els{\ey{(y - \ey{y} + \ey{y} - \yh)^2}}$$
+	
+	$$= \els{\ey{(y - \ey{y})^2}} + \els{\ey{(\ey{y} - \yh)^2}} + \els{\ey{2(y - \ey{y})(\ey{y} - \yh)}}$$
+	
+	Car on peut sortir $(\ey{y} - \yh)$, vu que ce sont des constantes.
+	
+	$$= \ey{(y - \ey{y})^2} + \els{(\ey{y} - \yh)^2} + \els{2\ey{(y - \ey{y})(\ey{y} - \yh)}}$$
+	
+	Car $\ey{y - \ey{y}} = \ey{y} - \underbrace{\ey{\ey{y}}}_{\ey{y}}$.
+	
+	$$=\ey{(y - \ey{y})^2} + \els{(\ey{y} - \yh)^2}$$
+	
+	$\ey{(y - \ey{y})^2} = \vary{y}$ est la variance, c'est l'erreur résiduelle ; il s'agit de la plus petite erreur que l'on peut atteindre. Il s'agit d'une donnée du problème, on ne peut pas agir dessus.
+	
+	$\els{(\ey{y} - \yh)^2}$ est la moyenne sur tous les ensembles d'apprentissage de l'erreur du modèle de Bayes.
+	
+	\dessin{27}
+	
+	Si on continue le raisonnement
+	
+	$$\els{(\ey{y} - \yh)^2}$$
+	
+	$$ = \els{(\ey{y} - \els{\yh} + \els{\yh} - \yh)^2}$$
+	
+	$$ = \els{(\ey{y} - \els{\yh})^2} + \els{(\els{\yh} - \yh)^2} + \els{2(\ey{y} - \els{\yh})(\els{\yh} - \els{\yh})}$$
+	
+	$$= (\ey{y} - \els{\yh})^2 + \els{(\yh - \els{\yh})^2} + 2(\ey{y} - \els{\yh})(\els{\yh} - \els{\yh})$$
+	
+	$$= (\ey{y} - \els{\yh})^2 + \els{(\yh - \els{\yh})^2}$$
+
+	\dessin{28}
+		
+	$\els{\yh}$ est la moyenne du modèle sur tout l'échantillon $LS$. $(\ey{y} - \els{\yh})^2$ est le biais$^2$, l'erreur entre le modèle de Bayes et le modèle moyen.
+		
+	\dessin{29}
+	
+	$\varls{\yh}$ est l'estimation de la variance, qui est la conséquence de sur-apprentissage. On a que
+	
+	$$E = \vary{y} + \text{biais}^2 + \els{(\yh - \els{\yh})^2}$$
+	
+	\dessin{30}
+	
+	$$E = \vary{y} + \text{biais}^2 + \varls{\yh}$$
+	
+	Pour les exemples :
+	
+	\begin{itemize}
+		\item $\yh_1 = \frac{1}{N} \sum_{i = 1}^N y_i$
+		
+		$$\els{\frac{1}{N} \sum_{i = 1}^N y_i} = \frac{1}{N} \sum_{i = 1}^N E_{LS}\{y_i\} = \frac{1}{N} \sum_{i = 1}^N \ey{y} = \ey{y}$$
+		
+		$\els{y_i}$ est la taille moyenne d'une même personne pour plusieurs $LS$, tandis que $\ey{y}$ est la taille moyenne de la population : ce sont les mêmes choses, car la distribution est iid, le choix ne fait pas varier la taille.
+		
+		$$\varls{\yh} = \varls{\frac{1}{N} \sum_{i = 1}^N y_i} = \frac{1}{N^2} \varls{\sum_{i = 1}^N y_i}$$
+		
+		Par une propriété.
+		
+		$$= \frac{1}{N^2} \sum_{i = 1}^N \varls{y_i}$$
+		
+		car les $y_i$ sont indépendants.
+		
+		$$= \frac{1}{N^2} N \vary{y}$$
+		
+		car la distribution est iid.
+		
+		Les caractéristiques de cet estimateur sont que
+		
+		\begin{enumerate}
+			\item si $N \rightarrow + \infty$, alors $E \rightarrow 0$.
+			\item le biais est nul, c'est le meilleur estimateur.			
+		\end{enumerate}
+		
+		\item $\lambda$ : $\yh_2 = \frac{\lambda . 180 + \sum_{i = 1}^N y_i}{\lambda + N}$, avec $\lambda \in [ 0, +\infty [ $
+		
+		Caractéristiques :
+		
+		\begin{itemize}
+			\item le biais est petit si la taille moyenne d'un homme belge est proche de 180
+			\item plus l'échantillon est grand, plus le biais est petit
+			\item si $\lambda$ est élevé, la variance va diminuer (car la prédiction devient constante), mais le biais va augmenter.
+		\end{itemize}
+	\end{itemize}
+	
+	$\yh_1$ et $\yh_2$ sont des estimateurs consistants car lorsque $N$ augmente (donc lorsqu'on a plus d'échantillons), $E$ diminue, ce qui n'est pas toujours le cas. $\yh_2$ combat le sur-apprentissage, on dit que $\lambda$ permet la régulation.
