@@ -27,13 +27,6 @@ $$E_{LS}\{Err_{LS}\} = E_{LS}\{E_{x, y} \{L(y, \hat{f}_{LS}(x))\} \}$$
 	
 	Supposons que l'on cherche à prédire le mieux possible la taille d'un mâle adulte belge. On choisit une mesure de l'erreur, comme l'erreur quadratique, et on cherche une estimation $\hat{y}$ tel que l'espérance $E_y\{(y - \hat{y})^2\}$ sur toute la population belge soit minimale.
 	
-	\newcommand{\ey}[1]{E_y\{#1\}}
-	\newcommand{\els}[1]{E_{LS}\{#1\}}
-	\newcommand{\yh}{\hat{y}}
-	\newcommand{\vary}[1]{var_y\{#1\}}
-	\newcommand{\varyx}[1]{var_{y\vert \underline{x}}\{#1\}}
-	\newcommand{\varls}[1]{var_{LS}\{#1\}}
-	
 	\dessin{25}
 	
 	L'estimation qui minimise l'erreur peut être calculée en prenant 
@@ -154,8 +147,6 @@ $$E_{LS}\{Err_{LS}\} = E_{LS}\{E_{x, y} \{L(y, \hat{f}_{LS}(x))\} \}$$
 	$\yh_1$ et $\yh_2$ sont des estimateurs consistants car lorsque $N$ augmente (donc lorsqu'on a plus d'échantillons), $E$ diminue, ce qui n'est pas toujours le cas. $\yh_2$ combat le sur-apprentissage, on dit que $\lambda$ permet la régulation.
 	
 	
-		\newcommand{\pyb}{P(\overline{y})}
-		\newcommand{\yb}{\overline{y}}
 		\subsection{Approche bayesienne}
 		
 		Supposons que
@@ -181,11 +172,6 @@ $$E_{LS}\{Err_{LS}\} = E_{LS}\{E_{x, y} \{L(y, \hat{f}_{LS}(x))\} \}$$
 	On considère qu'on cherche une fonction $\yh(x)$ à plusieurs entrée, on a une moyenne sur tout l'espace d'entrée.
 	
 	L'erreur devient
-	
-	\newcommand{\exy}{E_{\underline{x}, y}}
-	\newcommand{\eyx}{E_{y \vert \underline{x}y}}
-	\newcommand{\ex}{E_{\underline{x}}}
-	\newcommand{\xu}{\underline{x}}
 	
 	$$E = \els{\exy{(y - \yh(\xu))^2}} = \ex{\els{\eyx{(y - \yh(\xu))^2}}}$$
 	$$= \ex{\varyx{y}} + \ex{\text{biais}^2(\xu)} + \ex{\varls{\yh(\xu)}}$$

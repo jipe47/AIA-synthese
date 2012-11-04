@@ -47,25 +47,42 @@
 \newenvironment{remark}[1][Remark]{\begin{trivlist}
 \item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
 
+
+%% Raccourcis, histoire de ne pas devenir fou avec les notations
+\newcommand{\ey}[1]{E_y\{#1\}}
+\newcommand{\els}[1]{E_{LS}\{#1\}}
+\newcommand{\yh}{\hat{y}}				% y hat
+\newcommand{\vary}[1]{var_y\{#1\}}
+\newcommand{\varyx}[1]{var_{y\vert \underline{x}}\{#1\}}
+\newcommand{\varls}[1]{var_{LS}\{#1\}}
+
+\newcommand{\pyb}{P(\overline{y})}		% P(y barre)
+\newcommand{\yb}{\overline{y}}			% y barre
+
+\newcommand{\exy}{E_{\underline{x}, y}}
+\newcommand{\eyx}{E_{y \vert \underline{x}y}}
+\newcommand{\ex}{E_{\underline{x}}}
+\newcommand{\xu}{\underline{x}}			% x underline
+
 \title{Synthèse Apprentissage inductif appliqué}
 \author{Jean-Philippe Collette}
 
 \makeindex
 \begin{document}	
-	\maketitle
-	\tableofcontents
-	\input{intro}
+	%\maketitle
+	%\tableofcontents
+	%\input{intro}
 	
-	\part{Apprentissage supervisé}
-	\input{intro-supervised-learning}
-	\input{decision-tree}
-	\input{knn-kernel-method}	
+	%\part{Apprentissage supervisé}
+	%\input{intro-supervised-learning}
+	%\input{decision-tree}
+	%\input{knn-kernel-method}	
 	\input{linear-method}
-	\input{neural-network}
+	%\input{neural-network}
 	\input{bayes-model}
-	\input{model-evaluation}		
-	\input{svm}
-	\input{ensemble-method}
+	%\input{model-evaluation}		
+	%\input{svm}
+	%\input{ensemble-method}
 	
-	\part{Apprentissage non supervisé}
+	%\part{Apprentissage non supervisé}
 \end{document}	
