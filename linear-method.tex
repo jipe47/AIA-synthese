@@ -75,6 +75,8 @@
 			où $k(x, x') = \langle \phi(x), \phi(x') \rangle$, le produit scalaire dans l'espace donné et où $j$ indexe les exemples d'entraînement du modèle.
 		\end{itemize}
 
+
+	%% Lecture 3
 	\section{Régression linéaire}
 	
 	Une régression linéaire essaie d'approximer la sortie avec
@@ -144,3 +146,53 @@
 		$\rho_{a_1, y}$ est le coefficient de corrélation entre $a_1$ et $y$, et $\sigma_y$ et $\sigma_{a_1}$ sont les déviations standards de $y$ et $a_1$.
 		
 		\subsection{SE à plusieurs dimensions}
+		
+		On cherche $\wb'$ qui minimise
+		
+		$$TSE(\LS, \wb') = (\yb - A'^T\wb)^T(\yb - A'^T\wb')$$
+		
+		Le gradient est
+		
+		$$\Delta_{w'} TSE(\LS, \wb') = -2 A' (\yb - A'^T\wb')$$
+		
+		Si on résout $\Delta_{w'} TSE(\LS, \wb'*) = 0$, on obtient
+		
+		$$\wb'* = (A'A'^T)^{-1}A'\yb$$
+		
+		A noter que $\Delta^2_{w'} TSE(\LS, \wb') = 2A'A'^T$ est semi-définie positive symétrique.
+		
+		[Rappel notes p3 recto]
+		
+		A noter qu'il existe plusieurs solutions (des vecteurs $w'* = (w_0*, w_1*)$) optimales, ce n'est pas un problème à solution unique.
+		
+		[slide 10/19]
+		
+		Considérons la matrice $(A'A'^T)$ : l'élément $i, j$ est obtenu par le produit scalaire de la $i$ème ligne et de la $j$ ème ligne de $A'$ :
+		
+		$$A'A'^T = N \begin{pmatrix}
+		1 &  \ao_1 & \dots & \ao_n \\ 
+		\ao_1 & g_{1,1} & \dots & g_{1, n} \\
+		\vdots & \vdots & \ddots & \vdots \\
+		\ao_n & g_{n, 1} & \dots & g_{n, n}
+		\end{pmatrix} $$
+		
+		avec $\ao_i = \frac{1}{N} \sum_{k = 1}^N a_i(o_k)$ et $g_{i, j} = \frac{1}{N} \sum_{k = 1}^N a_i(o_k)a_j(o_k)$.
+		
+		Si la moyenne est nulle, $\ao_i = 0$ et les $g_{i, j}$ forment la matrice de covariance $\Sigma$
+		
+		\remarque{slides 12-19/19 ; ce qui suit vient de mes notes manuscrites}
+		
+		En conclusion, la prédiction n'est pas modifiée si on ajoute des constantes et si on effectue des combinaisons linéaires aux valeurs des attributs (tant qu'elles ne sont pas singulières).
+		
+		Si on retire la moyenne et l'écart-type à tous les coefficients de la matrice, on les place dans le même ordre de grandeur (abstraction des unités).
+		
+		
+		Le problème est que plusieurs sont possible. La solution est d'utiliser $\lambda$ [slide 16/19], qui permet d'en isoler une et de mieux conditionner le problème.
+		
+		Augmenter $\lambda$ réduit la variance, car on tient moins compte de $A$ dans $TSE_R$. En revanche, on est moins optimal sur l'échantillon, il y a augmentation de l'erreur quadratique moyenne.
+		
+		\dessin{39}
+		
+		Augmenter $\lambda$ est bénéfique sur un échantillon de test indépendant.
+		
+		\remarque{Des notations sur le graphique dans mes notes manquent dans cette synthèse.}
