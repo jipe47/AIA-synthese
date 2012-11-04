@@ -1,22 +1,148 @@
 \chapter{$k$-NN - méthode des $k$ème plus proches voisins}
+
+	\section{Introduction}
 		
-Cette méthode consiste à prédire la sortie en se basant sur les plus proches voisins de l'entrée.
+	Cette méthode consiste à prédire la sortie en se basant sur les plus proches voisins de l'entrée. L'idée est que les objets similaires devraient avoir des sorties similaires.
 		
-\dessin{11}
+	\dessin{11}
 		
-Pour ce faire, on trouve les $k$ plus proches voisins, en utilisant la distance euclidienne. La sortie sera,
+	Pour ce faire, on trouve les $k$ plus proches voisins, en utilisant une mesure de la distance :
+	
+	$$d_a(o, o') = (\ab(0) - \ab(o'))^T(\ab(o) - \ab(o')) = \sum_{i = 1}^n(a_i(o) - a_i(o'))^2$$
+	
+	Le plus proche voisin est donné par
+	
+	$$NN_a(o, \LS) = arg \min_{o' \in \LS} d_a(o, o')$$
+	
+	On extrapole alors la sortie sur base du plus proche voisin :
+	
+	$$\yh_{NN}(o) = y(NN_a(o, \LS))$$
+	
+	\section{Propriétés}
+	
+	Au niveau de la complexité :
+	
+	\begin{itemize}
+		\item pour l'apprentissage, il faut stocker $\LS$ : $n \times N$
+		\item pour les tests, il faut calculer $N$ distances, on a donc $N \times n$ calculs à effectuer
+	\end{itemize}
+	
+	Au niveau de la précision, asymptotiquement ($\Leftrightarrow$ lorsque $N \rightarrow \infty$), on est sous-optimal (sauf si le problème est déterministe).
+	
+	De plus, il y a une forte dépendance sur le choix des attributs. On considère alors des points sur les attributs lors du calcul de la distance :
+	
+	$$d_a^w = \sum_{i = 1}^n w_i (a_i(o) - a_i(o'))^2$$
+	
+	\dessin{41}
+	
+	L'erreur de resubstitution ne sera pas nulle si on considère les points sur la frontière. Ainsi, le point vert à côté des deux rouges sera mal classé si on considère les trois plus proches voisins.
+	
+	\section{Raffinement}
+	
+		\subsection{La méthode $k$-NN}
 		
-\begin{itemize}
-	\item dans le cadre d'une classification, la classe la plus fréquente,
-	\item dans le cadre d'une régression, la valeur moyenne.
-\end{itemize}
+		On considère les $k$ plus proches voisins, ce qui donne
 		
-\dessin{12}
+		$$kNN(o, \LS) = First(k, sort(\LS, d_a(o, .)))$$
 		
-\begin{itemize}
-	\item[+] très simple ;
-	\item[+] peut être adapté pour tout type de données, en changeant la mesure de la distance ;
-	\item[-] choisir une bonne mesure de la distance est un problème compliqué ;
-	\item[-] cet algorithme est très sensible à la présence de bruit ;
-	\item[-] lent.
-\end{itemize}
+		La sortie sera,
+		
+		\begin{itemize}
+			\item dans le cadre d'une classification, la classe la plus fréquente,
+			\item dans le cadre d'une régression, la valeur moyenne.
+			
+			$$\yh_{kNN}(o) = k^{-1} \sigma_{o' \in kNN_a(o, \LS)} y(o')$$
+		\end{itemize}
+		
+		$k$ permet de contrôler le sur-apprentissage. Asymptotiquement ($\Leftrightarrow \: N \rightarrow \infty$) : $k(N) \rightarrow \infty$ et $\frac{k(N)}{N} \rightarrow 0$, on a donc une solution optimale (l'erreur est minimisée).
+		
+		\dessin{12}
+		
+		$k$ ne doit pas augmenter trop vite avec $N$, par exemple $k = \sqrt{N}$.
+		
+		\subsection{Condensation et édition de $\LS$}
+		
+		L'idée est
+		
+		\begin{itemize}
+			\item de condenser $\LS$, c'est-à-dire retirer les objets "inutiles",
+			\item d'éditer $\LS$ en retirant des valeurs aberrantes.
+		\end{itemize}
+		
+		En appliquant ces deux modifications (d'abord l'édition puis la condensation), on élague $\LS$ afin d'obtenir de meilleurs performances.
+		
+		\dessin{40}
+		
+		\subsection{Autres raffinements}
+		
+		\begin{itemize}
+			\item mise au point automatique du vecteur de points $w$
+			\item utiliser des fenêtres de Parzen et/ou des méthodes à base de noyaux :
+			
+			$$\yh_K(o) = \sum_{o' \in \LS} y(o') K(o, o')$$
+			
+			où $K(o, o')$ est une mesure de la similarité. On pourrait par exemple prendre $K(o, o') = -\alpha \vert \vert a(o) - a(o') \vert \vert^2$ : cela permet de faire intervenir plus les voisins proches et moins ceux qui sont éloignés (réglable via $\alpha$).
+		\end{itemize}
+
+	\section{Avantages et inconvénients}
+		
+	\begin{itemize}
+		\item[+] très simple ;
+		\item[+] peut être adapté pour tout type de données, en changeant la mesure de la distance ;
+		\item[-] choisir une bonne mesure de la distance est un problème compliqué ;
+		\item[-] cet algorithme est très sensible à la présence de bruit ;
+		\item[-] lent.
+	\end{itemize}
+	
+	
+	\section{Relation entre les méthodes à base d'arbres et à base de noyaux}
+	
+	Un noyau peut être défini par un arbre de régression. Soient
+	
+	\begin{itemize}
+		\item $\mathcal{L}_i$, $i = 1, \dots , \vert \mathcal{T} \vert$, l'ensemble des feuilles de $\mathcal{T}$,
+		\item $N_i$ le nombre d'objets dans le sous-$\LS$ de $\mathcal{L}_i$, et
+		\item $K_\mathcal{T}(o, o')$ égal à $\frac{1}{N_i}$ si $o$ et $o'$ atteignent la même feuille $\mathcal{L_i}$, 0 sinon.
+	\end{itemize}
+	
+	Alors l'approximation de l'arbre de régression peut être écrite comme
+	
+	$$\yh_{\mathcal{T}}(o) = \sum_{o' \in \LS}y(o') K_{\mathcal{T}}(o, o')$$
+	
+	\dessinS{42}{.3}
+	
+	On peut utiliser une représentation à base de produits scalaires :
+	
+	\begin{itemize}
+		\item pour chaque feuille, on défini une fonction $a_{\mathcal{L}_i}(o)$ par $a_{\mathcal{L}_i}(o) = N_i^{- \frac{1}{2}}$ si $o$ atteint $\mathcal{L}_i$, 0 sinon.
+		\item soit $\ab_{\mathcal{T}}(o) = (a_{\mathcal{L}_1}(o), \dots , a_{\mathcal{L}_{\vert \mathcal{T} \vert }}(o))^T$
+	\end{itemize}
+	
+	On a alors
+	
+	$$K_{\mathcal{T}}(o, o') = \ab_{\mathcal{T}}^T(o) \ab_{\mathcal{T}}(o')$$
+	
+	et
+	
+	$$\yh_{\mathcal{T}}(o) = \sum_{o' \in \LS} y(o') \ab_{\mathcal{T}}^T(o) \ab_{\mathcal{T}}(o')$$
+	
+	\section{Relation entre les méthodes linéaires et à base de noyaux}
+	
+	On considère un problème de classification et on définit $y(o) = 1$ si $c(o) = c_1$ et $y(o) = -1$ si $c(o) = c_2$. On peut construire un
+	
+	\begin{itemize}
+		\item le centre de la classe 1 : $\cb_+ = N_+^{-1} \sum_{o' \in \LS_+} \ab(o')$
+		\item le centre de la classe 2 : $\cb_- = N_-^{-1} \sum_{o' \in \LS_-} \ab(o')$
+		\item classificateur : $\yh(o) = 1$ si $d(\cb_+, \ab(o)) < d(\cb_-, \ab(o))$
+		\item on définit $c = \frac{c_+ + c_)}{2}$ et $\Delta \cb = \cb_+ - \cb_-$
+	\end{itemize}
+	
+	On a alors
+	
+	$$\yh(o) = sgn((\ab(o) - \cb)^T \Delta \cb)$$
+	
+	ou
+	
+	% TODO Insérer l'abominable formule du transparent 12/12 \o/
+	
+	% Note page 4 recto
