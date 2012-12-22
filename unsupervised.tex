@@ -117,6 +117,8 @@ Deux composantes sont considérées :
 		
 		$$W(C) = \frac{1}{2} \sum_{k = 1}^K \sum_{C(i) = k} \sum_{C(i') = k} d(x_i, x_{i'})$$
 		
+		Plus les points d'un cluster sont rapprochés, plus ce nombre est petit et donc plus les clusters sont meilleurs.
+		
 		Le nombre de possibilité est cependant trop grand pour une énumération.
 		
 		$$S(N, K) = \frac{1}{K!} \sum_{k = 1}^K(-1)^{K - k} \begin{pmatrix}
@@ -128,7 +130,11 @@ Deux composantes sont considérées :
 	
 	Cet algorithme effectue un partitionnement avec un nombre $k$ fixé de clusters. On utilise la distance euclidienne entre deux objets, et on va chercher à minimiser la somme des variances intra-cluster :
 	
-	$$W(C) = \frac{1}{2} \sum_{k = 1}^K \sum_{C(i) = k} \sum_{C(i') = k} \Vert x_i - x_{i'} \Vert^2 = \sum_{k = 1}^K N_k \sum_{C(i) = k} \Vert x_i - \overline{x}_k \Vert^2$$
+	$$W(C) = \frac{1}{2} \sum_{k = 1}^K \sum_{C(i) = k} \sum_{C(i') = k} \Vert x_i - x_{i'} \Vert^2$$ 
+	
+	Le fait d'utiliser une distance euclidienne permet de réécrire la fonction et d'être plus efficace en passant d'un calcul quadratique par rapport au nombre de cluster à un calcul linéaire sur les points :
+	
+	$$W(C) = \sum_{k = 1}^K N_k \sum_{C(i) = k} \Vert x_i - \overline{x}_k \Vert^2$$
 	
 	avec $\overline{x}_k = (\overline{x}_{1k}, \dots, \overline{x}_{pk})$ le centre du cluster $k$ et $N_k$ le nombre de points dans le cluster $k$ :
 	
@@ -138,10 +144,17 @@ Deux composantes sont considérées :
 	
 	$$min_{C, \ens{m_k}^K_1} \sum_{k = 1}^K N_k \sum_{C(i) = k} \Vert x_i - m_k Vert^2$$
 	
+	On a deux degrés de liberté : les clusters des points et les centres de masse $m_k$.
+	
+	Si $C$ est fixé, les $m_k$ sont triviaux à calculer. Si les centres de masse sont fixés, on va chercher les plus proches voisins :
+	
+	$$C(i) = argmax_k \Vert x_i - m_k \Vert^2$$
+	
+	
 		\subsubsection{Algorithme}
 		
 		\begin{enumerate}
-			\item On assigne aléatoirement chaque point à un cluster
+			\item On assigne aléatoirement chaque point à un cluster OU on répartit les centres de masse aléatoirement
 			\item Itérativement :
 			
 			\begin{itemize}
@@ -152,7 +165,7 @@ Deux composantes sont considérées :
 			\end{itemize}
 		\end{enumerate}
 		
-		On s'arrête lorsqu'il n'y a plus de changement.
+		On s'arrête lorsqu'il n'y a plus de changement ; à chaque itération, la somme va diminuer.
 		
 		\dessin{48}
 		
@@ -160,15 +173,39 @@ Deux composantes sont considérées :
 		
 		\dessin{50}
 		
-		Chaque étape réduit l'éparpillement dans les clusters, donc la convergence est assurée, mais uniquement vers un optimum local.
+		Chaque étape réduit l'éparpillement dans les clusters, donc la convergence est assurée, mais uniquement vers un optimum local. De plus, chacune de ces étapes est linéaire par rapport au nombre d'objets, alors qu'avec le clustering hiérarchique il fallait considérer toutes les paires d'objets.
 		
-		De plus, vu le départ aléatoire de l'algorithme, on pourrait avoir plusieurs solutions différentes. La solution est de redémarrer l'algorithme plusieurs fois.
+		Vu le départ aléatoire de l'algorithme, on pourrait avoir plusieurs solutions différentes. La solution est de redémarrer l'algorithme plusieurs fois.
+		
+		L'algorithme des k-means peut être utilisé pour de la compression, en découpant une image en blocs et l'appliquant dessus.
+		
+		\dessin{54}
+		
+		\begin{center}
+		\begin{tabular}{|c|c|c|c||c|c|}
+		\hline
+		$p_1$ & $p_2$ & $p_3$ & $p_4$ & C & $m_k$ \\ 
+		\hline\hline
+		0 & 255 & 128 & 255 & 1 & $m_1$ \\ 
+		\hline 
+		$\vdots$ & $\vdots$ & $\vdots$ & $\vdots$ & 2 & $m_2$ \\ 
+		\hline 
+		  &   &   &   & 1 & $\vdots$ \\ 
+		\hline 
+		 &   &   &   & 3 &  \\ 
+		\hline 
+		 &  &  &  & 4 &  \\ 
+		\hline 
+		\end{tabular} 
+		\end{center}
 		
 		\subsubsection{K-medoids}
 		
-		Il s'agit d'une extension des k-means qui permet d'utiliser n'importe quelle mesure de distance. Elle est par contre beaucoup plus lente.
+		Il s'agit d'une extension des k-means qui permet d'utiliser n'importe quelle mesure de distance. 
 		
 		\dessin{51}
+		
+		Les k-medoids sont par contre beaucoup plus lents : dans le calcul de l'expression, pour chaque cluster, on doit vérifier toutes les paires de point, ce qui donne un algorithme quadratique.
 		
 		\subsubsection{Forces et faiblesses}
 		
@@ -221,6 +258,13 @@ Deux composantes sont considérées :
 		\item stabilité : sélectionner le $k$ qui conduit à des clusters stables (calculés avec une analyse bootstrap)
 	\end{itemize}
 	
+	\subsection{Sélection de features}
+	
+	La sélection de composantes peut améliorer le clustering en diminuant le bruit (et le temps de clacul).
+	
+	Par exemple, on va garder les 100 variables avec le plus de variance.
+	
+	Du clustering après une sélection de features supervisée doit être évitée, car on retrouvera toujours la classification, vu que c'est le critère utilisé pour sélectionner les variables.
 	
 
 \section{Réduction de dimensionnalité}
