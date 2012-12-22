@@ -1,0 +1,189 @@
+\chapter{Apprentissage non supervisé}
+
+Le but de l'apprentissage non supervisé est de trouver des irrégularités dans les données, sans se soucier de la relation entrée-sortie. On recherche ainsi les groupes de variables ou d'objets intéressants, et des dépendances entre les variables.
+
+Il existe trois grandes familles de problèmes :
+
+\begin{itemize}
+	\item clustering : trouver des groupes d'échantillons ou de variables.
+	\item réduction de dimensionnalité : on projette les données d'un espace à haute dimension vers un espace plus petit.
+	\item estimation de densité : déterminer la distribution des données dans l'espace d'entrée.
+\end{itemize}
+
+\section{Clustering}
+
+Le but est de grouper une collection d'objets en sous-ensembles (appelés clusters), de façon à ce que chaque objet dans un cluster soit proche des autres, tout en étant éloigné des objets des autres clusters.
+	
+Ces groupements peuvent être
+
+\begin{itemize}
+	\item des groupements de lignes/d'objets similaires
+	\item des groupements de colonnes/variables
+	\item du bi-clustering, c'est-à-dire en se basant sur les lignes et les colonnes.
+\end{itemize}
+
+\dessin{43}
+
+Applications :
+
+\begin{itemize}
+	\item marketing : trouver des groupes de clients qui ont un comportement similaire, en se basant sur leurs caractéristiques et les achats précédents
+	\item biologie : classifier de la faune et la flore selon leurs caractéristiques
+	\item web : classification de documents (par exemple des articles de blog)
+\end{itemize}
+
+Deux composantes sont considérées :
+
+\begin{itemize}
+	\item la mesure de distance entre deux objets
+	\item un algorithme de clustering, qui va minimiser les distances entre les objets d'un groupe et/ou maximiser les distances entre des groupes
+\end{itemize}
+
+	\subsection{Mesure de distances}
+		\subsubsection{Distance Euclidienne}
+		Elle mesure la différence entre des coordonnées et pénalise les grosses différences. Il s'agit de la racine carrée de la somme des carrés des différences entre les coordonnées :
+		
+		$$d_e(x_1, x_2) = \sqrt{(x_{10}-x_{20})^2 + (x_{11}-x_{21})^2 + \dots}$$
+		
+		\subsubsection{Distance de Manhattan}
+		Elle mesure la différence entre des coordonnées, mais de manière robuste. Il s'agit de la somme des différences absolues de toutes les coordonnées :
+		
+		$$d_e(x_1, x_2) = \vert x_{10}-x_{20} \vert + \vert x_{11}-x_{21} \vert + \dots$$
+		
+		\subsubsection{Corrélation}
+		Elle mesure une différence en tenant compte des tendances. La distance entre deux vecteurs est $1 - \rho$, où $\rho$ est la corrélation de Pearson entre les deux vecteurs :
+		
+		$$\rho(x_1, x_2) = \frac{cov(x_1, x_2)}{\sigma_{x_1} \sigma_{x_2}} = \frac{\sum_{i = 1}^n (x_{1, i} - \overline{x}_1)(x_{2, i} - \overline{x}_2)}{\sqrt{\sum_{i = 1}^n (x_{1, i} - \overline{x}_1)^2} \sqrt{\sum_{i = 1}^n (x_{2, i} - \overline{x}_2)^2}}$$
+	
+		On a que $\rho \in [-1, 1]$, donc $1 - \rho \in [0, 2]$ : 0 signifie que les données sont fortement corrélées.
+	
+	\subsection{Clustering hiérarchique}
+	
+		\subsubsection{Algorithme}
+		On a l'algorithme suivant :
+	
+		\begin{enumerate}
+			\item Chaque objet est assigné à son propre cluster
+			\item Itérativement :
+		
+			\begin{itemize}
+				\item les deux clusters les plus similaires sont joins et rassemblés en un.
+				\item la matrice de distances est mise à jour avec le nouveau cluster qui en remplace deux.
+			\end{itemize}
+		\end{enumerate}
+		
+		\subsubsection{Distance entre deux clusters}
+		
+		On a plusieurs possibilités :
+		
+		\begin{itemize}
+			\item Single linkage : utiliser la plus petite distance entre deux objets du cluster. Cela a tendance à créer des clusters étalés.
+			
+			\item Complete linkage : utiliser la plus grande distance entre deux objets du cluster. Cela a tendance à créer des grappes.
+			
+			\item Average distance : calculer la distance moyenne. On obtient un mix des deux autres mesures ; on a une sorte de distance entre les centres de masse.
+		\end{itemize}
+				
+		\dessin{44}
+		
+		\dessin{45}
+		
+		\subsubsection{Dendrogramme}
+		
+		Cela permet de visualiser le clustering hiérarchique et de déterminer visuellement le nombre de clusters.
+		
+		\dessin{46}
+		
+		
+		\subsubsection{Forces et faiblesses}
+		
+		\begin{itemize}
+			\item[+] on n'a pas besoin de supposer un nombre particulier de cluster
+			\item[+] on peut utiliser n'importe quel type de matrice de distance
+			\item[+] on a parfois une interprétation facile des résultats
+			
+			\item[-] trouver une interprétation n'est pas toujours aisé
+			\item[-] une fois qu'il a été décidé de combiner deux clusters, on ne peut pas revenir en arrière. Par exemple, le cluster rouge montre un mauvais départ, alors qu'on aurait voulu obtenir les deux clusters verts :
+			
+			\dessin{47}
+			\item[-] pas très bien motivé théoriquement
+		\end{itemize}
+		
+		\subsubsection{Algorithme de clustering combinatoire}
+		
+		Soit un nombre de clusters $K < N$ et un encodeur $C$ qui assigne la $i$ème observation au cluster $C(i)$. On va chercher la fonction $C^*$ qui minimise une fonction de perte, qui mesure si l'objectif de clustering est atteint.
+		
+		Par exemple, on pourrait avoir comme fonction de perte une qui se base sur l'éparpillement des objets d'un cluster (within cluster scatter) :
+		
+		$$W(C) = \frac{1}{2} \sum_{k = 1}^K \sum_{C(i) = k} \sum_{C(i') = k} d(x_i, x_{i'})$$
+		
+		Le nombre de possibilité est cependant trop grand pour une énumération.
+		
+		$$S(N, K) = \frac{1}{K!} \sum_{k = 1}^K(-1)^{K - k} \begin{pmatrix}
+		K \\ 
+		k
+		\end{pmatrix}  k^N$$
+	
+	\subsection{K-means}
+	
+	Cet algorithme effectue un partitionnement avec un nombre $k$ fixé de clusters. On utilise la distance euclidienne entre deux objets, et on va chercher à minimiser la somme des variances intra-cluster :
+	
+	$$W(C) = \frac{1}{2} \sum_{k = 1}^K \sum_{C(i) = k} \sum_{C(i') = k} \Vert x_i - x_{i'} \Vert^2 = \sum_{k = 1}^K N_k \sum_{C(i) = k} \Vert x_i - \overline{x}_k \Vert^2$$
+	
+	avec $\overline{x}_k = (\overline{x}_{1k}, \dots, \overline{x}_{pk})$ le centre du cluster $k$ et $N_k$ le nombre de points dans le cluster $k$ :
+	
+	$$N_k = \sum_{i = 1}^N I(C(i) = k)$$
+	
+	Cela revient donc à un problème d'optimisation :
+	
+	$$min_{C, \ens{m_k}^K_1} \sum_{k = 1}^K N_k \sum_{C(i) = k} \Vert x_i - m_k Vert^2$$
+	
+		\subsubsection{Algorithme}
+		
+		\begin{enumerate}
+			\item On assigne aléatoirement chaque point à un cluster
+			\item Itérativement :
+			
+			\begin{itemize}
+				\item calculer les moyennes des clusters $\ens{m_1 , \dots , m_K}$
+				\item pour ces moyennes, assigner chaque observation à la moyenne de cluster la plus proche :
+				
+				$$C(i) = \argmin_{1 \leq k \leq K} \Vert x_i - m_k \Vert^2$$
+			\end{itemize}
+		\end{enumerate}
+		
+		On s'arrête lorsqu'il n'y a plus de changement.
+		
+		\dessin{48}
+		
+		\dessin{49}
+		
+		\dessin{50}
+		
+		Chaque étape réduit l'éparpillement dans les clusters, donc la convergence est assurée, mais uniquement vers un optimum local.
+		
+		De plus, vu le départ aléatoire de l'algorithme, on pourrait avoir plusieurs solutions différentes. La solution est de redémarrer l'algorithme plusieurs fois.
+		
+		\subsubsection{K-medoids}
+		
+		Il s'agit d'une extension des k-means qui permet d'utiliser n'importe quelle mesure de distance. Elle est par contre beaucoup plus lente.
+		
+		\dessin{51}
+		
+		\subsubsection{Forces et faiblesses}
+		
+		\begin{itemize}
+			\item[+] simple et facile à comprendre
+			\item[+] on peut clusteriser n'importe quel nouveau point (contrairement au clustering hiérarchique)
+			\item[+] bonne motivation théorique
+			\item[-] il faut fixer le nombre de clusters
+			\item[-] sensible au choix initial des centres des clusters
+			\item[-] sensible aux données isolées (outliers)
+		\end{itemize}
+	
+	\subsection{Self-Organizing Maps}
+	
+
+\section{Réduction de dimensionnalité}
+
+\section{Estimation de densité}
