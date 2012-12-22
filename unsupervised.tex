@@ -183,6 +183,45 @@ Deux composantes sont considérées :
 	
 	\subsection{Self-Organizing Maps}
 	
+	C'est une méthode similaire au k-means, mais avec des contraintes supplémentaires : les clusters sont donnés sous forme de matrice (à une ou deux dimensions).
+	
+	\dessin{52}
+	
+		\subsubsection{Algorithme}
+		
+		Itérativement :
+		\begin{itemize}
+			\item prendre $P$ données aléatoirement		
+			\item déplacer tous les noeuds dans la direction de $P$ : plus un noeud est dans la topologie mieux c'est (et inversement)
+			\item diminuer la quantité de mouvement autorisée
+		\end{itemize}
+		
+		
+	\subsection{Nombre de cluster}
+	
+	La question est de savoir quand s'arrêter dans le clustering hiérarchique et comment choisir $k$ pour les k-means et les SOMs. On a un phénomène d'overfitting, comme en apprentissage supervisé :
+	
+	\begin{itemize}
+		\item on sur-apprend les données s'il y a trop de clusters. On arrive ainsi à trouvers des clusters qui n'existent pas dans les données à cause du bruit
+		\item on sous-apprend les données s'il y a trop peu de clusters, on passe ainsi à côté de clusters pertinents
+	\end{itemize}
+	
+	Il n'est cependant pas possible, contrairement à l'apprentissage supervisé, d'effectuer une validation croisée.
+	
+	Un choix de nombre de cluster consiste à prendre le point d'inflexion de la courbe de variance intra-cluster.
+	
+	\dessin{53}
+	
+	
+	Autres possibilités :
+	
+	\begin{itemize}
+		\item utiliser des indices internes : sélectionner $k$ qui minimise/maximise les distances intra- et extra-cluster
+		\item gap statistic : utiliser une méthode qui compare un indice interne avec ce qu'on aurait obtenu avec des données aléatoire, et choisir le $k$ qui minimise cette différence
+		\item stabilité : sélectionner le $k$ qui conduit à des clusters stables (calculés avec une analyse bootstrap)
+	\end{itemize}
+	
+	
 
 \section{Réduction de dimensionnalité}
 
