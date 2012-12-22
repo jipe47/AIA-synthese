@@ -3,7 +3,7 @@
 Cette méthode se base sur deux idées :
 
 \begin{enumerate}
-	\item la mise ne place d'un classifieur à large marge, et
+	\item la mise en place d'un classifieur à large marge, et
 	\item le "noyautage" de l'espace d'entrée.
 \end{enumerate}
 
@@ -15,3 +15,105 @@ Il faut trouver un classifieur linéaire. L'idée va être de trouver celui qui 
 C'est une méthode intuitivement sûre, avec une borne théorique sur l'erreur : $E(TS) < \mathcal{O}(\frac{1}{\text{margin}})$.
 
 65 $\rightarrow$ 74
+
+\section{Machines à support vectoriel linéaire}
+	
+	Soit un $\LS = \ens{(x_k, y_k)}^N_{k = 1}$, avec $y_k \in {-1, 1}$ et $x_k \in \mathbb{R}^n$. On cherche un classifieur de la forme
+	
+	$$\yh(x) = sgn(w^T x + b)$$
+	
+	qui classifie $\LS$ correctement, c'est-à-dire qui minimise
+	
+	$$\sum_{k = 1}^N1(y_k \neq \yh(x_k))$$
+	
+	\subsection{Hyperplan de marge maximale}
+	
+	Lorsque les données sont linéairement séparables dans l'espace des features, l'hyperplan séparateur n'est pas unique.
+	
+	\dessin{55}
+	
+	Une SVM va chercher à maximiser la distance de l'hyperplan au point le plus proche dans $\LS$, autrement dit
+	
+	$$\max_{w, b} min \ens{\Vert x - x_k \Vert : w^T x + b = 0, k = 1, \dots , N}$$
+	
+	On maximise la marge car, intuitivement, c'est une méthode sûr. De plus, il existe des bornes théoriques sur l'erreur de généralisation qui dépend de la marge :
+	
+	$$Err(TS) < \bigoh (\frac{1}{\gamma}$$
+	
+	où $\gamma$ est la marge. Cependant, ces marges ne sont pas souvent atteintes. En pratique, une SVM fonctionne très bien.
+	
+	Cet algorithme conduit à un problème d'optimisation convexe, où la solution peut être écrite uniquement en terme de produits scalaires.
+	
+	\subsection{Problème d'optimisation}
+	
+	\dessin{56}
+	
+	$w$ est perpendiculaire à la ligne $y(x) = w^Tx + b$ :
+	
+	$$y(x_a) = 0 = y(x_b) \Rightarrow w^T(x_A - x_B) = 0$$
+	
+	Soit $x$ tel que $y(x) = 0$. La distance de l'origine à cette ligne est
+	
+	$$\Vert x \Vert \cos(w, x) = \Vert x \Vert \frac{w^T x}{\Vert w \Vert \: \Vert x \Vert} = \frac{w^Tx}{\Vert w \Vert} = \frac{-b}{\Vert w \Vert}$$
+	
+	Tout point $x$ peut être écrit comme
+	
+	$$x = x_{\text{perp}} + r \frac{w}{\Vert w \Vert}$$
+	
+	où $\vert r \vert$ est la distance entre $x$ et la ligne. En multipliant les deux membres par $w^T$ et en ajoutant $b$, on obtient
+	
+	$$w^Tx + b = w^T x_{\text{perp}} + b + r \frac{w^T w}{\Vert w \Vert} = 0 + r \Vert w \Vert \Rightarrow r = \frac{y(x)}{\Vert w \Vert}$$
+	
+	Le problème d'optimisation peut alors être écrit comme 
+	
+	$$arg \max_{w, b} \ens{\frac{1}{\Vert w \Vert} \min_n [y_n . (w^T x_n + b)]}$$
+	
+	La solution n'est pas unique vu que l'hyperplan est inchangé si  on multiplie $w$ et $b$ par une constante $c > 0$. Pour imposer une unicité, on choisit typiquement $\vert w^T x + b \vert = 1$ pour le point $x$ qui est le plus proche de la surface (vecteur de support).
+	
+	Le problème est alors équivalent à maximiser $\frac{1}{\Vert w \Vert}$ (ou à minimiser $\Vert w \Vert$) avec les contraintes
+	
+	$$y_k(w^T x_k + b) \geq 1, \: \forall k = 1, \dots , N$$
+	
+	Le problème de la SVM est équivalent à
+	
+	$$\min_{w, b} \varepsilon(w, b) = \frac{1}{2} \Vert w \Vert^2$$
+	
+	sujet aux $N$ contraintes
+	
+	$$y_k(w^T x_k + b) \geq 1, \: \forall k = 1, \dots , N$$
+
+	$\Vert w \Vert$ devient $\frac{1}{2} \Vert w \Vert^2$ par facilité. Il s'agit d'un problème de programmation quadratique. Il existe une solution seulement si les données sont linéairement séparables.
+	
+	Optimisation des contraintes : 10 $\rightarrow$ 17/45
+	
+	\subsection{Vecteurs de support}
+	
+	Le problème primaire est donc
+	
+	$$\mathcal{L}(w, b, \alpha) = \frac{1}{2} \Vert w \Vert - \sum_{k = 1}^N \alpha_k (y_k (w^Tx_k + b) - 1)$$
+	
+	En accord avec les conditions complémentaires KKT, le vecteur solution $w$ est tel que
+	
+	$$\alpha_k (y_k (w^T x_k + b) - 1) = 0, \: \forall k = 1, \dots , N$$
+	
+	$\alpha_k = 0$ si la contrainte est satisfaite comme une inégalité stricte $y_k (w^T x_k + b) > 1$, car c'est la façon de maximiser $\mathcal{L}$.
+	
+	$\alpha_k > 0$ si la contrainte est satisfaite comme une égalité $y_k(w^Tx_k + b) = 1$, auquel cas $x_k$ est le vecteur de support.
+	
+	Une fois que les valeurs optimales de $\alpha$ ont été déterminées, le modèle final peut être écrit comme
+	
+	$$\yh(x) = sgn(\sum_{i= 1}^N y_i \alpha_i x_i^T x + b)$$
+	
+	où les valeurs de $\alpha_k$ différentes de 0 (strictement positives) correspondent aux vecteurs de support.
+	
+	$b$ est calculé en exploitant le fait que pour tout $\alpha_k > 0$, on a nécessairement $y_k(wTx_k + b) - 1 = 0$.
+	
+	Borne pour le leave-one-out : 20/45
+	
+	\subsection{Sort margin}
+	
+	A cause du bruit ou de données isolées (outliers), les données peuvent ne pas être linéairement séparables dans l'espace des features. 
+	
+	\dessin{57}
+	
+	
