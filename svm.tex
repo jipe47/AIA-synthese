@@ -26,6 +26,8 @@ C'est une méthode intuitivement sûre, avec une borne théorique sur l'erreur :
 	
 	$$\sum_{k = 1}^N1(y_k \neq \yh(x_k))$$
 	
+	\dessin{62}
+	
 	\subsection{Hyperplan de marge maximale}
 	
 	Lorsque les données sont linéairement séparables dans l'espace des features, l'hyperplan séparateur n'est pas unique.
@@ -34,7 +36,7 @@ C'est une méthode intuitivement sûre, avec une borne théorique sur l'erreur :
 	
 	Une SVM va chercher à maximiser la distance de l'hyperplan au point le plus proche dans $\LS$, autrement dit
 	
-	$$\max_{w, b} min \ens{\Vert x - x_k \Vert : w^T x + b = 0, k = 1, \dots , N}$$
+	$$\underbrace{\max_{w, b} \underbrace{min \ens{\Vert x - x_k \Vert : w^T x + b = 0, k = 1, \dots , N}}_{\text{point le plus proche de la droite}}}_{\text{maximisation de la marge}}$$
 	
 	On maximise la marge car, intuitivement, c'est une méthode sûr. De plus, il existe des bornes théoriques sur l'erreur de généralisation qui dépend de la marge :
 	
@@ -58,21 +60,26 @@ C'est une méthode intuitivement sûre, avec une borne théorique sur l'erreur :
 	
 	Tout point $x$ peut être écrit comme
 	
-	$$x = x_{\text{perp}} + r \frac{w}{\Vert w \Vert}$$
+	$$x = x_{\perp} + r \frac{w}{\Vert w \Vert}$$
 	
-	où $\vert r \vert$ est la distance entre $x$ et la ligne. En multipliant les deux membres par $w^T$ et en ajoutant $b$, on obtient
+	où $x_{\perp}$ est la projection de $x$ et $\vert r \vert$ la distance entre $x$ et la ligne. En multipliant les deux membres par $w^T$, on obtient
 	
-	$$w^Tx + b = w^T x_{\text{perp}} + b + r \frac{w^T w}{\Vert w \Vert} = 0 + r \Vert w \Vert \Rightarrow r = \frac{y(x)}{\Vert w \Vert}$$
+	$$w^Tx = \underbrace{w^T x_{\perp}}_{\substack{-b\\ \text{car } x_{\perp} \text{ est sur} \\ \text{la droite}}} + r \frac{\overbrace{w^T w}^{\Vert w \Vert2}}{\Vert w \Vert}$$
+	$$\Leftrightarrow r = \frac{w^Tx + b}{\Vert w \Vert} = \frac{y(x)}{\Vert w \Vert}$$
 	
 	Le problème d'optimisation peut alors être écrit comme 
 	
 	$$arg \max_{w, b} \ens{\frac{1}{\Vert w \Vert} \min_n [y_n . (w^T x_n + b)]}$$
 	
-	La solution n'est pas unique vu que l'hyperplan est inchangé si  on multiplie $w$ et $b$ par une constante $c > 0$. Pour imposer une unicité, on choisit typiquement $\vert w^T x + b \vert = 1$ pour le point $x$ qui est le plus proche de la surface (vecteur de support).
+	Si les exemples sont bien classés, $y_n$ et $w^Tx_n + b$ seront du même signe. $y_n$ permet de bien classer les valeurs, sinon on aurait une droite à l'infini (?).
+	
+	La solution n'est pas unique vu que l'hyperplan est inchangé si  on multiplie $w$ et $b$ par une constante $c > 0$ (par exemple, $c (w^Tx + b) = 0$ est aussi une solution). Pour imposer une unicité, on choisit typiquement $\vert w^T x + b \vert = 1$ pour le point $x$ qui est le plus proche de la surface (vecteur de support).
 	
 	Le problème est alors équivalent à maximiser $\frac{1}{\Vert w \Vert}$ (ou à minimiser $\Vert w \Vert$) avec les contraintes
 	
 	$$y_k(w^T x_k + b) \geq 1, \: \forall k = 1, \dots , N$$
+	
+	On a deux points qui sont les plus proches de la droite. C'est toujours le cas, sinon on pourrait encore augmenter la marge.
 	
 	Le problème de la SVM est équivalent à
 	
@@ -82,7 +89,7 @@ C'est une méthode intuitivement sûre, avec une borne théorique sur l'erreur :
 	
 	$$y_k(w^T x_k + b) \geq 1, \: \forall k = 1, \dots , N$$
 
-	$\Vert w \Vert$ devient $\frac{1}{2} \Vert w \Vert^2$ par facilité. Il s'agit d'un problème de programmation quadratique. Il existe une solution seulement si les données sont linéairement séparables.
+	$\Vert w \Vert$ devient $\frac{1}{2} \Vert w \Vert^2$ par facilité. Le $\frac{1}{2}$ permet de simplifier lors de la dérivation. Il s'agit d'un problème de programmation quadratique. Il existe une solution seulement si les données sont linéairement séparables, sinon des inéquations ne seront pas satisfaites.
 	
 	Optimisation des contraintes : 10 $\rightarrow$ 17/45
 	
