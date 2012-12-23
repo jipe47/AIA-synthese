@@ -179,8 +179,69 @@ $$\sum_{i = 1}^N \alpha_i y_i = 0$$
 
 \section{Notion mathématique du noyau}
 
+Soit $U$ un ensemble d'objets non vide. Un noyau positif est une fonction $K(., .)$
 
+$$K(.,.) : U \times U \rightarrow \mathbb{R}$$
 
+telle que pour tout $N \in \mathbb{N}$ et pour tout $o_1, \dots , o_N \in U$, la matrice $N \times N$
 
+$$K : K_{i, j} = K(o_i, o_j)$$
+
+est symétrique et définie semi-positive.
+
+Pour tout noyau positif $K$ défini sur $U$, il existe un espace de produit scalaire $\mathcal{V}$ et une fonction $\phi(.) : U \rightarrow \mathcal{V}$ tel que
+
+$$K(o, o') = \phi(o) \times \phi(o')$$
+
+où l'opérateur $\times$ dénote le produit scalaire dans $\mathcal{V}$.
+
+En général, l'espace $\mathcal{V}$ n'est pas nécessairement de dimension finie.
+
+Le noyau défini un produit scalaire, et donc une norme et une mesure de distance sur $U$, qui est héritée de $\mathcal{V}$ :
+
+$$d^2_U(o, o') = d^2_\mathcal{V}(\phi(o), \phi(o')) = (\phi(o) - \phi(o'))^T(\phi(o) - \phi(o'))$$
+$$= \phi(o) \times \phi(o) + \phi(o') \times \phi(o') - 2 \phi(o) \times \phi(o')$$
+$$= K(o, o) + K(o', o') - 2 K(o, o')$$
+
+\section{Exemple de noyaux}
+
+\begin{itemize}
+	\item noyau constant : $K(o, o') \models 1$
+	\item noyau linéaire défini sur des attributs numériques : $K(o, o') = \mathbf{a}^T(o) \mathbf{a}(o')$
+	\item noyau de Hamming pour des attributs discrets : $K(o, o') = \sum_{i = 1}^m \delta_{\mathbf{a}_i(o), \mathbf{a}_i(o')}$
+	\item noyau de texte, qui calcule le nombre de sous-chaînes communes dans $o$ et $o'$ (dimension infinie si la taille du texte n'est à priori pas bornée)
+	\item combinaison de noyaux :
 	
+	\begin{itemize}
+		\item la somme de plusieurs noyaux (positifs) est toujours un noyau (positif)
+		\item le produit de plusieurs noyaux est aussi un noyau
+		\item noyaux polynomiaux : $\sum_{i = 0}^n a_i(K(x, x'))^i$ si $\forall i : a_i \geq 0$
+	\end{itemize}
 	
+	\item $K(x, x') = (x^Tx')^2$ (voir 31/45)
+	\item noyau gaussien : $K(x, x') = \exp{\frac{-(x - x')^T(x - x')}{2 \sigma^2}}$
+\end{itemize}
+
+\dessin{60}
+
+\section{Méthodes à noyau}
+
+\dessin{61}
+
+L'approche est modulaire : on découple l'algorithme de la représentation. Beaucoup d'algorithmes peuvent utiliser des noyaux : ridge regression, PCA, k-means, etc. Des noyaux ont été défini pour plusieurs types de données : séries temporelles, images, grpahes, séquences, etc.
+
+Les intérêts principaux des noyaux est que l'on peut travailler efficacement dans des espaces de dimension très élevée (potentiellement infinie) dès qu'un produit scalaire est facile à calculer, et qu'on peut appliquer des algorithmes classiques sur des données en toute généralité, sans être nécessairement vectorielles (par exemple construire un modèle linéaire sur un graphe).
+
+Exemple de la ridge regression : 34 $\rightarrow$ 40 / 45
+
+\section{Forces et faiblesses}
+
+\begin{itemize}
+	\item[+] les SVM sont motivées théoriquement
+	\item[+] classifier des plus efficaces
+	\item[+] implémentations efficaces pour des problèmes larges
+	\item[-] modèles en boîte noire
+	\item[-] le choix d'un bon noyau est difficile et critique pour atteindre une bonne précision
+\end{itemize}
+
+L'optimisation convexe est un outil très utile en apprentissage, car beaucoup de problèmes peuvent être formulés comme des problèmes d'optimisation convexe. On bénéficie également du travail important donné pour créer des algorithmes d'optimisation efficaces, et qui plus est donnent une solution unique (ce qui rend le problème plus stable).
