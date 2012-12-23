@@ -116,4 +116,71 @@ C'est une méthode intuitivement sûre, avec une borne théorique sur l'erreur :
 	
 	\dessin{57}
 	
+	Les discordances sont mesurées par les variables $\xi_i \geq 0$ avec la contrainte relaxée associée $y_i(w^Tx_i + b) \geq 1 - \xi_i$. En rendant $\xi_i$ suffisamment large, la contrainte peut toujours être satisfaite :
+	
+	\begin{itemize}
+		\item si $0 < \xi_i < 1$, la marge n'est pas satisfaite mais $x_i$ est toujours correctement classé
+		\item si $\xi_i > 1$, alors $x_i$ est mal classé.
+	\end{itemize}
+	
+	\subsubsection{Marge douce en norme 1}
+	
+	Le problème primal est
+	
+	$$\min_{w, \xi} \frac{1}{2} \Vert w \Vert^2 + C \sum_{i = 1}^N \xi_i$$
+	s.t.
+	
+	$$y_i(w^T x_i + b) \geq 1 - \xi_i, \: \xi_i \geq 0, \: \forall i = 1, \dots , N$$
+	
+	où $C$ est une constante positive et qui équilibre l'objectif de maximiser la marge et de minimiser l'erreur engendrée.
+	
+	On a le problème dual :
+	
+	$$\max_\alpha \mathcal{W}(\alpha) = \sum_{k = 1}^N \alpha_k - \frac{1}{2} \sum_{i, j = 1}^N \alpha_i \alpha_j y_i y_j x_i^T x_j$$
+	
+	s.t.
+	
+	$$0 \leq \alpha_k \leq C, \: \forall k = 1, \dots , N \text{ (contrainte de boîte)}$$
+	$$\sum_{i = 1}^N \alpha_i y_i = 0$$
+	
+	\dessin{58}
+	
+\section{Kernel trick}
+
+% Transparent passé : 24/45
+
+Les données d'apprentissage peuvent ne pas être linéairement séparables dans l'espace d'entrée. On considère alors un mapping non linéaire $\phi$ vers un nouvel espace de features.
+
+\dessin{59}
+
+Le problème dual devient
+
+$$\max_\alpha \mathcal{W}(\alpha) = \sum_{k = 1}^N \alpha_k - \frac{1}{2} \sum_{i, j = 1}^N \alpha_i \alpha_j y_i y_j \phi(x_i)^T \phi(x_j)$$
+
+Plutôt que de définir le mapping $\phi$, on peut directement définir le produit scalaire $\phi^T(x) \phi(x')$, ce qui rend le mapping implicite.
+
+Il est possible de caractériser mathématiquement les fonctions $K(x, x')$ définies sur des paires d'objets : cette fonction est appelée un noyau (positif ou de Mercer). Il peut cependant être difficile de trouver une mesure de la similarité entre $x$ et $x'$.
+
+Le kernel trick est que n'importe quel algorithme qui utilise les données avec uniquement des produits vectoriels peut se baser sur ce mapping implicite, en remplaçant $x^Tx'$ par $K(x, x')$. Dans le cas du SVM, on a
+
+$$\yh(x) = sgn(\sum_{k = 1}^N y_k \alpha_k \phi(x_k)^T\phi(x) + b) = sgn(\sum_{k = 1}^N y_k \alpha_k K(x, x_k) + b)$$
+
+où les $\alpha_k$ peuvent être déterminés en résolvant le problème de maximisation quadratique 
+
+$$\max_\alpha \mathcal{W}(\alpha) = \sum_{k = 1}^N \alpha_k - \frac{1}{2} \sum_{i, j = 1}^N \alpha_i \alpha_j y_i y_j K(x_i, x_j)$$
+
+sujet aux $N$ contraintes d'inégalité
+
+$$\alpha_k \geq 0, \: \forall k = 1, \dots , N$$
+
+et la contrainte d'égalité
+
+$$\sum_{i = 1}^N \alpha_i y_i = 0$$
+
+\section{Notion mathématique du noyau}
+
+
+
+
+	
 	
