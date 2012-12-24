@@ -1,1 +1,163 @@
 \chapter{Évaluation de modèles}
+
+Pour un modèle donné et ayant appris sur un ensemble de données (de taille $N$), on aimerait estimer ses performances. Le but est de
+
+\begin{itemize}
+	\item sélectionner un ou plusieurs modèles (ex : déterminer la bonne complexité ou choisir entre différents algorithmes d'apprentissage).
+	\item évaluer les modèles, afin d'estimer les performances sur des nouvelles données.
+\end{itemize}
+
+
+\section{Méthodes d'évaluation}
+	\subsection{Méthode test set}
+
+	On suppose qu'on dispose de beaucoup de données, que $N$ est grand. On divise la base de données en deux parties, une qui servira d'ensemble d'apprentissage et l'autre d'ensemble de test (par ex 70\%, 30\%). La méthode est la suivante :
+
+	\begin{itemize}
+		\item on apprend le modèle sur $\LS$
+		\item on le test sur $\TS$
+		\item l'estimation qui en résulte est une estimation de l'erreur d'un modèle qui aurait appris sur toute la base de données.
+	\end{itemize}
+	
+	\dessin{65}
+	
+	\subsection{K-fold}
+	
+	La méthode du test-set n'est pas fiable sur une petite base de données car elle est basée sur un petit échantillon d'une base de données déjà réduite. De plus, on utilise l'estimation du modèle construit comme une estimation pour toute la base de données, or lorsque la base de données est très petite, apprendre le modèle sur toute la base ou sur une partie change fortement les résultats.
+	
+	Courbe d'apprentissage, où on confronte les performances à la taille de l'échantillon d'apprentissage.
+	
+	\dessin{63}
+	
+	On utilise pour cela la validation k-fold : on divise aléatoirement la base de données en $k$ sous-ensembles (typiquement $k = 10$).
+	
+	\dessin{64}
+	
+	La méthode est la suivante :
+	
+	\begin{itemize}
+		\item pour chaque sous-ensemble
+		\begin{itemize}
+			\item apprendre le modèle sur les objets qui ne sont pas dans le sous-ensemble
+			\item calculer les prédictions du modèle sur les points du sous-ensemble
+		\end{itemize}
+		\item reporter l'erreur moyenne sur ces prédictions
+	\end{itemize}
+	
+	Lorsque $k = N$, la méthode s'appelle une validation croisée \textit{leave-one-out}.
+	
+	Le choix de $k$ est très important :
+	
+	\begin{itemize}
+		\item si $k = N$ :
+		\begin{itemize}
+			\item[+] non-biaisé : enlever un objet ne change pas trop la taille de l'échantillon d'apprentissage
+			\item[-] grande variance : on dépend énormément de la base de données
+			\item[-] lent : il faut entraîner $N$ modèles
+		\end{itemize}
+		\item si $k = 5, 10$ :
+		
+		\begin{itemize}
+			\item[+] petite variance et rapide : on n'a que $5-10$ modèles sur peu de données
+			\item[-] potentiellement biaisé (voir courbe d'apprentissage)
+		\end{itemize}
+	\end{itemize}
+	
+	\subsection{Bootstrap}
+	
+	Un échantillon bootstrap est un échantillon avec un remplacement ; des objets n'apparaissent pas et d'autres apparaissent plusieurs fois.
+	
+	\dessin{66}
+	
+	On a alors que
+	
+	$$P(o_i \in \text{ bootstrap}) = 1 - (1 - \frac{1}{N})^N \approx 1 - \frac{1}{e} = 0.632$$
+	
+	On peut alors estimer l'erreur de bootstrap :
+	
+	\begin{itemize}
+		\item pour $i = 1$ jusqu'à $B$ :
+		
+		\begin{itemize}
+			\item prendre un échantillon de boostrap $B_i$ de la base de données
+			\item apprendre un modèle $f_i$ sur cet échantillon
+		\end{itemize}
+		
+		\item pour chaque objet, calculer l'erreur de tous les modèles qui ont été construit sans lui (environ 30\%)
+		\item moyenner sur tous les objets
+	\end{itemize}
+	
+	Des améliorations existent :
+	
+	\begin{itemize}
+		\item $.632$ bootstrap : correction pour la courbe d'apprentissage
+		\item $.632+$ bootstrap : correction pour le sur-apprentissage
+	\end{itemize}
+	
+	\subsection{Erreurs de test conditionnelles et erreurs de test attendues}
+	
+	Pour un modèle $\hat{f}_\LS$ donné, on a l'erreur de test conditionnelle :
+	
+	$$\text{Err}_\LS = \exy{L(y, \hat{f}_\LS(x))}$$
+	
+	On a l'erreur attendue :
+	
+	$$\els{\text{Err}_\LS} = \els{\exy{L(y, \hat{f}_\LS(x))}}$$
+	
+	Seule la méthode test set estime la première erreur, la validation croisée permet quant à elle d'estimer la seconde.
+	
+\section{Méthodes de sélection}
+
+Le but, pour une base de données de $N$ objets, est de déterminer le meilleur modèle possible et d'estimer l'erreur des prédictions. La méthodologie dépend encore une fois de la taille de la base.
+
+	\subsection{Méthode test set}
+	
+	Si la base de données est grande, on divise aléatoirement l'ensemble d'apprentissage en trois parties : un ensemble d'apprentissage $\LS$, un ensemble de validation $\VS$ et un un ensemble de test $\TS$ (par exemple 50\%, 25\% et 25\%.
+	
+	\dessin{67}
+	
+	La méthode est la suivante :
+	
+	\begin{itemize}
+		\item apprendre les modèles à comparer sur le $\LS$
+		\item sélectionner le meilleur en basant les performances sur $\VS$
+		\item le ré-entraîner sur $\LS + \VS$
+		\item le tester sur $\TS$, afin d'avoir une estimation des performances
+		\item le ré-entraîner sur $\LS + \VS + \TS$, afin d'avoir le modèle final
+	\end{itemize}
+	
+	\subsection{Validation croisée}
+	
+	On utilise deux étapes de validation croisée en k-fold.
+	
+	\dessin{68}
+	
+	CV1 est utilisé pour évaluer le modèle final, tandis que CV2 est utilisé pour la sélection du modèle.
+	
+	On peut également combiner la méthode test set et la validation croisée.
+	
+	\dessin{69}
+	
+	Les deux étapes sont nécessaires, car plus on compare des modèles et plus la probabilité de tomber par chance sur celui qui donne des bons résultats augmente. Les erreurs sur $\VS$ ou sur CV2 sont alors en général trop optimistes.
+	
+	Illustration :
+	
+	\dessin{70}
+	
+	\subsection{Méthodes analytiques}
+	
+	On cherche le modèle qui minimise un critère de la forme
+	
+	$$\text{Err}(\LS) + G(\text{complexité})$$
+	
+	où $G$ est une fonction monotone croissante. Le critère est dérivé de preuves théoriques.
+	
+	L'avantage est qu'il n'y a pas de re-entraînement, par contre on ne peut l'utiliser que pour la sélection de modèle, et on pourrait manquer le vrai optimum dans le cas d'échantillons finis.
+	
+\section{Biais de sélection}
+	
+	En général, n'importe quel choix fait en utilisant la sortie doit être dans une boucle de validation croisée.
+	
+	\dessin{71}
+		
+\section{Mesure de performance}
