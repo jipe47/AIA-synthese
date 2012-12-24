@@ -3,12 +3,12 @@
 Cette méthode se base sur deux idées :
 
 \begin{enumerate}
-	\item la mise en place d'un classifieur à large marge, et
+	\item la mise en place d'un classificateur à large marge, et
 	\item le "noyautage" de l'espace d'entrée.
 \end{enumerate}
 
 \dessin{14}
-Il faut trouver un classifieur linéaire. L'idée va être de trouver celui qui maximise la marge, c'est-à-dire la largeur du bord qui peut être étendue jusqu'à toucher une donnée.
+Il faut trouver un classificateur linéaire. L'idée va être de trouver celui qui maximise la marge, c'est-à-dire la largeur du bord qui peut être étendue jusqu'à toucher une donnée.
 
 \dessin{15}
 
@@ -18,7 +18,7 @@ C'est une méthode intuitivement sûre, avec une borne théorique sur l'erreur :
 
 \section{Machines à support vectoriel linéaire}
 	
-	Soit un $\LS = \ens{(x_k, y_k)}^N_{k = 1}$, avec $y_k \in {-1, 1}$ et $x_k \in \mathbb{R}^n$. On cherche un classifieur de la forme
+	Soit un $\LS = \ens{(x_k, y_k)}^N_{k = 1}$, avec $y_k \in {-1, 1}$ et $x_k \in \mathbb{R}^n$. On cherche un classificateur de la forme
 	
 	$$\yh(x) = sgn(w^T x + b)$$
 	
@@ -99,7 +99,7 @@ C'est une méthode intuitivement sûre, avec une borne théorique sur l'erreur :
 	
 	$$\mathcal{L}(w, b, \alpha) = \frac{1}{2} \Vert w \Vert - \sum_{k = 1}^N \alpha_k (y_k (w^Tx_k + b) - 1)$$
 	
-	En accord avec les conditions complémentaires KKT, le vecteur solution $w$ est tel que
+	En accord avec les conditions complémentaires KKT (Karush-Kuhn-Tucker), le vecteur solution $w$ est tel que
 	
 	$$\alpha_k (y_k (w^T x_k + b) - 1) = 0, \: \forall k = 1, \dots , N$$
 	
@@ -111,7 +111,7 @@ C'est une méthode intuitivement sûre, avec une borne théorique sur l'erreur :
 	
 	$$\yh(x) = sgn(\sum_{i= 1}^N y_i \alpha_i x_i^T x + b)$$
 	
-	où les valeurs de $\alpha_k$ différentes de 0 (strictement positives) correspondent aux vecteurs de support.
+	où les valeurs de $\alpha_k$ différentes de 0 (strictement positives) correspondent aux vecteurs de support. On a une sorte de KNN, mais on ne tient compte que des points sur la frontière, qui définissent les vecteurs de support.
 	
 	$b$ est calculé en exploitant le fait que pour tout $\alpha_k > 0$, on a nécessairement $y_k(wTx_k + b) - 1 = 0$.
 	
@@ -139,7 +139,7 @@ C'est une méthode intuitivement sûre, avec une borne théorique sur l'erreur :
 	
 	$$y_i(w^T x_i + b) \geq 1 - \xi_i, \: \xi_i \geq 0, \: \forall i = 1, \dots , N$$
 	
-	où $C$ est une constante positive et qui équilibre l'objectif de maximiser la marge et de minimiser l'erreur engendrée.
+	où $C$ est une constante positive et qui équilibre l'objectif de maximiser la marge et de minimiser l'erreur engendrée. Ainsi, si $C = 0$, on ne pénalise pas les $\xi_i$ donc les mauvais classements. Plus $C$ est grand et plus on augmente la complexité, car les $\alpha_k$ peuvent être grands et on veut un meilleur classement (donc on prend de plus en plus en compte les $\xi_i$).
 	
 	On a le problème dual :
 	
@@ -151,6 +151,8 @@ C'est une méthode intuitivement sûre, avec une borne théorique sur l'erreur :
 	$$\sum_{i = 1}^N \alpha_i y_i = 0$$
 	
 	\dessin{58}
+	
+	Les points dans la marge correspondent à des $\xi > 0$. La figure du milieu illustre du sur-apprentissage.
 	
 \section{Kernel trick}
 
@@ -215,7 +217,7 @@ $$= K(o, o) + K(o', o') - 2 K(o, o')$$
 \begin{itemize}
 	\item noyau constant : $K(o, o') \models 1$
 	\item noyau linéaire défini sur des attributs numériques : $K(o, o') = \mathbf{a}^T(o) \mathbf{a}(o')$
-	\item noyau de Hamming pour des attributs discrets : $K(o, o') = \sum_{i = 1}^m \delta_{\mathbf{a}_i(o), \mathbf{a}_i(o')}$
+	\item noyau de Hamming pour des attributs discrets : $K(o, o') = \sum_{i = 1}^m \delta_{\mathbf{a}_i(o), \mathbf{a}_i(o')}$ (nombre de composantes communes aux deux vecteurs)
 	\item noyau de texte, qui calcule le nombre de sous-chaînes communes dans $o$ et $o'$ (dimension infinie si la taille du texte n'est à priori pas bornée)
 	\item combinaison de noyaux :
 	
