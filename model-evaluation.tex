@@ -25,7 +25,7 @@ Pour un modèle donné et ayant appris sur un ensemble de données (de taille $N
 	
 	La méthode du test-set n'est pas fiable sur une petite base de données car elle est basée sur un petit échantillon d'une base de données déjà réduite. De plus, on utilise l'estimation du modèle construit comme une estimation pour toute la base de données, or lorsque la base de données est très petite, apprendre le modèle sur toute la base ou sur une partie change fortement les résultats.
 	
-	Courbe d'apprentissage, où on confronte les performances à la taille de l'échantillon d'apprentissage.
+	On peut tracer la courbe d'apprentissage, où on confronte les performances à la taille de l'échantillon d'apprentissage. On voit qu'il faut que le $\LS$ soit d'une taille minimale si on veut avoir des résultats pertinents.
 	
 	\dessin{63}
 	
@@ -73,7 +73,7 @@ Pour un modèle donné et ayant appris sur un ensemble de données (de taille $N
 	
 	$$P(o_i \in \text{ bootstrap}) = 1 - (1 - \frac{1}{N})^N \approx 1 - \frac{1}{e} = 0.632$$
 	
-	On peut alors estimer l'erreur de bootstrap :
+	L'idée est d'utiliser les 30\% de données qu'il reste comme $\TS$. On peut alors estimer l'erreur de bootstrap :
 	
 	\begin{itemize}
 		\item pour $i = 1$ jusqu'à $B$ :
@@ -104,7 +104,7 @@ Pour un modèle donné et ayant appris sur un ensemble de données (de taille $N
 	
 	$$\els{\text{Err}_\LS} = \els{\exy{L(y, \hat{f}_\LS(x))}}$$
 	
-	Seule la méthode test set estime la première erreur, la validation croisée permet quant à elle d'estimer la seconde.
+	Seule la méthode test set estime la première erreur, la validation croisée permet quant à elle d'estimer la seconde car on fait de l'apprentissage sur des $\LS$ différents.
 	
 \section{Méthodes de sélection}
 
@@ -125,6 +125,8 @@ Le but, pour une base de données de $N$ objets, est de déterminer le meilleur 
 		\item le tester sur $\TS$, afin d'avoir une estimation des performances
 		\item le ré-entraîner sur $\LS + \VS + \TS$, afin d'avoir le modèle final
 	\end{itemize}
+	
+	$\VS$ permet de sélectionner le modèle. Une fois que c'est fait, on réapprend sur $\LS$ et $\VS$ et on teste sur $\TS$. Le choix de la meilleure méthode (apprise sur $\LS$ et testée sur $\VS$) n'entraîne pas de sur-apprentissage, mais il y a tout de même un risque s'il y a trop de méthodes à tester (on en aurait une qui donne des résultats par coup de chance), ce qui pourrait donner une grosse erreur sur $\TS$. La solution est d'ajouter une nouvelle boucle de validation croisée ; tout choix d'échantillon peut créer un biais.
 	
 	\subsection{Validation croisée}
 	
@@ -182,9 +184,15 @@ Le but, pour une base de données de $N$ objets, est de déterminer le meilleur 
 	$$\text{Sensibilité (sensitivity/recall) } = \frac{TP}{P}$$
 	$$\text{Spécificité (specificity) } = \frac{TN}{TN + FP} = 1 - \frac{FP}{N}$$
 	
+	La sensibilité permet de détecter le maximum de positif (on est sûr de détecter les cas positifs), tandis que la spécificité détecte le maximum de négatif. L'avantage de ces mesures est qu'elles ne dépendent pas de la proportion d'objets positifs ou négatifs.
+	
 	Ces mesures peuvent être portées sur une courbe ROC (Receiver operating characteristic). Si la sortie de l'algorithme d'apprentissage est un nombre (par exemple, la probabilité d'appartenir à une classe), on peut utiliser un seul afin de régler la sensibilité et la spécificité.
 	
 	\dessin{74}
+	
+	Le meilleur algorithme est le D. Si un modèle retourne toujours la classe positive, il se trouvera dans le coin supérieur droit. S'il retourne toujours la classe négative, il sera dans le coin inférieur gauche. S'il renvoie une valeur au hasard, il sera situé au centre ; la diagonale représente les choix aléatoires biaisés.
+	
+	Si on se trouve dans la diagonale inférieure, on peut inverser les réponses ($+ \Rightarrow -$, $- \Rightarrow +$) pour revenir dans la diagonale supérieure, et donc avoir une meilleur AUC.
 	
 	\dessin{75}
 	
@@ -198,11 +206,19 @@ Le but, pour une base de données de $N$ objets, est de déterminer le meilleur 
 		\item F-mesure = $\frac{2 * \text{précision} * \text{recall}}{\text{précision} + \text{recall}}$
 	\end{itemize}
 	
+	\dessin{76}
+	
+	Le meilleur algorithme aura une courbe ROC de la forme {\pigpenfont I}, tandis que la courbe de recall aura la forme {\pigpenfont C}.
+	
 	\subsection{Régression}
+	
+		A partir du moment où on a plus d'une classe, on utilise un taux d'erreur plutôt qu'une courbe ROC.
 	
 		\subsubsection{Erreur quadratique}
 		
 		$$\frac{1}{N} \sum_{i = 1}^N (y_i - \yh_i)^2$$
+		
+		Le carré permet de pénaliser les très mauvaises prédictions.
 		
 		\subsubsection{Erreur absolue moyenne}
 		
@@ -216,7 +232,7 @@ Le but, pour une base de données de $N$ objets, est de déterminer le meilleur 
 		
 		$$1 - \frac{6 \sum_i d_i^2}{N(N^2 - 1)}$$
 		
-		avec $d_i$ la différence de rang de $y_i$ et $\yh_i$.
+		avec $d_i$ la différence de rang de $y_i$ et $\yh_i$, le rang étant l'ordre obtenu après un tri des valeurs.
 		
 	\subsection{Mesures de performances pour l'entraînement}
 	
