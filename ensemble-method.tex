@@ -91,18 +91,66 @@ Supposons que l'on ait $T$ modèles $\ens{\yh_1, \dots , \yh_T}$ et leur moyenne
 
 $$\yh_{\ens{ens}}(\xu) = \frac{1}{T} \sum_i \yh_i(\xu)$$
 
-Le modèle moyen est donc toujours meilleur que les modèles individuels en moyenne.
+
+$$\frac{1}{T} \sum_i \eyx{(y - \yh(\xu))^2} = \frac{1}{T} \sum_i \eyx{(y - \yens(\xu) + \yens(\xu) - \yh_i(\xu))^2}$$
+$$= 
+\frac{1}{T} \sum_i \eyx{(y - \yens(\xu))^2} 
++ \frac{1}{T} \sum_i \underbrace{\eyx{(\yens(\xu) - \yh_i(\xu))^2)}}_{\star_1}
++ \underbrace{\frac{1}{T} \sum_i \eyx{\underbrace{(y(\xu) - \yens(\xu))}_{\substack{\text{ne dépend} \\ \text{pas de }i}}
+\underbrace{(\yens(\xu) - \yh_i(\xu))}_{\substack{\text{ne dépend} \\
+ \text{pas de } y}}}}_{\eyx{y - \yens(\xu)}\frac{1}{T} \sum_i (\yens(\xu) - \yh_i(\xu)) \star_2}$$
+ 
+ $\star_1$ : on peut supprimer le $\eyx{.}$ car l'intérieur ne dépend pas de $y$. De plus, on a que $\yens = \frac{1}{T} \sum_i \yh_i(\xu)$
+ $\star_2$ : $\yens(\xu)$ ne dépend pas de $i$, donc on peut faire rentrer la somme, et annuler le terme car $\sum_i \yh_i(\xu) = \yens(\xu)$.
+ 
+ Au final, on a
+
+$$\frac{1}{T}\sum_i \eyx{(y - \yh_i(\xu))^2} = \eyx{(y - \yhens(\xu))^2} + \frac{1}{T} \sum_i (y_i(\xu) - \yhens(\xu))^2$$
+
+$$\Leftrightarrow \eyx{(y - \yhens(\xu))^2} = \frac{1}{T}\sum_i \eyx{(y - \yh_i(\xu))^2} - \frac{1}{T} \sum_i (y_i(\xu) - \yhens(\xu))^2$$
+
+Le modèle moyen est donc toujours meilleur que les modèles individuels en moyenne. Ce n'est cependant pas vrai en classification.
 
 	
 \section{Boosting}
 	
-L'idée est de combiner plusieurs modèles "faibles", afin de produire un modèle plus puissant.
+L'idée est de combiner plusieurs modèles "faibles", afin de produire un modèle plus puissant. Un modèle est considéré comme faible s'il a un grand biais (en classification, si le modèle est à peine meilleur qu'un choix aléatoire).
+
+Les différences par rapport aux autres méthodes d'ensemble sont que
+
+\begin{itemize}
+	\item les modèles sont construits séquentiellement sur des versions modifiées des données
+	\item les prédictions des modèles sont combinées à travers une somme pondérée/un vote
+\end{itemize}
+
+\dessin{94}
+
+En régression,
+
+$$\yh(\xu) = \beta_1\yh_1(\xu) + \dots + \beta_T \yh_T(\xu)$$
+
+En classification, $\yh(\xu)$ sera la classe majoritaire dans $\ens{\yh_1(\xu), \dots , \yh_T(\xu)}$, en tenant compte des points $\ens{\beta_1, \dots , \beta_T}$.
+
+	\subsection{Adaboost}
 	
-95 $\rightarrow$ 96
+17 $\rightarrow$ 24
 	
 \section{Interprétabilité et efficacité}
 	
-Lorsque les méthodes ensemble sont combinées avec les arbres de décision, elles perdent de l'interprétabilité et de l'efficacité. En revache, on les utilise toujours pour calculer l'importance des variables, en effectuant la moyenne sur tous les arbres. De plus, les méthodes ensemble peuvent être parallélisée et l'algorithme boosting utilise des petits arbres, ce qui fait que le coût en temps processeur n'est pas important.
+Lorsque les méthodes ensemble sont combinées avec les arbres de décision, elles perdent de l'interprétabilité et de l'efficacité. En revanche, on les utilise toujours pour calculer l'importance des variables, en effectuant la moyenne sur tous les arbres. De plus, les méthodes ensemble peuvent être parallélisée et l'algorithme boosting utilise des petits arbres, ce qui fait que le coût en temps processeur n'est pas important.
 	
 		
 	\dessin{91}
+	
+	
+\section{Autres approches d'ensemble}
+	\subsection{Moyenne de modèle de Bayes}
+	25
+	\subsection{Stacking}
+	26
+	
+\section{Conclusion}
+
+Les méthodes d'ensemble sont très efficaces pour réduire le biais et/ou la variance, en transformant une méthode pas si bonne en une méthode très compétitive. Adaboost avec des arbres est considéré comme un des meilleurs algorithme de classification.
+
+L'interprétabilité et l'efficacité du modèle sont difficiles à préserver si on veut réduire la variance significativement.
