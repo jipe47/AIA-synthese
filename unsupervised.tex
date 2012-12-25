@@ -269,4 +269,137 @@ Deux composantes sont considérées :
 
 \section{Réduction de dimensionnalité}
 
-\section{Estimation de densité}
+On va chercher à diminuer la dimensionnalité de l'espace des données. On a plusieurs possibilités :
+
+\begin{itemize}
+	\item une sélection de features : on trouve un sous-ensemble des variables originales : $X_i' = X_j$ pour certains $j$
+	\item une extraction de fetures : on transforme l'espace original en un espace de plus petite dimension : $X_i' = f(X_1, \dots , X_p)$
+	\item des méthodes linéaires : $f(X_1, \dots , X_p) = w_0 + w_1 X_1 + \dots + w_p X_p$
+\end{itemize}
+
+Dans tous les cas, on doit pouvoir reconstruire la base de données d'origine à partir de la version compacte. Les objectifs de la réduction de dimensionnalité sont de
+
+\begin{itemize}
+	\item réduire la dimensionnalité avant de faire passer les données dans d'autres méthodes
+	\item choisir les variables les plus utiles $\Leftrightarrow$ qui apportent le plus d'information
+	\item compresser les données
+	\item visualiser des données multidimensionnelles, pour identifier des groupes d'objets et identifier des \textit{outliers}.
+\end{itemize}
+
+	\subsection{PCA}
+	
+	L'analyse en composantes principales (PCA) est une méthode linéaire qui transforme un grand nombre de variables en un petit ensemble de variables non corrélées que l'on appelle composantes principales. L'idée est de mapper les points dans de petites dimensions, tout en préservant au maximum la variances des données.
+	
+	On va chercher une direction (composante principale) afin, après projection des données, de maximiser l'étalement. On peut prendre une deuxième composante, afin de conserver plus d'informations, au cas où on aurait trop d'approximations. Chaque point est ainsi codé par sa distance par rapport à une origine.
+	
+	\dessin{78}
+		
+	\dessin{79}
+	
+	Cette méthode est très efficace quand il y a beaucoup de corrélation entre les variables (donc de la redondance).
+	
+	\dessin{83}
+	
+	\subsubsection{Approche mathématique}
+	
+	On a deux formulations du problème possibles :
+	
+	\begin{itemize}
+		\item maximisation de la variance : on trouve les directions qui maximisent la variance des données projetées.
+		\item minimisation de l'erreur : on minimise l'erreur de reconstruction des données projetées.
+	\end{itemize}
+	
+	Considérons un ensemble d'observations $\ens{x_n}$, $n = 1, \dots , N$, avec $x_n$ un vecteur de dimension $D$. On veut trouver la direction unitaire $u_1$ qui maximise la variance de la projection :
+	
+	$$arg \max_{u_1} \frac{1}{N} \sum_{n = 1}^N \Vert u_1^T x_n - u_1^T \xo \Vert^2 = u_1^TCu_1$$
+	
+	avec
+	
+	$$\Vert u_1 \Vert = u_1^Tu_1 = 1$$
+	$$C = \frac{1}{N} \sum_{i = 1}^N (x_n - \xo)(x_n - \xo)^T$$
+	
+	$\Vert u_1^T x_n - u_1^T \xo \Vert^2$ est la variance du vecteur considéré, car on a
+	
+	$$(\sum_i u_1^Tx_i - \underbrace{\frac{1}{N} \sum_i u_1^Tx_i}_{-u_1^T\sum_i \underbrace{\frac{1}{N} u_1^Tx_i}_{\xo}})^2$$
+	
+	La contrainte de vecteur unitaire ($\Vert u_1 \Vert = 1$) est nécessaire, sinon le vecteur aurait une variance infinie.
+	
+	Si on introduit le lagrangien :
+	
+	$$u_1^T Cu_1 + \lambda_1(1 - u_1^Tu_1)$$
+	
+	$$\frac{\vartheta}{\vartheta u_1} = 0 \Leftrightarrow Cu_1 - \lambda u_1 = 0 \Leftrightarrow Cu_1 = \lambda u_1$$
+	
+	$u_1$ est un vecteur propre de $C$. La variance est donnée par
+	
+	$$\rightarrow u_1^TCu_1 = \lambda u_1^Tu_1 = \lambda \Vert u_1 \Vert = \lambda_1$$
+	
+	On a donc que $u_1$ est un vecteur propre correspondant à la plus grande valeur propre $\lambda_1$.
+	
+	
+	Rechercher la seconde composante est similaire, mais on ajoute une contrainte d'orthogonalité. Si on généralise à $M$ composantes, on a que la $M + 1$ème composante est obtenue en maximisant 
+	
+	$$u_{M + 1}^T C u_{M + 1}$$
+	
+	avec les contraintes
+	
+	$$u_{M + 1}^T u_{M + 1} = 1$$
+	$$u_{M + 1} u_i = 0, \: \forall i = 1, \dots , M + 1$$
+	
+	Avec le multiplicateur lagrangien :
+	
+	$$u_{M + 1}^T Cu_{M + 1} + \lambda_{M + 1} (1 - u_{M + 1}^T u_{M + 1}) + \sum_{i = 1}^M \nu_i u_{M + 1}^T u_i$$
+	
+	On a l'optimum
+	
+	$$0 = 2 C u_{M + 1} - 2 \lambda_{M + 1} u_{M + 1}  +\sum_{i=1}^M \nu_i u_i$$
+	
+	Si on multiplie à gauche par $u_i^T$, on a
+	
+	$$0 = 2u_i^T C u_{M + 1} - 2 \lambda_{M + 1} \underbrace{u_i^T u_{M + 1}}_{0}  +\sum_{i=1}^M \nu_i u_i^T u_i$$
+	
+	Or, 
+	$$u_i^TCu_{M + 1} = (C^Tu_i)^Tu_{M + 1} = (Cu_i)^T u_{M + 1} = (\lambda_i u_i)^T u_{M + 1} = \lambda_i u_i^T u_{M + 1} = 0$$
+	
+	On a donc que $\nu_i = 0$ et donc
+	
+	$$C u_{M + 1} = \lambda_{M + 1} u_{M + 1}$$
+	
+	$u_{M + 1}^T$ est le vecteur propre de la $M + 1$ème plus grande valeur propre.
+	
+	La $i$ème composante principale pour des objets $x_k$ est donnée par $x_{ji}' = u_i^Tx_j$. La reconstruction de l'entrée se fait par
+	
+	$$\xu_j = \sum_{i = 1}^M x_{ji}' u_i = \sum_{i = 1}^M(u_i^Tx_j)u_i$$
+	
+	PCA minimise également l'erreur de reconstruction :
+	
+	$$arg \max_{u_1, \dots , u_M} \frac{1}{N} \sum_{i = 1}^N \Vert x_j - \xh_j \Vert^2$$
+	
+	\dessin{80}
+	
+	Au final, on obtient un tableau de la forme
+	
+	\begin{center}
+	\begin{tabular}{c|cccc}
+	\hline 
+	  & 1 & 2 & \dots & $k$ \\ 
+	\hline 
+	$\xu_1$ & $\uu_1^T\xu_1$ & $\uu_2^Tx_1$ & \dots & $\uu_k^T\xu_1$ \\ 
+	$\xu_2$ &   &   &   &   \\ 
+	\vdots &   &   &   &   \\ 
+	\end{tabular} 
+	\end{center}
+	
+	Les $u_k$ sont les vecteurs propres de la matrice de covariance, les valeurs propres sont quant à elle les variances de la projection.
+	
+	\subsubsection{Etude des composantes}
+	
+	\dessin{81}
+	
+	Le poids de chaque variable donne une idée de son importance dans une composante, et peut être utilisé pour de la sélection de features. Pour chaque composantes, on a une mesure du pourcentage de la variance des données initiales qu'elles contiennent.
+	
+	La question est de savoir combien de composantes il faut prendre. Pour cela, on trace le scree plot, les valeurs propres ($\Leftrightarrow$ variances) de chaque composante en ordre décroissant.
+	
+	\dessin{82}
+	
+	On supprime les composantes avec des valeurs propres inférieures à 1 et on prend $k$ au point d'inflexion de la courbe, à partir duquel les débris commencent à s'accumuler.
