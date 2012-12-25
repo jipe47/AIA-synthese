@@ -161,3 +161,68 @@ Le but, pour une base de données de $N$ objets, est de déterminer le meilleur 
 	\dessin{71}
 		
 \section{Mesure de performance}
+
+	\subsection{Classification binaire}
+	
+	Les résultats peuvent être résumés dans un tableau de contingence/matrice de confusion.
+	
+	\dessin{72}
+	
+	On définit alors
+	
+	$$\text{Taux d'erreur (error rate) } = \frac{FP + FN}{N + P}$$
+	$$\text{Précision (accuracy) } = \frac{TP + TN}{N + P} = 1 - \text{ error rate}$$
+	
+	Le taux d'erreur est cependant limité : on n'a pas d'informations sur la distribution des erreurs sur les classes, et il est sensible aux changement dans la distribution des classes dans l'échantillon de test.
+	
+	\dessin{73}
+	
+	Dans le cadre de diagnostiques médicaux, on utilise des mesures plus appropriées :
+	
+	$$\text{Sensibilité (sensitivity/recall) } = \frac{TP}{P}$$
+	$$\text{Spécificité (specificity) } = \frac{TN}{TN + FP} = 1 - \frac{FP}{N}$$
+	
+	Ces mesures peuvent être portées sur une courbe ROC (Receiver operating characteristic). Si la sortie de l'algorithme d'apprentissage est un nombre (par exemple, la probabilité d'appartenir à une classe), on peut utiliser un seul afin de régler la sensibilité et la spécificité.
+	
+	\dessin{74}
+	
+	\dessin{75}
+	
+	On peut résumer une courbe ROC avec un nombre : la surface en dessous de la courbe. On peut l'interpréter comme la probabilité que deux objets choisis aléatoirement dans l'échantillon sont correctement ordonnés par le modèle, c'est-à-dire que le positif a un plus haut score que le négatif.
+	
+	On utilise d'autre mesures :
+	
+	\begin{itemize}
+		\item la précision : $\frac{TP}{TP + FP}$, la proportion de bonnes prédictions parmi les prédictions positives
+		\item le rappel (recall) : $\frac{TP}{TP + FN}$, la proportion de positifs qui sont détectés
+		\item F-mesure = $\frac{2 * \text{précision} * \text{recall}}{\text{précision} + \text{recall}}$
+	\end{itemize}
+	
+	\subsection{Régression}
+	
+		\subsubsection{Erreur quadratique}
+		
+		$$\frac{1}{N} \sum_{i = 1}^N (y_i - \yh_i)^2$$
+		
+		\subsubsection{Erreur absolue moyenne}
+		
+		$$\frac{1}{N} \sum_{i = 1}^N \vert y_i - \yh_i \vert$$
+		
+		\subsubsection{Corrélation de Pearson}
+		
+		$$\frac{\sum_i (y_i - \frac{1}{N} \sum_j y_j)(\yh_i - \frac{1}{N} \sum_j \yh_j)}{(N - 1)s_y s_{\yh} }$$
+		 		
+		\subsubsection{Corrélation de rank de Spearman}
+		
+		$$1 - \frac{6 \sum_i d_i^2}{N(N^2 - 1)}$$
+		
+		avec $d_i$ la différence de rang de $y_i$ et $\yh_i$.
+		
+	\subsection{Mesures de performances pour l'entraînement}
+	
+	Les mesures de performances pour l'entraînement peuvent être différentes des mesures de performances de test. Il y a plusieurs raisons à cela :
+	
+	\begin{itemize}
+		\item algorithmiquement, une mesure dérivable est soumise à une optimisation de gradient (par ex le taux d'erreur et l'erreur absolue moyenne ne sont pas dérivable, l'AUC n'est pas décomposable)
+		\item le sur-apprentissage : pour l'entraînement, la perte incorpore souvent un terme de pénalité pour la complexité du modèle (ce qui est inutile au moment du test). De plus, certaines mesures sont moins promptes au sur-apprentissage (par exemple la marge).
+	\end{itemize}
