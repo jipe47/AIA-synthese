@@ -300,7 +300,7 @@ Dans tous les cas, on doit pouvoir reconstruire la base de données d'origine à
 	
 	\dessin{83}
 	
-	\subsubsection{Approche mathématique}
+	\subsection{Approche mathématique}
 	
 	On a deux formulations du problème possibles :
 	
@@ -392,7 +392,7 @@ Dans tous les cas, on doit pouvoir reconstruire la base de données d'origine à
 	
 	Les $u_k$ sont les vecteurs propres de la matrice de covariance, les valeurs propres sont quant à elle les variances de la projection.
 	
-	\subsubsection{Etude des composantes}
+	\subsection{Etude des composantes}
 	
 	\dessin{81}
 	
@@ -403,3 +403,50 @@ Dans tous les cas, on doit pouvoir reconstruire la base de données d'origine à
 	\dessin{82}
 	
 	On supprime les composantes avec des valeurs propres inférieures à 1 et on prend $k$ au point d'inflexion de la courbe, à partir duquel les débris commencent à s'accumuler.
+	
+	\subsection{Limitations}
+	
+	PCA peut retrouver visuellement des groupes de données, mais s'il échoue à retrouver ces groupes, on ne peut rien conclure, et c'est indirect par rapport aux méthodes de clustering.
+	
+	PCA peut être utilisé pour de la sélection de composantes, mais les premières composantes ne sont pas forcément liées à la sortie et les méthodes de sélection de features supervisées fonctionnent mieux. De ce fait, PCA ne doit être considéré que comme un outil d'exploration.
+	
+	\subsection{Extensions de PCA}
+	
+		\subsubsection{Kernel PCA}
+		
+		Il s'agit d'une technique d'extraction de features basée sur le noyautage de PCA.
+		
+		\dessin{84}
+		
+		\subsubsection{Sparse PCA}
+		
+		On cherche les composantes avec des données creuses, avec peu de composantes avec des poids non nuls. On utilise des pénalisation différentes, comme par exemple L1 (LASSO).
+		
+	\subsection{Autres techniques de réduction de dimension}
+	
+		\subsubsection{Independent Component Analysis (ICA)}
+		
+		On ne se force pas à utiliser des composantes orthogonales.
+		
+		\dessin{85}
+		
+		\subsubsection{Auto-encodeur avec des réseaux de neurones}
+		
+		\dessin{86}
+		
+		\subsubsection{Multi-dimensional scaling (MDS)}
+		
+		On cherche des nouvelles coordonnées telles que certaines distances sont respectées (au sens des moindres carrés).
+		\dessin{87}
+		
+\section{Autres méthodes non-supervisées}
+
+\begin{itemize}
+	\item règles associatives
+	\item estimation de densitée :
+	
+	\begin{itemize}
+		\item modèles de mixture
+		\item réseau bayesiens
+	\end{itemize}
+\end{itemize}
