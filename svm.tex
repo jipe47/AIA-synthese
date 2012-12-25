@@ -141,6 +141,8 @@ C'est une méthode intuitivement sûre, avec une borne théorique sur l'erreur :
 	
 	où $C$ est une constante positive et qui équilibre l'objectif de maximiser la marge et de minimiser l'erreur engendrée. Ainsi, si $C = 0$, on ne pénalise pas les $\xi_i$ donc les mauvais classements. Plus $C$ est grand et plus on augmente la complexité, car les $\alpha_k$ peuvent être grands et on veut un meilleur classement (donc on prend de plus en plus en compte les $\xi_i$).
 	
+	\dessin{77}
+	
 	On a le problème dual :
 	
 	$$\max_\alpha \mathcal{W}(\alpha) = \sum_{k = 1}^N \alpha_k - \frac{1}{2} \sum_{i, j = 1}^N \alpha_i \alpha_j y_i y_j x_i^T x_j$$
