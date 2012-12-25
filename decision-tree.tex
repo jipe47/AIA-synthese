@@ -12,9 +12,14 @@ Un arbre de décision est un arbre où
 
 \dessin{16}
 
-	\section{Création d'un arbre de décision}
+L'apprentissage avec cet algorithme consiste à choisir la structure d'arbre et à déterminer les prédictions aux feuilles.
+
+Afin de minimiser l'erreur de classification, on associe aux feuilles la classe majoritaire lorsqu'on descend dans l'arbre.
+
+\section{Arbre de classification}
+	\subsection{Création d'un arbre de classification}
 	
-	On a l'algorithme suivant, pour une procédure \textit{learn\_dt($LS$)}, où $LS$ est l'échantillon d'apprentissage.
+	On a l'algorithme suivant (Top-down induction of DT), pour une procédure \textit{learn\_dt($\LS$)}, où $\LS$ est l'échantillon d'apprentissage.
 	
 	\begin{itemize}
 		\item[$\bullet$] si tous les objets de LS ont la même classe, créer une feuille avec cette classe comme label,
@@ -30,13 +35,53 @@ Un arbre de décision est un arbre où
 		\end{itemize}
 	\end{itemize}
 	
+	Propriétés : 
+	
+	\begin{itemize}
+		\item sous-optimal mais rapide
+		\item dépend très fortement du critère pour sélectionner l'attribut
+	\end{itemize}
+	
+	\subsection{Recherche du meilleur attribut}
+	
 	Pour trouver le meilleur attribut, il faut définir un score afin d'évaluer les séparations possibles. Ce score devra favoriser la séparation en classe, afin de réduire la profondeur de l'arbre.
 	
 	\dessin{17}
 	
-	Une mesure assez commune est celle-ci :
+		\subsubsection{Impureté}
+		
+		Une mesure assez commune est l'impureté. Soit $p_j$ la proportion d'objets de la classe $j$ ($j = 1, \dots , J$) dans $\LS$.
+		
+		\begin{itemize}
+			\item $I(\LS)$ est minimal si $p_i = 1$ et $p_j = 0$ pour $j \neq i$.
+			\item $I(\LS)$ est maximal si $p_j = \frac{1}{J}$ : il y a le même nombre d'objets de chaque classe.
+		\end{itemize}
+		
+		Le meilleur split est celui qui maximise la réduction d'impureté.
+		
+		$$\Delta I(\LS, A) = I(\LS) - \sum_a \frac{\vert \LS_a \vert}{\vert \LS \vert} I(\LS_a)$$
+		
+		avec $\LS_a$ le sous-ensemble des objets de $\LS$ tels que $A = a$. $\Delta I$ est une mesure de score ou un critère de séparation.
+		
+		%$$I(LS, A) = H(LS) - \frac{\vert LS_{\text{left}}\vert}{\vert LS\vert}H(LS_{\text{left}}) - \frac{\vert LS_{\text{right}}\vert}{\vert LS \vert}H(LS_{\text{right}})$$
+		
+		
+		Exemple de mesure d'impureté :
+		
+		\begin{itemize}
+			\item entropie de Shannon : $H(\LS) = \sum_j p_j \log p_j$. Elle mesure l'incertitude, la surprise : une réduction de l'entropie est un gain d'information.
+			
+			\item indice de Gini : $I(\LS) = \sum_j p_j(1 - p_j)$
+			\item taux d'erreur de malclassification : $I(\LS) = 1 - \max_j p_j$
+			
+		\end{itemize}
+		
+		\dessin{88}
+		
 	
-	$$I(LS, A) = H(LS) - \frac{\vert LS_{\text{left}}\vert}{\vert LS\vert}H(LS_{\text{left}}) - \frac{\vert LS_{\text{right}}\vert}{\vert LS \vert}H(LS_{\text{right}})$$
+	\subsection{Élagage}
+
+	Le sur-apprentissage survient lorsqu'on considère un arbre trop profond et qu'on tient compte de bruits ou de mauvaises mesures dans les données.
 	
 	\dessin{18}
 	
@@ -44,13 +89,55 @@ Un arbre de décision est un arbre où
 	
 	\begin{itemize}
 		\item pre-pruning/pré-élagage : arrêter d'étendre l'arbre plus tôt, avant qu'il n'atteigne le point où il classe parfaitement l'échantillon d'apprentissage ;
-		\item post-pruning/post-élagage : permettre à l'arbre de surapprendre et de l'élager ensuite ;
+		\item post-pruning/post-élagage : permettre à l'arbre de sur-apprendre et de l'élaguer ensuite ;
 		\item les méthodes Ensemble.
 	\end{itemize}
 	
-	\dessin{19}
 	
-	\section{Variables numériques}
+	
+		\subsubsection{Pre-pruning}
+		
+		On arrête la séparation de noeud si
+		
+		\begin{itemize}
+			\item le nombre d'objets est trop petit (\textit{min\_samples\_split}), ou si
+			\item l'impureté est trop faible, ou si
+			\item le meilleur test n'est pas statistiquement pertinent
+		\end{itemize}
+		
+		Le problème est que le paramètre optimal pour cet élagage est très dépendant du problème, et que l'on peut passer à côté de l'arbre optimal.
+		
+		
+		\subsubsection{Post-pruning}
+		
+		On sépare l'ensemble d'apprentissage $\LS$ en deux :
+		
+		\begin{itemize}
+			\item un ensemble $\GS$ (growing sample) pour construire l'arbre, et
+			\item un ensemble de validation $\VS$ pour évaluer l'erreur de généralisation.
+		\end{itemize}
+		
+		On va construire un arbre complet à partir de $\GS$, puis on va calculer un ensemble d'arbres $\ens{T_1, T_2, \dots}$, avec $T_1$ l'arbre complet et $T_i$ l'arbre obtenu en retirant des noeuds de l'arbre $T_{i - 1}$.
+		
+		On sélectionne ensuite le $T_i*$ de la séquence qui minimise l'erreur sur $\VS$.
+		
+		\dessin{19}
+		
+		Pour construire la séquence, on a plusieurs manières :
+		
+		\begin{itemize}
+			\item reduced error pruning : à chaque étape, on retire le noeud qui diminue le plus l'erreur sur $\VS$
+			\item cost-complexity pruning : on définit un critère de coût-complexité :
+			
+			$$\text{Error}_{\GS}(T) + \alpha \text{ Complexity}(T)$$
+			
+			On construit la séquence d'arbres qui minimise ce critère en augmentant $\alpha$.
+		\end{itemize}
+		
+		
+		Le problème du post-pruning est qu'il faut dédier une partie de l'ensemble d'apprentissage à la validation, ce qui peut poser un problème pour des petites bases de données. La solution est d'utiliser de la validation croisée $k$-fold.
+	
+	\subsection{Variables numériques}
 	
 	Deux solutions :
 	\begin{itemize}
@@ -60,11 +147,31 @@ Un arbre de décision est un arbre où
 		\dessin{20}
 	\end{itemize}
 	
-	\subsubsection{Arbre de régression}
+	Slides 38 $\rightarrow$ 44 : variables numériques, attributs à plusieurs valeurs, valeurs d'attribut manquantes.
+	
+\section{Arbre de régression}
 	
 	Un arbre de régression est un arbre de décision où les labels des noeuds sont numériques.
 	
-	\section{Interprétabilité et sélection d'attribut}
+
+	\dessin{89}
+	
+	Afin de minimiser l'erreur quadratique sur $\LS$, la prédiction à une feuille est la moyenne de tous les éléments de $\LS$ qui l'atteignent.
+	
+	L'impureté d'un échantillon est définie par la variance de la sortie de cet échantillon :
+	
+	$$I(\LS) = \text{var}_{y \vert \LS} \ens{y} = \text{E}_{y \vert \LS}((y - \text{E}_{y \vert \LS}(y))^2)$$
+	
+	Le meilleur split est celui qui diminue le plus la variance :
+	
+	$$\Delta I(\LS, A) =\text{var}_{y \vert \LS} \ens{y} - \sum_a \frac{\vert \LS_a \vert}{\vert \LS \vert} \text{var}_{y \vert \LS_a} \ens{y}$$
+
+	L'élagage fonctionne de la même façon que pour les arbres de classification, si ce n'est que dans le post-pruning, c'est l'arbre qui minimise l'erreur quadratique sur $\VS$ qui est sélectionné.
+	
+	En pratique, le pruning est plus important en régression car les arbres complets sont beaucoup plus complexes ; souvent, tous les objets ont une sortie différence, du coup l'arbre complet a autant de feuilles qu'il y a d'objets dans l'échantillon d'apprentissage.
+
+
+\section{Interprétabilité et sélection d'attribut}
 	
 	Un arbre de décision est très interprétable, il peut être converti facilement en un ensemble de règles "si \dots alors".
 	
@@ -72,16 +179,20 @@ Un arbre de décision est un arbre où
 	
 	Les arbres de décision sont souvent utilisés comme pre-processing pour d'autres algorithmes d'apprentissage, qui souffrent de variables inutiles.
 	
-	Certaines variables ont une importance, elles ne contribuent pas toutes de manière égale. Grâce aux arbres, on peut évaluer leur importance.
+	Certaines variables ont une importance, elles ne contribuent pas toutes de manière égale. Grâce aux arbres, on peut évaluer leur importance. Cela peut permettre notamment d'éviter de mesurer des attributs si cela est coûteux et inutile.
 	
-	$\longrightarrow$ Comment ?
+	L'importance d'une variable est calculée par la réduction de l'impureté :
+	
+	$$I(A) = \sum_{\substack{\text{noeuds où} \\ \text{A est testé}}} \vert \LS_{text{noeud}} \vert \Delta I(\LS_{\text{noeud}}, A)$$
+	
 	
 	\section{Avantages et inconvénients}
 	
 	\begin{itemize}
-		\item[+] très rapide et scalabe, on peut traiter d'énorme quantité d'entrées et d'objets ;
+		\item[+] très rapide et scalabe, on peut traiter d'énorme quantité d'entrées et d'objets ; la complexité est de l'ordre $\bigoh (nN\log N)$
 		\item[+] donne une bonne interprétabilité et quantifie l'importance des variables ;
-		\item[-] grande variance ;
+		\item[+] très flexible : support de plusieurs types d'attribut, de valeurs manquantes, de problèmes de classification et de régression, etc
+		\item[-] grande variance et donc grande instabilité ;
 		\item[-] souvent pas aussi précis que d'autres méthodes.
 	\end{itemize}
 	
