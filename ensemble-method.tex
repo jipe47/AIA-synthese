@@ -1,29 +1,108 @@
 \chapter{Méthodes d'ensemble}
 
-L'idée est de combiner plusieurs modèles construits avec un algorithme d'apprentissage. Cela permet d'améliorer très fort la précision. Les arbres de décision sont souvent utilisés pour des raisons d'efficacité.
+Pour une méthode donnée, il y a généralement un trade-off à faire entre le biais et la variance. Il est possible d'améliorer le modèle (par exemple avec du pruning pour les arbres de décision), mais ce n'est pas toujours possible. Le but des méthodes d'ensemble est de modifier de trade-off, quitte à perdre des features de la méthode initiale.
 
-	\subsubsection{Bagging}
+
+L'idée est de combiner plusieurs modèles construits avec un algorithme d'apprentissage afin d'améliorer la précision. Les arbres de décision sont souvent utilisés pour des raisons d'efficacité.
+
+Il existe deux familles de méthode :
+
+\begin{itemize}
+	\item les techniques de moyennage, où la prédiction finale n'est que la moyenne des prédictions, et qui permet de surtout faire diminuer la variance.
+	\item les algorithmes de boosting, où on crée des modèles séquentiellement afin de diminuer le biais.
+\end{itemize}
+
+\section{Bagging}
+
+	\subsection{Approche théorique}
+	Supposons que l'on puisse générer plusieurs échantillons d'apprentissages $\ens{\LS_1, \LS_2, \dots , \LS_T}$ à partir de la distribution des données originales $P(\xu, y)$. Pour chacun des $\LS_i$, on va apprendre un modèle $\yh_{\LS_i}$ et on va calculer la moyenne :
 	
-	Différents échantillons d'apprentissage conduisent à différents modèles, surtout si l'algorithme surapprend les données. Vu qu'il n'y a qu'un seul modèle optimal, la variance est la source d'erreur.
+	$$\yh_{\text{ens}} = \frac{1}{T} \sum_{i = 1}^T \yh_{\LS_i}(\xu)$$
 	
-	La solution est d'agréger plusieurs modèles pour en obtenir un qui est stable. Plus il y en a, plus les résultats seront meilleurs.
+	Pour rappelle, on a l'erreur moyenne suivante :
 	
+	$$\els{\text{Err}(\xu)} = \eyx{(y - h_B(\xu))^2} + (h_B(\xu) - \els{\yh(\xu)})^2 + \els{(\yh(\xu) - \els{\yh(\xu)})^2}$$
+	
+	Le biais n'est pas différent par rapport à l'algorithme original. En effet,
+	
+	$$\text{E}_{\LS_1, \dots , \LS_T} \ens{\yh_{text{ens}} (\xu)} = \frac{1}{T} \sum_i \text{E}_{\LS_i}\ens{\yh_{\LS_i}(\xu)} = \els{\yh_{\LS}(\xu)}$$
+	
+	Par contre, la variance est divisée par $T$ :
+	
+	$$\text{E}_{\LS_1, \dots , \LS_T} \ens{(\yh_{\text{ens}}(\xu) - \text{E}_{\LS_1, \dots , \LS_T} \ens{\yh_{\text{ens}}(\xu)})^2} = \frac{1}{T} \els{(\yh(\xu) - \els{\yh_{\text{ens}}(\xu)})^2}$$
+	
+	En effet, différents échantillons d'apprentissage conduisent à différents modèles, surtout si l'algorithme sur-apprend les données. Vu qu'il n'y a qu'un seul modèle optimal, la variance est la source d'erreur.
+	
+	
+	\subsection{En pratique}
+	
+	Il n'est généralement pas possible de créer plusieurs $\LS$, car $P(\xu, y)$ est inconnu. L'idée est d'utiliser du bootstrap sampling pour générer plusieurs ensembles d'apprentissage
+
 	\dessin{21}
 	
-	Un type d'agrégation est le bootstrap aggregating : chaque modèle apprend sur un échantillon où des remplacements ont été effectué, avec des lignes redondantes.
+	On a alors l'algorithme du bagging (\textbf{b}ootstrap \textbf{agg}regat\textbf{ing}) :
 	
-	\dessin{22}
-	
-	
-	\subsubsection{Boosting}
-	
-	L'idée est de combiner plusieurs modèles "faibles", afin de produire un modèle plus puissant.
-	
-	95 $\rightarrow$ 96
-	
-	\subsubsection{Interprétabilité et efficacité}
-	
-	Lorsque les méthodes ensemble sont combinées avec les arbres de décision, elles perdent de l'interprétabilité et de l'efficacité. En revache, on les utilise toujours pour calculer l'importance des variables, en effectuant la moyenne sur tous les arbres. De plus, les méthodes ensemble peuvent être parallélisée et l'algorithme boosting utilise des petits arbres, ce qui fait que le coût en temps processeur n'est pas important.
+	\begin{itemize}
+		\item on crée $T$ bootstrap samples $\ens{B_1, \dots , B_T}$ à partir de $\LS$
+		\item on apprend un modèle $\yh_{B_i}$ pour chaque $B_i$
+		\item on construit le modèle de moyenne :
+		
+		$$\yh_{\text{ens}}(\xu) = \frac{1}{T} \sum_{i = 1}^T \yh_{B_i}(\xu)$$
+	\end{itemize}
 	
 	
 	
+	\dessin{90}
+	
+	Dans le cas d'une classification, $\yh(\xu)$ sera la classe majoritaire parmi $\ens{\yh_1(\xu), \dots , \yh_T(\xu)}$
+	
+	La variance est réduite, mais le biais augmente un peu car la taille effective du bootstrap sample est environ 30\% plus petite que le $\LS$ original.
+
+	\dessin{92}
+	
+	
+	\subsection{Autres techniques de moyennage}
+	
+	Paradigme de perturbation et combinaison : on perturbe les données ou l'algorithme d'apprentissage pour obtenir plusieurs modèles qui sont bons sur l'échantillon d'apprentissage, puis on combine les prédictions des modèles.
+	
+	La variance est généralement diminuée (grâce à la moyenne), mais le biais augmente un peu à cause de la perturbation.
+	
+	Exemples : le bagging perturbe l'échantillon d'apprentissage, les réseaux de neurones peuvent être initialisés avec des poids aléatoires, random forests
+	
+\section{Random Forests}
+
+	C'est un algorithme de type perturb and combine conçu spécifiquement pour les arbres. Elle utilise du bagging et une sélection aléatoire d'un ensemble d'attributs. L'algorithme suivant est utilisé :
+	
+	\begin{itemize}
+		\item on construit l'arbre sur un bootstrap sample
+		\item au lieu de choisir le meilleur split pour tous les attributs, on sélectionne le meilleur split parmi un sous-ensemble de $k$ attributs
+	\end{itemize}
+	
+	Il y a un trade-off biais/variance avec $k$ : plus $k$ est petit et plus la réduction est grande, mais plus haut sera le biais.
+	
+	\dessin{93}
+	
+	Un autre avantage des random forests est de diminuer le temps de calcul par rapport au bagging, car seul un sous-ensemble d'attributs est considéré lorsqu'on split un noeud.
+	
+	
+\section{Décomposition de l'ambiguïté}
+
+Supposons que l'on ait $T$ modèles $\ens{\yh_1, \dots , \yh_T}$ et leur moyenne
+
+$$\yh_{\ens{ens}}(\xu) = \frac{1}{T} \sum_i \yh_i(\xu)$$
+
+Le modèle moyen est donc toujours meilleur que les modèles individuels en moyenne.
+
+	
+\section{Boosting}
+	
+L'idée est de combiner plusieurs modèles "faibles", afin de produire un modèle plus puissant.
+	
+95 $\rightarrow$ 96
+	
+\section{Interprétabilité et efficacité}
+	
+Lorsque les méthodes ensemble sont combinées avec les arbres de décision, elles perdent de l'interprétabilité et de l'efficacité. En revache, on les utilise toujours pour calculer l'importance des variables, en effectuant la moyenne sur tous les arbres. De plus, les méthodes ensemble peuvent être parallélisée et l'algorithme boosting utilise des petits arbres, ce qui fait que le coût en temps processeur n'est pas important.
+	
+		
+	\dessin{91}
