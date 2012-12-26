@@ -3,7 +3,7 @@
 Réduire le nombre de variable est utile car
 
 \begin{itemize}
-	\item on évite le sur-apprentissage et on améliore les performances du modèle
+	\item on évite le sur-apprentissage (car on apprend sur des variables inutiles) et on améliore les performances du modèle
 	\item on améliore l'interprétabilité
 	\item les modèles sont plus rapides et moins coûteux
 	\item on réduit tous les temps de calculs (si la sélection est elle-même rapide)
@@ -12,8 +12,8 @@ Réduire le nombre de variable est utile car
 Il existe deux familles de méthodes :
 
 \begin{itemize}
-	\item la sélection de feature : on cherche un petit (ou le plus petit) sous-ensemble de features qui maximisent la précision du modèle
-	\item le ranking de feature : on trie les variables selon leur importance à la prédiction de la sortie
+	\item la sélection de features : on cherche un petit (ou le plus petit) sous-ensemble de features qui maximisent la précision du modèle
+	\item le ranking de features : on trie les variables selon leur importance à la prédiction de la sortie
 \end{itemize}
 
 A noter qu'on peut obtenir une sélection de feature avec un ranking : il suffit de sélectionner les $k$ premières features.
@@ -57,22 +57,38 @@ Exemples :
 	\item les valeurs absolues des points dans une SVM linéaire : $\yh(\xu) = sgn(\sum_i w_i x_i + b)$
 \end{itemize}
 
+Avantages et inconvénients :
+	
+\begin{itemize}
+	\item[+] généralement efficace en terme de temps de calcul
+	\item[+] bonne intégration avec l'algorithme d'apprentissage
+	\item[+] multivariable
+	\item[-] spécifique à l'algorithme d'apprentissage
+\end{itemize}
+
 	\subsection{LASSO}
 	
-	Il s'agit d'un modèle linéaire avec une pénalisation L1
+	Il s'agit d'un modèle linéaire avec une pénalisation L1, comme de la ridge regression ; le carré est remplacé par une valeur absolue.
 	
 	$$\min_{\beta} \sum_{i = 1}^N (y_i -(\beta_0 + \sum_j \beta_j x_j))^2 + \lambda \sum_j \vert \beta_j \vert$$
 	
+	Les courbes rouges représentent la valeur des premiers termes, sans régularisation.
+	
 	\dessin{96}
 	
-	Avantages et inconvénients :
 	
-	\begin{itemize}
-		\item[+] généralement efficace en terme de temps de calcul
-		\item[+] bonne intégration avec l'algorithme d'apprentissage
-		\item[+] multivariable
-		\item[-] spécifique à l'algorithme d'apprentissage
-	\end{itemize}
+	Le problème est identique à
+	
+	$$\min_{\beta} \sum_i (y_i - \beta \xu_i)^2$$
+	$$\text{tel que } \sum_j \vert \beta_j \vert < C \text{ (losange)}$$
+	$$\text{ou  } \sum_j  \beta_j^2  < C \text{ (cercle)}$$
+	
+	Un losange est mieux car on a plus de chance d'arriver au sommet d'un losange qu'au sommet d'un cercle, donc d'avoir un $\beta_i$ nul. Pour $\vert \beta \vert^p$, si $p \leq 1$, on se dirige vers une sorte d'étoile à quatre branches (\ding{71}), ce qui augmente encore plus la probabilité.
+	
+	Si $\lambda$ augmente, les coefficients rétrécissent ; on obtient un classement des variables (celle qui dure le plus longtemps est la plus importante).
+	
+	
+	Cette méthode est plus lente que la ridge regression, car il y a un problème d'optimisation, et on est limité aux méthodes linéaires.
 	
 \section{Techniques de wrapper}
 
@@ -120,7 +136,7 @@ Supposons une expérience artificielle où les variables sont choisies aléatoir
 	\item idem mais avec les 20 meilleures features : 35\%
 \end{itemize}
 
-On pourrait supposer qu'il y a 20 variables intéressantes et qu'avec elles on pourrait créer un meilleur classificateur qu'un classificateur aléatoire. Cependant, sur un nouvel ensemble d'échantillons, on obtient une erreur de 52\%.
+On pourrait supposer qu'il y a 20 variables intéressantes et qu'avec elles on pourrait créer un meilleur classificateur qu'un classificateur aléatoire. Cependant, sur un nouvel ensemble d'échantillons, on obtient une erreur de 52\%. De plus, le 35\% obtenu n'est pas possible, car toutes les valeurs sont aléatoires : tout modèle aura une erreur de 50\%.
 
 On a un problème de sur-apprentissage, car on a sélectionné et testé le modèle sur base de toute la base de données. Le bon protocole aurait dû être
 
@@ -136,3 +152,4 @@ On a un problème de sur-apprentissage, car on a sélectionné et testé le mod�
 	\end{itemize}
 \end{itemize}
 
+Il faut donc utiliser une table différente pour la sélection et la validation, afin d'éviter de la corrélation lors de la validation.
