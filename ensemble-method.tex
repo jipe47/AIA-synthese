@@ -137,7 +137,59 @@ En classification, $\yh(\xu)$ sera la classe majoritaire dans $\ens{\yh_1(\xu), 
 
 	\subsection{Adaboost}
 	
-17 $\rightarrow$ 24
+	On suppose que l'algorithme d'apprentissage utilisé accepte les objets pondérés : $\ens{(x_1, y_1, w_1), \dots , (x_N, y_N, w_N)}$. C'est le cas de beaucoup d'algorithmes ; avec les arbres, on prend en compte les poids quand on compte les objets ; avec un réseau de neurones, on minimise l'erreur au carré pondérée.
+	
+	A chaque étape, Adaboost augmente les poids dans le cas où l'échantillon est mal classé par le modèle, ainsi l'algorithme se focalise sur les cas compliqués de l'échantillon d'apprentissage. $\beta_i$ sera ainsi plus petit si le modèle commet beaucoup d'erreurs. Par exemple,
+	
+	\begin{itemize}
+		\item si l'exemple est mal classé, $w_i \rightarrow w_i \exp{\beta}$
+		\item si l'exemple est bien classé, $w_i \rightarrow w_i . 1$
+	\end{itemize}
+	
+	On a l'algorithme suivant : il prend en entrée un algorithme d'apprentissage et un échantillon d'apprentissage $\ens{(x_i, y_i) : i = 1, \dots , N}$. On initialise les poids $w_i = \frac{1}{N}$, $i = 1 , \dots , N$.
+	
+	Pour $t = 1$ jusque $T$ :
+	
+	\begin{itemize}
+		\item on construit un modèle $\yh_t(x)$ avec l'algorithme d'apprentissage en utilisant les poids $w_i$
+		\item on calcule l'erreur pondérée :
+		
+		$$\text{Err}_t = \frac{\sum_i w_i . I(y_i \neq \yh_t(x_i))}{\sum_i w_i}$$
+		
+		\item on calcule $\beta_t = \log{\frac{1 - \text{Err}_t}{\text{Err}_t}}$
+		\item on met à jour les poids :
+		
+		$$w_i \leftarrow w_i . \exp{\beta_t . I(y_i \neq \yh_t(x_i))}$$
+		
+		\item on normalise les poids, de façon à ce que $\sum_i w_i = 1$
+	\end{itemize}
+	
+	\dessin{101}
+		
+	\subsection{Boosting aux moindres carrés}
+	
+	Cet algorithme de boosting est conçu pour les régression. Il prend en entrée un algorithme d'apprentissage et un échantillon d'apprentissage $\ens{(x_i, y_i) : i = 1, \dots , N}$. On initialise de la façon suivante :
+	
+	$$\yh_0(x) = \frac{1}{N} \sum_i y_i$$
+	$$r_i = y_i, \: i = 1, \dots , N$$
+	
+	
+	Pour $t = 1$ jusque $T$ :
+	
+	\begin{itemize}
+		\item pour $i = 1$ jusque $N$, on calcule les résiduels :
+		
+		$$r_i \leftarrow r_1 - \yh_{t - 1}(x_i)$$
+		
+		\item on construit un arbre de régression sur l'échantillon d'apprentissage
+	\end{itemize}
+	
+	On retourne ensuite le modèle définit par
+	
+	$$\yh(x) = \yh_0(x) + \yh_1(x) + \dots + \yh_T(x)$$
+	
+	
+	\subsection{Algorithme de boosting générique}
 	
 \section{Interprétabilité et efficacité}
 	
