@@ -184,7 +184,7 @@ Le but, pour une base de données de $N$ objets, est de déterminer le meilleur 
 	$$\text{Sensibilité (sensitivity/recall) } = \frac{TP}{P}$$
 	$$\text{Spécificité (specificity) } = \frac{TN}{TN + FP} = 1 - \frac{FP}{N}$$
 	
-	La sensibilité permet de détecter le maximum de positif (on est sûr de détecter les cas positifs), tandis que la spécificité détecte le maximum de négatif. L'avantage de ces mesures est qu'elles ne dépendent pas de la proportion d'objets positifs ou négatifs.
+	La sensibilité permet de détecter le maximum de positif (plus elle est grande et plus on est sûr de détecter les cas positifs), tandis que la spécificité détecte le maximum de négatif. L'avantage de ces mesures est qu'elles ne dépendent pas de la proportion d'objets positifs ou négatifs.
 	
 	Ces mesures peuvent être portées sur une courbe ROC (Receiver operating characteristic). Si la sortie de l'algorithme d'apprentissage est un nombre (par exemple, la probabilité d'appartenir à une classe), on peut utiliser un seul afin de régler la sensibilité et la spécificité.
 	
