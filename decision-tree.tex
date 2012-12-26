@@ -195,34 +195,3 @@ Afin de minimiser l'erreur de classification, on associe aux feuilles la classe 
 		\item[-] souvent pas aussi précis que d'autres méthodes.
 	\end{itemize}
 	
-	
-\section{Relation entre les méthodes à base d'arbres et à base de noyaux}
-	
-	Un noyau peut être défini par un arbre de régression. Soient
-	
-	\begin{itemize}
-		\item $\mathcal{L}_i$, $i = 1, \dots , \vert \mathcal{T} \vert$, l'ensemble des feuilles de $\mathcal{T}$,
-		\item $N_i$ le nombre d'objets dans le sous-$\LS$ de $\mathcal{L}_i$, et
-		\item $K_\mathcal{T}(o, o')$ égal à $\frac{1}{N_i}$ si $o$ et $o'$ atteignent la même feuille $\mathcal{L_i}$, 0 sinon.
-	\end{itemize}
-	
-	Alors l'approximation de l'arbre de régression peut être écrite comme
-	
-	$$\yh_{\mathcal{T}}(o) = \sum_{o' \in \LS}y(o') K_{\mathcal{T}}(o, o')$$
-	
-	\dessinS{42}{.3}
-	
-	On peut utiliser une représentation à base de produits scalaires :
-	
-	\begin{itemize}
-		\item pour chaque feuille, on défini une fonction $a_{\mathcal{L}_i}(o)$ par $a_{\mathcal{L}_i}(o) = N_i^{- \frac{1}{2}}$ si $o$ atteint $\mathcal{L}_i$, 0 sinon.
-		\item soit $\ab_{\mathcal{T}}(o) = (a_{\mathcal{L}_1}(o), \dots , a_{\mathcal{L}_{\vert \mathcal{T} \vert }}(o))^T$
-	\end{itemize}
-	
-	On a alors
-	
-	$$K_{\mathcal{T}}(o, o') = \ab_{\mathcal{T}}^T(o) \ab_{\mathcal{T}}(o')$$
-	
-	et
-	
-	$$\yh_{\mathcal{T}}(o) = \sum_{o' \in \LS} y(o') \ab_{\mathcal{T}}^T(o) \ab_{\mathcal{T}}(o')$$
