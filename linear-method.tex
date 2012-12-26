@@ -26,7 +26,7 @@
 		\item[-] parfois pas aussi précis que des autres méthodes (non linéaires).
 	\end{itemize}
 
-	\section{Régression linéaire}
+	\section{Ridge regression}
 	
 	Une régression linéaire essaie d'approximer la sortie avec
 	
@@ -45,17 +45,107 @@
 		\item des valeurs "dummies".
 	\end{itemize}
 	
-	\section{Ridge regression}
-
-	On doit trouver $w$ qui minimise (avec $\lambda > 0$) :
-
-	$$\sum_i (y_i - wx_i)^2 + \lambda \vert \vert w \vert \vert^2$$
-
-	Dans le cadre d'un algèbre simple, si $X$ est la matrice d'entrée et $y$ le vecteur de sortie, la solution est donnée par
-
-	$$w^r = (X^T X + \lambda I)^{-1}X^Ty$$
-
-	$\lambda$ permet de réguler la complexité, et d'éviter des problèmes liés à la singularité de $X^TX$.
+	
+	Si on pose $a_0(o) = 1 \: \forall o$, et si on dénote
+	
+	\begin{itemize}
+		\item $\ab'(o_i) = (a_0(o_i), a_1(o_i), \dots , a_n(o_i))^T$, et
+		\item $\wb' = (w_0, w_1, \dots , w_n)^T$,
+	\end{itemize}
+	
+	On a le carré de l'erreur (Square Error) sur un échantillon $i$ :
+	
+	$$SE(o_i, \wb') = (y(o_i) - \yh(o_i))^2 = (y(o_i) - \wb'^T\ab'(o_i))^2$$
+	
+	On a aussi le carré de l'erreur sur tous les objets de $LS$ (Total Square Error), avec $A' = (\ab'^1, \dots , \ab'^N)$
+	
+	$$TSE(LS, \wb') = \sum_{i = 1}^N (y(o_i) - \wb'^T\ab'(o_i))^2 = (\yb - A'^T\wb)^T(\yb - A'^T\wb')$$
+	
+	$$A' = \begin{array}{c}\left. \underbrace{\begin{pmatrix}
+	1 & 1 & \dots & 1 \\ 
+	a_1(o_1) & a_2(o_1) & \dots & a_N(o_1) \\ 
+	\vdots & \dots & \dots & \vdots \\ 
+	a_1(o_n) & a_2(o_n) & \dots & a_N(o_n)
+	\end{pmatrix}}_{N}\right\} n + 1\end{array} $$
+	
+		
+	On cherche $\wb'$ qui minimise
+		
+	$$\TSE(\LS, \wb') = (\yb - A'^T\wb)^T(\yb - A'^T\wb')$$
+		
+	Le gradient est
+		
+	$$\Delta_{w'} TSE(\LS, \wb') = -2 A' (\yb - A'^T\wb')$$
+		
+	Si on résout $\Delta_{w'} TSE(\LS, \wb'*) = 0$, on obtient
+		
+	$$\wb'* = (A'A'^T)^{-1}A'\yb$$
+		
+	Il existe cependant plusieurs solutions optimales, ce n'est pas un problème à solution unique. Afin d'avoir une solution unique, on va introduire un terme $\lambda > 0$ de régulation : l'erreur devient
+	
+	$$\TSE(\LS, \wb') = (\yb - A'^T\wb)^T(\yb - A'^T\wb') + \lambda \wb^T\wb$$
+	
+	Le gradient devient
+	
+	$$\Delta_{w} TSE(\LS, \lambda, \wb) = -2 A (\yb - A^T\wb) + 2 \lambda \wb$$
+	
+	La solution optimale devient alors
+	
+	$$\wb^*(\lambda) = (A A^T + \lambda I)^{-1} A \yb$$
+	
+	Cette solution est unique $\forall \lambda > 0$. Augmenter $\lambda$ réduit la variance, car on tient moins compte de $A$ dans $TSE_R$. En revanche, on est moins optimal sur l'échantillon, il y a augmentation de l'erreur quadratique moyenne.
+		
+	\dessin{39}
+		
+	Augmenter $\lambda$ est bénéfique sur un échantillon de test indépendant.
+	
+	En terme de temps de calcul :
+	
+	\begin{itemize}
+		\item créer la matrice de covariance est de l'ordre de $N n^2$ opérations
+		\item résoudre le système pour trouver $\wb^*$ est de l'ordre de $n^3$ opérations
+		\item[$\rightarrow$] $\bigoh(n^3)$
+	\end{itemize}
+	
+	
+	C'est la méthode de régulation qui donne son nom à la \textit{ridge regression}
+	
+	
+	% Ce qui suit est un résumé des slides du cours à partir du 10/19. Vu que ce n'est pas spécialement accessible ni amusant, le lecteur peut aller en parler à Denver à la fin de ce fichier.
+		
+	\begin{comment}
+	[slide 10/19]
+		
+	Considérons la matrice $(A'A'^T)$ : l'élément $i, j$ est obtenu par le produit scalaire de la $i$ème ligne et de la $j$ ème ligne de $A'$ :
+		
+	$$A'A'^T = N \begin{pmatrix}
+		1 &  \ao_1 & \dots & \ao_n \\ 
+		\ao_1 & g_{1,1} & \dots & g_{1, n} \\
+		\vdots & \vdots & \ddots & \vdots \\
+		\ao_n & g_{n, 1} & \dots & g_{n, n}
+		\end{pmatrix} $$
+		
+	avec $\ao_i = \frac{1}{N} \sum_{k = 1}^N a_i(o_k)$ et $g_{i, j} = \frac{1}{N} \sum_{k = 1}^N a_i(o_k)a_j(o_k)$.
+		
+	Si la moyenne est nulle, $\ao_i = 0$ et les $g_{i, j}$ forment la matrice de covariance $\Sigma$
+		
+	\remarque{slides 12-19/19 ; ce qui suit vient de mes notes manuscrites}
+		
+	En conclusion, la prédiction n'est pas modifiée si on ajoute des constantes et si on effectue des combinaisons linéaires aux valeurs des attributs (tant qu'elles ne sont pas singulières).
+		
+	Si on retire la moyenne et l'écart-type à tous les coefficients de la matrice, on les place dans le même ordre de grandeur (abstraction des unités).
+				
+	Le problème est que plusieurs solutions sont possible. La solution est d'utiliser $\lambda$ [slide 16/19], qui permet d'en isoler une et de mieux conditionner le problème.
+		
+	Augmenter $\lambda$ réduit la variance, car on tient moins compte de $A$ dans $TSE_R$. En revanche, on est moins optimal sur l'échantillon, il y a augmentation de l'erreur quadratique moyenne.
+		
+	\dessin{39}
+		
+	Augmenter $\lambda$ est bénéfique sur un échantillon de test indépendant.
+		
+	\end{comment}
+	
+	
 
 	\section{Perceptron}
 
@@ -97,117 +187,10 @@
 	\end{itemize}
 
 
-	
-	
-	
-	\section{Solution minimisant l'erreur quadratique moyenne}
-	
-	Si on pose $a_0(o) = 1 \: \forall o$, et si on dénote
-	
-	
-	\begin{itemize}
-		\item $\ab'(o_i) = (a_0(o_i), a_1(o_i), \dots , a_n(o_i))^T$, et
-		\item $\wb' = (w_0, w_1, \dots , w_n)^T$,
-	\end{itemize}
-	
-	on a le carré de l'erreur (Square Error) sur un échantillon $i$ :
-	
-	$$SE(o_i, \wb') = (y(o_i) - \yh(o_i))^2 = (y(o_i) - \wb'^T\ab'(o_i))^2$$
-	
-	On a aussi le carré de l'erreur sur tous les objets de $LS$ (Total Square Error), avec $A' = (\ab'^1, \dots , \ab'^N)$
-	
-	$$TSE(LS, \wb') = \sum_{i = 1}^N (y(o_i) - \wb'^T\ab'(o_i))^2 = (\yb - A'^T\wb)^T(\yb - A'^T\wb')$$
-	
-	$$A' = \begin{array}{c}\left. \underbrace{\begin{pmatrix}
-	1 & 1 & \dots & 1 \\ 
-	a_1(o_1) & a_2(o_1) & \dots & a_N(o_1) \\ 
-	\vdots & \dots & \dots & \vdots \\ 
-	a_1(o_n) & a_2(o_n) & \dots & a_N(o_n)
-	\end{pmatrix}}_{N}\right\} n + 1\end{array} $$
-	
-		\subsection{SE à une dimension}
-		
-		Avec une seule entrée, la solution est donnée par
-		
-		$$(w_0*, w_1*) = arg \min_{w_0, w_1} \sum_{i = 1}^N (y(o_i) - w_0 - w_1a_1(o_i))^2$$
-		
-		Lorsqu'on annule la dérivée, on obtient
-		
-		$$w_1* = \frac{cov(a_1, y)}{\sigma^2_{a_1}}$$
-		$$w_0* = \yo - w_1*\overline{a}_1$$
-		
-		avec $\overline{a}_1 = \frac{1}{N} \sum_{k = 1}^Na_1(o_k)$ et $\yb = \frac{1}{N} \sum_{k = 1}^N y(o_k)$. Ainsi le seul $w_i$ à trouver est $w_0$. La meilleur valeur est la moyenne des $\yh(o_i)$.
-		
-		$$\yh = w_0, \: w_0* = arg \min_{w_0} \underbrace{\sum_{i = 1}^N (w_0 - y(o_i))^2}_{TSE(\LS, w_0)}$$
-		
-		$$\frac{d}{dw_0} TSE = \sum_{i = 1}^N 2(w_0 - y(o_i)) = 0$$
-		$$\Leftrightarrow 2 N w_0 = 2 \sum_{i = 1}^N y(o_i) \Leftrightarrow w_0 = \frac{1}{N} \sum_{i = 1}^N y(o_i)$$
-		
-		Si on substitue dans l'équation $y(o) = w_0* + w_1*a_1(o)$, on a
-		
-		$$\frac{y(o) - \yo}{\sigma_y} = \rho_{a_1, y} \frac{a_1(o) - \overline{a}_1}{\sigma_{a_1}}$$
-		
-		$\rho_{a_1, y}$ est le coefficient de corrélation entre $a_1$ et $y$, et $\sigma_y$ et $\sigma_{a_1}$ sont les déviations standards de $y$ et $a_1$.
-		
-		\subsection{SE à plusieurs dimensions}
-		
-		On cherche $\wb'$ qui minimise
-		
-		$$TSE(\LS, \wb') = (\yb - A'^T\wb)^T(\yb - A'^T\wb')$$
-		
-		Le gradient est
-		
-		$$\Delta_{w'} TSE(\LS, \wb') = -2 A' (\yb - A'^T\wb')$$
-		
-		Si on résout $\Delta_{w'} TSE(\LS, \wb'*) = 0$, on obtient
-		
-		$$\wb'* = (A'A'^T)^{-1}A'\yb$$
-		
-		A noter que $\Delta^2_{w'} TSE(\LS, \wb') = 2A'A'^T$ est semi-définie positive symétrique.
-		
-		[Rappel notes p3 recto]
-		
-		A noter qu'il existe plusieurs solutions (des vecteurs $w'* = (w_0*, w_1*)$) optimales, ce n'est pas un problème à solution unique.
-		
-		[slide 10/19]
-		
-		Considérons la matrice $(A'A'^T)$ : l'élément $i, j$ est obtenu par le produit scalaire de la $i$ème ligne et de la $j$ ème ligne de $A'$ :
-		
-		$$A'A'^T = N \begin{pmatrix}
-		1 &  \ao_1 & \dots & \ao_n \\ 
-		\ao_1 & g_{1,1} & \dots & g_{1, n} \\
-		\vdots & \vdots & \ddots & \vdots \\
-		\ao_n & g_{n, 1} & \dots & g_{n, n}
-		\end{pmatrix} $$
-		
-		avec $\ao_i = \frac{1}{N} \sum_{k = 1}^N a_i(o_k)$ et $g_{i, j} = \frac{1}{N} \sum_{k = 1}^N a_i(o_k)a_j(o_k)$.
-		
-		Si la moyenne est nulle, $\ao_i = 0$ et les $g_{i, j}$ forment la matrice de covariance $\Sigma$
-		
-		\remarque{slides 12-19/19 ; ce qui suit vient de mes notes manuscrites}
-		
-		En conclusion, la prédiction n'est pas modifiée si on ajoute des constantes et si on effectue des combinaisons linéaires aux valeurs des attributs (tant qu'elles ne sont pas singulières).
-		
-		Si on retire la moyenne et l'écart-type à tous les coefficients de la matrice, on les place dans le même ordre de grandeur (abstraction des unités).
 		
 		
-		Le problème est que plusieurs sont possible. La solution est d'utiliser $\lambda$ [slide 16/19], qui permet d'en isoler une et de mieux conditionner le problème.
-		
-		Augmenter $\lambda$ réduit la variance, car on tient moins compte de $A$ dans $TSE_R$. En revanche, on est moins optimal sur l'échantillon, il y a augmentation de l'erreur quadratique moyenne.
-		
-		\dessin{39}
-		
-		Augmenter $\lambda$ est bénéfique sur un échantillon de test indépendant.
-		
-		\remarque{Des notations sur le graphique dans mes notes manquent dans cette synthèse.}
-		
-		
-		
-		
-		
-		
-		
-% Stuff from the overview		
+% Ce qui suit vient d'une première synthèse basée sur l'overview. Ce n'est plus pertinent de l'inclure dans cette synthèse, mais le code est conservé au cas où il faudrait effectuer quelques prélèvements.
+
 \begin{comment}
 \subsection{Modèle linéaire}
 
@@ -252,3 +235,23 @@ $$h(X_1, X_2) = \left\{
 La phase d'apprentissage aura pour but de trouver les paramètres numériques de cette fonction.
 
 \end{comment}
+
+
+%           _                  
+%          //                                                  
+%         //                                                   
+%      __/(                                                    
+%  _.~-a  ~-.                                                  
+% {_____)    `.           _..=~~~~=._                          
+%       ~-_    \      _.=~           '=.                       
+%          \    `._.=~            .=.   :=._                   
+%           -         __         (   \   : \)                  
+%            ~.      (  }       (     |   : :                  
+%              `:     \ \        \    |\   ; :                 
+%                \     \ }        \   / |  ;  }                
+%                 `-.__//__.==~~=._\ (_/  ;  ;                 
+%                     //           | |/  ;  ;                  
+%                    {{       _____|_/ ;   ;        *     ___  
+%                     `      ---- _=.=`   ~ _____   ||*    ____
+%                             __:='    .='     ___\\||/___     
+%                         ..:~____.==''                        
