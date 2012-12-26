@@ -17,6 +17,7 @@
 		\item Classification : linear discriminant analysis, PLS-discriminant analysis, support vector machines, \dots \\
 	\end{itemize} 
 
+	Avantages et inconvénients :
 	\begin{itemize}
 		\item[+] simple ;
 		\item[+] il existe des variantes rapides et scalable ;
@@ -42,7 +43,7 @@
 	
 		$$\sum_i (y_i - wx_i)^2$$
 	
-		en utilisant une descente de radiant : étant donné un exemple d'entrainement $(x, y)$,
+		en utilisant une descente de gradiant : étant donné un exemple d'entrainement $(x, y)$,
 	
 		$$\delta \leftarrow y - w^Tx$$
 		$$\forall jw_i \leftarrow w_j + \eta \delta x_j$$
