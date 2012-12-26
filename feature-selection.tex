@@ -1,1 +1,138 @@
 \chapter{Sélection de features}
+
+Réduire le nombre de variable est utile car
+
+\begin{itemize}
+	\item on évite le sur-apprentissage et on améliore les performances du modèle
+	\item on améliore l'interprétabilité
+	\item les modèles sont plus rapides et moins coûteux
+	\item on réduit tous les temps de calculs (si la sélection est elle-même rapide)
+\end{itemize}
+
+Il existe deux familles de méthodes :
+
+\begin{itemize}
+	\item la sélection de feature : on cherche un petit (ou le plus petit) sous-ensemble de features qui maximisent la précision du modèle
+	\item le ranking de feature : on trie les variables selon leur importance à la prédiction de la sortie
+\end{itemize}
+
+A noter qu'on peut obtenir une sélection de feature avec un ranking : il suffit de sélectionner les $k$ premières features.
+
+Trois approches existent dans la sélection de features :
+
+\begin{itemize}
+	\item filtre : sélection à-priori des variables, indépendamment d'un algorithme d'apprentissage supervisé
+	\item embarqué (embedded) : sélection de features embarquée dans un algorithme d'apprentissage
+	\item wrapper : utiliser la validation croisée pour trouver l'ensemble optimal de features pour un algorithme
+\end{itemize}
+
+\section{Techniques de filtre}
+
+	L'idée est d'associer un score à chaque feature et de retirer celle dont le score est trop bas.
+	
+	Généralement, on utilise une fonction de score univariable, comme avec les arbres de décision ou avec des tests statistiques (t-test, chi$^2$, etc). Le nombre optimal de features peut être déterminé par de la validation croisée.
+	
+	Des approches de sélection multi-variable existent (dans les arbres de décision, etc), et peuvent être utile ; des features pourraient être inutiles toutes seules (on a un petit score univariable), mais ensembles, elles peuvent parfaitement expliquer la classification.
+	
+	\dessin{95}
+	
+	Avantages et inconvénients :
+	\begin{itemize}
+		\item[+] l'approche univariable est rapide et scalable
+		\item[+] on est indépendant de l'algorithme d'apprentissage supervisé
+		\item[-] on ignore l'algorithme d'apprentissage, et donc potentiellement une bonne combinaison de variables
+		\item[-] l'approche univariable ignore la dépendance entre les features
+		\item[-] l'approche multivariable est beaucoup plus lente
+	\end{itemize}
+	
+\section{Techniques embarquées}
+
+Certains algorithmes d'apprentissage supervisé embarquent une sélection de feature ; la recherche d'un sous-ensemble optimal de features se fait dans l'algorithme même.
+
+Exemples :
+
+\begin{itemize}
+	\item le splitting des arbres de décision
+	\item les méthodes ensemble à base d'arbre
+	\item les valeurs absolues des points dans une SVM linéaire : $\yh(\xu) = sgn(\sum_i w_i x_i + b)$
+\end{itemize}
+
+	\subsection{LASSO}
+	
+	Il s'agit d'un modèle linéaire avec une pénalisation L1
+	
+	$$\min_{\beta} \sum_{i = 1}^N (y_i -(\beta_0 + \sum_j \beta_j x_j))^2 + \lambda \sum_j \vert \beta_j \vert$$
+	
+	\dessin{96}
+	
+	Avantages et inconvénients :
+	
+	\begin{itemize}
+		\item[+] généralement efficace en terme de temps de calcul
+		\item[+] bonne intégration avec l'algorithme d'apprentissage
+		\item[+] multivariable
+		\item[-] spécifique à l'algorithme d'apprentissage
+	\end{itemize}
+	
+\section{Techniques de wrapper}
+
+On essaie de trouver le sous-ensemble de features qui maximise la qualité du modèle induite par l'algorithme d'apprentissage. Cette qualité est estimée par de la validation croisée  vu que le nombre de sous-ensemble d'un ensemble de $p$ features est de $2^p$, tous les sous-ensembles ne sont pas évalués et des heuristiques sont nécessaires.
+
+Plusieurs approches existent :
+
+\begin{itemize}
+	\item forward (ou backward) selection : on ajoute (retire) les variables qui diminue le plus (augmente le moins) l'erreur
+	\item optimisation avec des algorithmes génétiques
+\end{itemize}
+
+Une approche populaire est l'élimination récursive de features. On suppose que l'on dispose d'un algorithme d'apprentissage qui peut ranker les features (ex : SVM, arbres de décision). A partir de l'ensemble complet de features, on itère :
+
+\begin{itemize}
+	\item on apprend un modèle à partir de l'ensemble courrant de features
+	\item on calcule le rank des features avec le modèle
+	\item on retire la feature avec le plus petit rank
+\end{itemize}
+
+Au final, on garde l'ensemble de features qui donne la plus petite erreur par validation croisée.
+
+\dessin{97}
+
+Avantage et inconvénients :
+
+\begin{itemize}
+	\item[+] l'ensemble de features est taillé sur mesure pour l'algorithme d'apprentissage
+	\item[+] il est possible de trouver des interactions et de supprimer des variables redondantes
+	\item[-] méthode susceptible au sur-apprentissage : il est parfois facile de trouver un petit sous-ensemble de variables bruitées qui donne de très bons résultats
+	\item[-] coûteux, car il faut construite un modèle sur chaque sous-ensemble de variable
+\end{itemize}
+
+
+\section{Biais de sélection}
+
+\paragraph{Mauvaise méthode de sélection}
+
+A partir de la base de données, on sélectionne les $N$ meilleurs variables avec un filtre. On évalue ensuite un algorithme qui utilise ces $N$ variables par validation croisée sur la base de données.
+
+Supposons une expérience artificielle où les variables sont choisies aléatoirement, de même que la classe de sortie. On effectue alors deux essais :
+
+\begin{itemize}
+	\item tree bagging sans sélection de feature : erreur en validation croisée 10-fold = 52\%
+	\item idem mais avec les 20 meilleures features : 35\%
+\end{itemize}
+
+On pourrait supposer qu'il y a 20 variables intéressantes et qu'avec elles on pourrait créer un meilleur classificateur qu'un classificateur aléatoire. Cependant, sur un nouvel ensemble d'échantillons, on obtient une erreur de 52\%.
+
+On a un problème de sur-apprentissage, car on a sélectionné et testé le modèle sur base de toute la base de données. Le bon protocole aurait dû être
+
+\begin{itemize}
+	\item diviser $\LS$ en 10 sous-ensembles
+	\item pour $i = 1$ jusqu'à 10 :
+	
+	\begin{itemize}
+		\item retirer le $i$ème sous-ensemble de $\LS$
+		\item sélectionner les 20 variables sur les sous-ensembles restant
+		\item apprendre le modèle sur les 20 variables et les objets restant
+		\item tester le modèle sur le $i$ème sous-ensemble de variables
+	\end{itemize}
+\end{itemize}
+
