@@ -252,11 +252,17 @@ $$E_{LS}\{Err_{LS}\} = E_{LS}\{E_{x, y} \{L(y, \hat{f}_{LS}(x))\} \}$$
 		\begin{itemize}
 			\item du pruning, afin de réduire explicitement la complexité de l'algorithme
 			\item un arrêt précoce, afin de réduire la recherche
-			\item une régularization, qui réduit l'espace d'hypothèses. On utilise par exemple le weight decay avec les réseaux de neurones, qui consiste à pénaliser les grandes valeurs pour les poids.
+			\item une régularisation, qui réduit l'espace d'hypothèses. On utilise par exemple le weight decay avec les réseaux de neurones, qui consiste à pénaliser les grandes valeurs pour les poids.
 		\end{itemize}
 		
 		\dessin{98}
 		
+		La réalisation est la vraie valeur auquel s'ajoute du bruit. Le biais du modèle n'est pas équivalent au biais de l'algorithme d'apprentissage.
+				
+		Exemple de résultats :
+		
 		\dessin{99}
 		
 		Comme attendu, la variance diminue mais le biais augmente.
+		
+		A noter qu'une bonne estimation du biais est l'erreur de resubstitution (sur $\LS$).
