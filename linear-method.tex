@@ -196,3 +196,55 @@
 		Augmenter $\lambda$ est bénéfique sur un échantillon de test indépendant.
 		
 		\remarque{Des notations sur le graphique dans mes notes manquent dans cette synthèse.}
+		
+		
+		
+		
+		
+		
+		
+% Stuff from the overview		
+\begin{comment}
+\subsection{Modèle linéaire}
+
+\dessin{3}
+
+On a par exemple
+
+$$h(X_1, X_2) = \left\{
+\begin{array}{ll}
+\text{malade} & \text{si } w_0 + w_1X_1 + w_2X_2 > 0 \\
+\text{sain} & \text{sinon.}
+\end{array}
+\right.$$
+
+La phase d'apprentissage aura pour but de trouver les meilleurs $w_0$, $w_1$ et $w_2$ ; un modèle linéaire ne possède que trois paramètres.
+
+\subsection{Modèle quadratique}
+\dessin{4}
+
+$$h(X_1, X_2) = \left\{
+\begin{array}{ll}
+\text{malade} & \text{si } w_0 + w_1X_1 + w_2X_2 + \textcolor{red}{w_3 X_1^2 + W_4X_2^2} > 0 \\
+\text{sain} & \text{sinon.}
+\end{array}
+\right.$$
+
+La phase d'apprentissage aura pour but de trouver les meilleurs $w_0$, $w_1$, $w_2$, $w_3$ et $w_4$.
+
+Par facilité, on peut étendre la base de données, en ajoutant des colonnes contenant $X_1^2$ et $X_2^2$.
+
+Un modèle quadratique est au moins aussi bon que le meilleur modèle linéaire, car on peut rendre un modèle quadratique linéaire avec $w_3 = w_4 = 0$.
+
+
+\subsection{Modèle d'un réseau de neurones artificiels}
+\dessin{5}
+$$h(X_1, X_2) = \left\{
+\begin{array}{ll}
+\text{malade} & \text{si une fonction complexe de } X_1, X_2 > 0 \\
+\text{sain} & \text{sinon.}
+\end{array}
+\right.$$
+La phase d'apprentissage aura pour but de trouver les paramètres numériques de cette fonction.
+
+\end{comment}
