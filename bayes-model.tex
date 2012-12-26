@@ -243,4 +243,20 @@ $$E_{LS}\{Err_{LS}\} = E_{LS}\{E_{x, y} \{L(y, \hat{f}_{LS}(x))\} \}$$
 		
 	\section{Techniques de réduction du biais et de la variance}
 	
-	43 $\rightarrow$ 51
+	Afin de réduire le biais et la variance, on peut jouer sur les paramètres de l'algorithme d'apprentissage, cependant cela ne suffit pas toujours. On peut alors passer aux méthodes d'ensemble, qui offrent un trade-off biais/variance différent, mais qui font perdre des caractéristiques de la méthode initiale.
+	
+		\subsection{Réduction de la variance}
+		
+		L'idée générale est de réduire la capacité de l'algorithme d'apprendre $\LS$. Cela se fait par
+		
+		\begin{itemize}
+			\item du pruning, afin de réduire explicitement la complexité de l'algorithme
+			\item un arrêt précoce, afin de réduire la recherche
+			\item une régularization, qui réduit l'espace d'hypothèses. On utilise par exemple le weight decay avec les réseaux de neurones, qui consiste à pénaliser les grandes valeurs pour les poids.
+		\end{itemize}
+		
+		\dessin{98}
+		
+		\dessin{99}
+		
+		Comme attendu, la variance diminue mais le biais augmente.
