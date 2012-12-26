@@ -25,7 +25,7 @@ Il existe deux familles de méthode :
 	
 	Le biais n'est pas différent par rapport à l'algorithme original. En effet,
 	
-	$$\text{E}_{\LS_1, \dots , \LS_T} \ens{\yh_{text{ens}} (\xu)} = \frac{1}{T} \sum_i \text{E}_{\LS_i}\ens{\yh_{\LS_i}(\xu)} = \els{\yh_{\LS}(\xu)}$$
+	$$\text{E}_{\LS_1, \dots , \LS_T} \ens{\yhens (\xu)} = \frac{1}{T} \sum_i \text{E}_{\LS_i}\ens{\yh_{\LS_i}(\xu)} = \els{\yh_{\LS}(\xu)}$$
 	
 	Par contre, la variance est divisée par $T$ :
 	
@@ -36,7 +36,7 @@ Il existe deux familles de méthode :
 	
 	\subsection{En pratique}
 	
-	Il n'est généralement pas possible de créer plusieurs $\LS$, car $P(\xu, y)$ est inconnu. L'idée est d'utiliser du bootstrap sampling pour générer plusieurs ensembles d'apprentissage
+	Il n'est généralement pas possible de créer plusieurs $\LS$, car $P(\xu, y)$ est inconnu, et les méthodes d'ensembles nécessitent justement beaucoup de données. L'idée est d'utiliser du bootstrap sampling pour générer plusieurs ensembles d'apprentissage.
 
 	\dessin{21}
 	
@@ -50,16 +50,17 @@ Il existe deux familles de méthode :
 		$$\yh_{\text{ens}}(\xu) = \frac{1}{T} \sum_{i = 1}^T \yh_{B_i}(\xu)$$
 	\end{itemize}
 	
-	
-	
 	\dessin{90}
 	
 	Dans le cas d'une classification, $\yh(\xu)$ sera la classe majoritaire parmi $\ens{\yh_1(\xu), \dots , \yh_T(\xu)}$
-	
-	La variance est réduite, mais le biais augmente un peu car la taille effective du bootstrap sample est environ 30\% plus petite que le $\LS$ original.
 
 	\dessin{92}
 	
+	La variance est réduite, mais le biais augmente un peu car la taille effective du bootstrap sample est environ 30\% plus petite que le $\LS$ original ; tous les exemples de départ ne s'y trouvent pas, seulement environ $\approx$ 63.2\%.
+	
+	\dessin{100}
+	
+	L'erreur est moindre, par contre il faut souvent augmenter la complexité pour obtenir l'erreur minimale.
 	
 	\subsection{Autres techniques de moyennage}
 	
@@ -71,18 +72,20 @@ Il existe deux familles de méthode :
 	
 \section{Random Forests}
 
-	C'est un algorithme de type perturb and combine conçu spécifiquement pour les arbres. Elle utilise du bagging et une sélection aléatoire d'un ensemble d'attributs. L'algorithme suivant est utilisé :
+	C'est un algorithme de type \textit{perturb and combine} conçu spécifiquement pour les arbres. Elle utilise du bagging et une sélection aléatoire d'un ensemble d'attributs. L'algorithme suivant est utilisé :
 	
 	\begin{itemize}
 		\item on construit l'arbre sur un bootstrap sample
-		\item au lieu de choisir le meilleur split pour tous les attributs, on sélectionne le meilleur split parmi un sous-ensemble de $k$ attributs
+		\item au lieu de choisir le meilleur split sur tout les attributs (au nombre de $p$), on sélectionne le meilleur split parmi un sous-ensemble de $k$ attributs
 	\end{itemize}
 	
-	Il y a un trade-off biais/variance avec $k$ : plus $k$ est petit et plus la réduction est grande, mais plus haut sera le biais.
+	Il y a un trade-off biais/variance avec $k$ : plus $k$ est petit et plus la réduction est grande, mais plus haut sera le biais. Faire la moyenne casse le compromis biais/variance habituel.
+	
+	Le fait d'effectuer des choix aléatoires fait que l'arbre ne dépend pas de l'échantillon d'apprentissage
 	
 	\dessin{93}
 	
-	Un autre avantage des random forests est de diminuer le temps de calcul par rapport au bagging, car seul un sous-ensemble d'attributs est considéré lorsqu'on split un noeud.
+	Un autre avantage des random forests est de diminuer le temps de calcul par rapport au bagging, car seul un sous-ensemble d'attributs est considéré lorsqu'on split un noeud (et pas tous). Généralement, $k = \sqrt{p}$.
 	
 	
 \section{Décomposition de l'ambiguïté}
@@ -110,7 +113,6 @@ $$\frac{1}{T}\sum_i \eyx{(y - \yh_i(\xu))^2} = \eyx{(y - \yhens(\xu))^2} + \frac
 $$\Leftrightarrow \eyx{(y - \yhens(\xu))^2} = \frac{1}{T}\sum_i \eyx{(y - \yh_i(\xu))^2} - \frac{1}{T} \sum_i (y_i(\xu) - \yhens(\xu))^2$$
 
 Le modèle moyen est donc toujours meilleur que les modèles individuels en moyenne. Ce n'est cependant pas vrai en classification.
-
 	
 \section{Boosting}
 	
@@ -124,6 +126,8 @@ Les différences par rapport aux autres méthodes d'ensemble sont que
 \end{itemize}
 
 \dessin{94}
+
+Par exemple, pour passer de $\LS_1$ à $\LS_2$, on ignore les points bien classés de $\LS_1$.
 
 En régression,
 
