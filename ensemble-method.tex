@@ -191,6 +191,41 @@ En classification, $\yh(\xu)$ sera la classe majoritaire dans $\ens{\yh_1(\xu), 
 	
 	\subsection{Algorithme de boosting générique}
 	
+	Le but est de trouver $\yh(\xu) = \beta_1 \yh_1(\xu) + \dots + \beta_T \yh_T(\xu)$ et qui minimise $\sum_{i = 1}^N L(y_i, \yh(\xu_i))$.
+	
+	On utilise du \textit{forward stage-wise additive modeling} :
+	
+	\begin{enumerate}
+		\item On initialise $\yh(\xu) = 0$
+		\item pour $t = 1$ jusque $T$ :
+		
+		\begin{enumerate}
+			\item on calcule
+			
+			$$(\beta_t, \yh_t) = arg \min_{\beta, \yh'} \sum_i L(y_i, \yh(\xu_i) + \beta \yh'(\xu_i))$$
+			\item 
+			
+			$$\yh(\xu) \leftarrow \yh(\xu) + \beta_t \yh_t(\xu)$$
+		\end{enumerate}
+	\end{enumerate}
+	
+	On a ainsi
+	
+	\begin{itemize}
+		\item pour le boosting aux moindres carrés, $L(y, y') = (y - y')^2$
+		\item pour Adaboost, $L(y, y') = \exp{(-y y')}$
+	\end{itemize}
+	
+	\dessin{102}
+	
+	\subsection{Méthodes de boosting}
+	
+	Il existe de nombreux autres algorithmes de boosting (par exemple le gradient boosting).
+	
+	Le boosting sur les arbres de décision/régression améliore très fortement leur précision, cependant on est beaucoup plus sensible au bruit (sur-apprentissage) que les techniques de moyennage).
+	
+	Ainsi, pour que le boosting fonctionne, il faut que les modèles ne soit pas parfaits sur l'échantillon d'apprentissage. Pour les arbres, on peut soit les élaguer (pre-prune ou post-prune avec de la validation croisée), soit limiter le nombre de tests (et spliter d'abord sur les noeuds les plus impures). Il y a encore une fois un trade-off biais/variance qui dépend de la taille de l'arbre.
+	
 \section{Interprétabilité et efficacité}
 	
 Lorsque les méthodes ensemble sont combinées avec les arbres de décision, elles perdent de l'interprétabilité et de l'efficacité. En revanche, on les utilise toujours pour calculer l'importance des variables, en effectuant la moyenne sur tous les arbres. De plus, les méthodes ensemble peuvent être parallélisée et l'algorithme boosting utilise des petits arbres, ce qui fait que le coût en temps processeur n'est pas important.
