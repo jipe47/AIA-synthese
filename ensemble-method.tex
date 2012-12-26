@@ -218,7 +218,25 @@ En classification, $\yh(\xu)$ sera la classe majoritaire dans $\ens{\yh_1(\xu), 
 	
 	\dessin{102}
 	
-	\subsection{Méthodes de boosting}
+	La courbe rouge (squared error) n'est pas intéressante, car elle pénalise les modèles où $y.f > 1$, or il faudrait qu'elle tende vers 0 comme les autres.
+	
+	\subsection{$\LS$ boosting}
+
+	\remarque{Je n'ai pas retrouvé dans les transparents quoi que ce soit qui ait un rapport à cette section. Cela vient de mes notes, mais elles sont assez lacunaires, du coup ce qui suit ne veut pas dire grand chose.}
+		
+	On a un paramètre $u \in [0, 1]$ qui permet de ralentir l'évolution de l'algorithme, et donc le sur-apprentissage.
+	
+	\begin{center}
+	\begin{tabular}{ccc|ccc}
+	$x_1$ & \dots & $x_p$ & $y$ & $y_0$ & $y_1$ \\ 
+	\hline 
+	  &   &   & $y_1$ & $y_1 - u\yo$ & ? \\ 
+	  &   &   & $y_2$ & $y_2 - u\yo$ & ? \\ 
+	  &   &  & \vdots & \vdots & ? \\ 
+	\end{tabular} 
+	\end{center}
+	
+	\subsection{Autres méthodes de boosting}
 	
 	Il existe de nombreux autres algorithmes de boosting (par exemple le gradient boosting).
 	
@@ -256,6 +274,14 @@ Lorsque les méthodes ensemble sont combinées avec les arbres de décision, ell
 	\end{itemize}
 	
 	Soit $\LS^0 = \ens{(x_i^0, y_i)}$ avec $x_i^0 = (y_i^t)^T_{t = 1}$ : on retourne $\yh = A^0(\LS^0)$.
+	
+	Il s'agit d'une généralisation du boosting, dont le modèle est une combinaison linéaire des osus-modèles. L'algorithme d'apprentissage s'entraîne sur les sorties des sous-modèles.
+	
+	\dessin{103}
+	
+	Il faut cependant que les $y_i$ soient différents, par exemple avec de la validation croisée.
+	
+	\dessin{104}
 	
 \section{Conclusion}
 
