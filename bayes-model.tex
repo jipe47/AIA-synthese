@@ -11,7 +11,7 @@ La fonction $L : \mathcal{Y} \times \mathcal{Y} \rightarrow \mathbb{R}$ mesure l
 	\item en régression, $L(y, y') = (y - y')^2$ (erreur quadratique).
 \end{itemize}
 
-Soit la fonction $\hat{f}_{LS}$ apprise à partir de $LS$ à partir d'un algorithme d'apprentissage. Cette fonction (qui dnne la prédiction à un certain point) est une variable aléatoire.
+Soit la fonction $\hat{f}_{LS}$ apprise à partir de $LS$ à partir d'un algorithme d'apprentissage. Cette fonction (qui donne la prédiction à un certain point) est une variable aléatoire.
 
 \dessin{24}
 
@@ -165,7 +165,7 @@ $$E_{LS}\{Err_{LS}\} = E_{LS}\{E_{x, y} \{L(y, \hat{f}_{LS}(x))\} \}$$
 		
 		$$\yh = arg \: \text{max}_{\yo} P(\yo \vert LS)$$
 		
-		[20]
+		Voir slide 20.
 	
 	\section{Problème de régression (complet)}
 	
@@ -188,13 +188,25 @@ $$E_{LS}\{Err_{LS}\} = E_{LS}\{E_{x, y} \{L(y, \hat{f}_{LS}(x))\} \}$$
 		\item $\text{variance}(\xu) = \els{(\yh - \els{\yh(\xu)})^2}$, qui quantifie de combien $\yh(\xu)$ varie d'un échantillon d'apprentissage à un autre.
 	\end{itemize}
 	
-	23 $\rightarrow$ 26
-	
-	24 : le biais est la différence au carré entre les courbes bleu et noire (intégrée).
-	
-	25 : le décalage est faible, mais la variance est haute. La variance est proche du bruit.
-	
-	
+		\subsection{Illustration}
+		
+		Soit une fonction $y = h(x) + \epsilon$, $\epsilon \approx N(0, 1)$.
+		
+		\dessin{105}
+		
+		Si on utilise une méthode avec trop de biais et peu de variance, on a du sous-apprentissage. Le biais est la différence au carré entre les courbes bleu et noire (intégrée).
+		
+		\dessin{106}
+		
+		Si on utilise une méthode avec peu de biais et beaucoup de variance, on a du sur-apprentissage. Le décalage est faible, mais la variance est haute. La variance est proche du bruit.
+		
+		\dessin{107}
+		
+		A noter que ne pas avoir de bruit ne signifie pas qu'il n'y a pas de variance, mais qu'il y en a moins.
+		
+		\dessin{108}
+		
+		
 	\section{Problèmes de classification}
 	
 	L'erreur moyenne de mauvaise classification est
@@ -216,25 +228,42 @@ $$E_{LS}\{Err_{LS}\} = E_{LS}\{E_{x, y} \{L(y, \hat{f}_{LS}(x))\} \}$$
 	\section{Paramètres influençant le biais et la variance}
 	
 		\subsection{Complexité du modèle}
-		[31]
+		% Slide 31 ?
+		
+		Pour le problème considéré, on a que la variance du bruit vaut 1 et la moyenne est nulle : l'erreur résiduelle vaut donc 1.
 		
 		\dessin{31}
 		
 		Généralement, le biais est une fonction décroissante de la complexité, tandis que la variance croît.
 		
-		\subsection{Complexité du modèle de Bayes}
+			\subsubsection{Réseaux de neurones}
 		
-		\dessin{32}
-		\dessin{33}
-		\dessin{34}
+			\dessin{32}
+		
+			\subsubsection{Arbres de régression}
+			
+			\dessin{33}
+			
+			\subsubsection{$k$-NN}
+			
+			\dessin{34}
 		
 		\subsection{Bruit}
+		
+		A une complexité de modèle fixée, le biais augmente avec la complexité du modèle de Bayes. Cependant, les effets sur la variance sont difficiles à prédire.
+		
+		A cause du bruit, la variance augmente, mais globalement le biais n'est pas affecté. Par exemple, avec un arbre de régression (complet).
 		
 		\dessin{35}
 		
 		\subsection{Taille de l'échantillon d'apprentissage}
 		
+		Pour les modèles dont la complexité ne dépend pas de la taille de $\LS$, le biais reste constant et la variance diminue avec la taille de l'échantillon. Par exemple, avec une régression linéaire.
+		
 		\dessin{36}
+		
+		Lorsque la complexité du modèle est dépendante de la taille de l'échantillon d'apprentissage (par exemple les arbres), le biais et la variance décroissent avec la taille de l'échantillon d'apprentissage. Par exemple, avec un arbre de régression.
+		
 		\dessin{37}
 		
 		\subsection{Algorithmes d'apprentissage}
