@@ -141,8 +141,9 @@
 	
 	$$\yh(o) = sgn((\ab(o) - \cb)^T \Delta \cb)$$
 	
-	ou
+	ou alors
 	
-	% TODO Insérer l'abominable formule du transparent 12/12 \o/
+	$$\yh(o) = sgn(N_+^{-1} \sum_{o' \in \LS_+} \ab^T(o')\ab(o) - N_-^{-1} \sum_{o' \in \LS_-}\ab^T(o') \ab(o) + b)$$
 	
-	% Note page 4 recto
+	avec $b = \frac{1}{2} (\Vert \cb_- \Vert^2 - \Vert \cb_+ \Vert^2)$.
+	
