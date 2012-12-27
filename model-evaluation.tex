@@ -211,7 +211,7 @@ Le choix d'une mesure de l'erreur ou de la qualité dépend fortement de l'appli
 	
 	Les résultats peuvent être résumés dans un tableau de contingence/matrice de confusion.
 	
-	\dessin{72}
+	\dessinS{72}{.5}
 	
 	On définit alors
 	
@@ -220,7 +220,7 @@ Le choix d'une mesure de l'erreur ou de la qualité dépend fortement de l'appli
 	
 	Le taux d'erreur est cependant limité : on n'a pas d'informations sur la distribution des erreurs sur les classes, et il est sensible aux changement dans la distribution des classes dans l'échantillon de test.
 	
-	\dessin{73}
+	\dessinS{73}{.45}
 	
 	Dans le cadre de diagnostiques médicaux, on utilise des mesures plus appropriées :
 	
@@ -231,13 +231,13 @@ Le choix d'une mesure de l'erreur ou de la qualité dépend fortement de l'appli
 	
 	Ces mesures peuvent être portées sur une courbe ROC (Receiver operating characteristic). Si la sortie de l'algorithme d'apprentissage est un nombre (par exemple, la probabilité d'appartenir à une classe), on peut utiliser un seul afin de régler la sensibilité et la spécificité.
 	
-	\dessin{74}
+	\dessinS{74}{.5}
 	
 	Le meilleur algorithme est le D. Si un modèle retourne toujours la classe positive, il se trouvera dans le coin supérieur droit. S'il retourne toujours la classe négative, il sera dans le coin inférieur gauche. S'il renvoie une valeur au hasard, il sera situé au centre ; la diagonale représente les choix aléatoires biaisés.
 	
 	Si on se trouve dans la diagonale inférieure, on peut inverser les réponses ($+ \Rightarrow -$, $- \Rightarrow +$) pour revenir dans la diagonale supérieure, et donc avoir une meilleur AUC.
 	
-	\dessin{75}
+	\dessinS{75}{.5}
 	
 	On peut résumer une courbe ROC avec un nombre : la surface en dessous de la courbe. On peut l'interpréter comme la probabilité que deux objets choisis aléatoirement dans l'échantillon sont correctement ordonnés par le modèle, c'est-à-dire que le positif a un plus haut score que le négatif.
 	
@@ -249,7 +249,7 @@ Le choix d'une mesure de l'erreur ou de la qualité dépend fortement de l'appli
 		\item F-mesure = $\frac{2 * \text{précision} * \text{recall}}{\text{précision} + \text{recall}}$
 	\end{itemize}
 	
-	\dessin{76}
+	\dessinS{76}{.5}
 	
 	Le meilleur algorithme aura une courbe ROC de la forme {\pigpenfont I}, tandis que la courbe de recall aura la forme {\pigpenfont C}.
 	

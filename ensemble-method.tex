@@ -50,15 +50,15 @@ Il existe deux familles de méthode :
 		$$\yh_{\text{ens}}(\xu) = \frac{1}{T} \sum_{i = 1}^T \yh_{B_i}(\xu)$$
 	\end{itemize}
 	
-	\dessin{90}
+	\dessinS{90}{.45}
 	
 	Dans le cas d'une classification, $\yh(\xu)$ sera la classe majoritaire parmi $\ens{\yh_1(\xu), \dots , \yh_T(\xu)}$
 
-	\dessin{92}
+	\dessinS{92}{.45}
 	
 	La variance est réduite, mais le biais augmente un peu car la taille effective du bootstrap sample est environ 30\% plus petite que le $\LS$ original ; tous les exemples de départ ne s'y trouvent pas, seulement environ $\approx$ 63.2\%.
 	
-	\dessin{100}
+	\dessinS{100}{.65}
 	
 	L'erreur est moindre, par contre il faut souvent augmenter la complexité pour obtenir l'erreur minimale.
 	
@@ -83,7 +83,7 @@ Il existe deux familles de méthode :
 	
 	Le fait d'effectuer des choix aléatoires fait que l'arbre ne dépend pas de l'échantillon d'apprentissage
 	
-	\dessin{93}
+	\dessinS{93}{.5}
 	
 	Un autre avantage des random forests est de diminuer le temps de calcul par rapport au bagging, car seul un sous-ensemble d'attributs est considéré lorsqu'on split un noeud (et pas tous). Généralement, $k = \sqrt{p}$.
 	
@@ -125,7 +125,7 @@ Les différences par rapport aux autres méthodes d'ensemble sont que
 	\item les prédictions des modèles sont combinées à travers une somme pondérée/un vote
 \end{itemize}
 
-\dessin{94}
+\dessinS{94}{.5}
 
 Par exemple, pour passer de $\LS_1$ à $\LS_2$, on ignore les points bien classés de $\LS_1$.
 
@@ -216,7 +216,7 @@ En classification, $\yh(\xu)$ sera la classe majoritaire dans $\ens{\yh_1(\xu), 
 		\item pour Adaboost, $L(y, y') = \exp{(-y y')}$
 	\end{itemize}
 	
-	\dessin{102}
+	\dessinS{102}{.45}
 	
 	La courbe rouge (squared error) n'est pas intéressante, car elle pénalise les modèles où $y.f > 1$, or il faudrait qu'elle tende vers 0 comme les autres.
 	
@@ -248,7 +248,7 @@ En classification, $\yh(\xu)$ sera la classe majoritaire dans $\ens{\yh_1(\xu), 
 	
 Lorsque les méthodes ensemble sont combinées avec les arbres de décision, elles perdent de l'interprétabilité et de l'efficacité. En revanche, on les utilise toujours pour calculer l'importance des variables, en effectuant la moyenne sur tous les arbres. De plus, les méthodes ensemble peuvent être parallélisée et l'algorithme boosting utilise des petits arbres, ce qui fait que le coût en temps processeur n'est pas important.
 		
-	\dessin{91}
+	\dessinS{91}{.5}
 	
 \section{Autres approches d'ensemble}
 

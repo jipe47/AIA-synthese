@@ -49,7 +49,7 @@ $$E_{LS}\{Err_{LS}\} = E_{LS}\{E_{x, y} \{L(y, \hat{f}_{LS}(x))\} \}$$
 	
 	Vu que $LS$ est tiré aléatoirement de la population, la prédiction $\yh$ est aussi une variable aléatoire. La distribution dépend de l'ensemble de l'apprentissage.
 	
-	\dessin{26}
+	\dessinS{26}{.5}
 	
 	Un bon algorithme d'apprentissage doit être bon sur un seul $LS$, mais aussi en moyenne sur plusieurs échantillons d'apprentissage. On veut minimiser 
 	
@@ -73,7 +73,7 @@ $$E_{LS}\{Err_{LS}\} = E_{LS}\{E_{x, y} \{L(y, \hat{f}_{LS}(x))\} \}$$
 	
 	$\els{(\ey{y} - \yh)^2}$ est la moyenne sur tous les ensembles d'apprentissage de l'erreur du modèle de Bayes.
 	
-	\dessin{27}
+	\dessinS{27}{.5}
 	
 	Si on continue le raisonnement
 	
@@ -87,17 +87,17 @@ $$E_{LS}\{Err_{LS}\} = E_{LS}\{E_{x, y} \{L(y, \hat{f}_{LS}(x))\} \}$$
 	
 	$$= (\ey{y} - \els{\yh})^2 + \els{(\yh - \els{\yh})^2}$$
 
-	\dessin{28}
+	\dessinS{28}{.5}
 		
 	$\els{\yh}$ est la moyenne du modèle sur tout l'échantillon $LS$. $(\ey{y} - \els{\yh})^2$ est le biais$^2$, l'erreur entre le modèle de Bayes et le modèle moyen.
 		
-	\dessin{29}
+	\dessinS{29}{.5}
 	
 	$\varls{\yh}$ est l'estimation de la variance, qui est la conséquence de sur-apprentissage. On a que
 	
 	$$E = \vary{y} + \text{biais}^2 + \els{(\yh - \els{\yh})^2}$$
 	
-	\dessin{30}
+	\dessinS{30}{.5}
 	
 	$$E = \vary{y} + \text{biais}^2 + \varls{\yh}$$
 	
@@ -192,19 +192,19 @@ $$E_{LS}\{Err_{LS}\} = E_{LS}\{E_{x, y} \{L(y, \hat{f}_{LS}(x))\} \}$$
 		
 		Soit une fonction $y = h(x) + \epsilon$, $\epsilon \approx N(0, 1)$.
 		
-		\dessin{105}
+		\dessinS{105}{.3}
 		
 		Si on utilise une méthode avec trop de biais et peu de variance, on a du sous-apprentissage. Le biais est la différence au carré entre les courbes bleu et noire (intégrée).
 		
-		\dessin{106}
+		\dessinS{106}{.3}
 		
 		Si on utilise une méthode avec peu de biais et beaucoup de variance, on a du sur-apprentissage. Le décalage est faible, mais la variance est haute. La variance est proche du bruit.
 		
-		\dessin{107}
+		\dessinS{107}{.3}
 		
 		A noter que ne pas avoir de bruit ne signifie pas qu'il n'y a pas de variance, mais qu'il y en a moins.
 		
-		\dessin{108}
+		\dessinS{108}{.3}
 		
 		
 	\section{Problèmes de classification}
@@ -232,21 +232,21 @@ $$E_{LS}\{Err_{LS}\} = E_{LS}\{E_{x, y} \{L(y, \hat{f}_{LS}(x))\} \}$$
 		
 		Pour le problème considéré, on a que la variance du bruit vaut 1 et la moyenne est nulle : l'erreur résiduelle vaut donc 1.
 		
-		\dessin{31}
+		\dessinS{31}{.45}
 		
 		Généralement, le biais est une fonction décroissante de la complexité, tandis que la variance croît.
 		
 			\subsubsection{Réseaux de neurones}
 		
-			\dessin{32}
+			\dessinS{32}{.45}
 		
 			\subsubsection{Arbres de régression}
 			
-			\dessin{33}
+			\dessinS{33}{.45}
 			
 			\subsubsection{$k$-NN}
 			
-			\dessin{34}
+			\dessinS{34}{.45}
 		
 		\subsection{Bruit}
 		
@@ -254,21 +254,21 @@ $$E_{LS}\{Err_{LS}\} = E_{LS}\{E_{x, y} \{L(y, \hat{f}_{LS}(x))\} \}$$
 		
 		A cause du bruit, la variance augmente, mais globalement le biais n'est pas affecté. Par exemple, avec un arbre de régression (complet).
 		
-		\dessin{35}
+		\dessinS{35}{.45}
 		
 		\subsection{Taille de l'échantillon d'apprentissage}
 		
 		Pour les modèles dont la complexité ne dépend pas de la taille de $\LS$, le biais reste constant et la variance diminue avec la taille de l'échantillon. Par exemple, avec une régression linéaire.
 		
-		\dessin{36}
+		\dessinS{36}{.45}
 		
 		Lorsque la complexité du modèle est dépendante de la taille de l'échantillon d'apprentissage (par exemple les arbres), le biais et la variance décroissent avec la taille de l'échantillon d'apprentissage. Par exemple, avec un arbre de régression.
 		
-		\dessin{37}
+		\dessinS{37}{.45}
 		
 		\subsection{Algorithmes d'apprentissage}
 		
-		\dessin{38}
+		\dessinS{38}{.5}
 		
 	\section{Techniques de réduction du biais et de la variance}
 	
@@ -284,13 +284,13 @@ $$E_{LS}\{Err_{LS}\} = E_{LS}\{E_{x, y} \{L(y, \hat{f}_{LS}(x))\} \}$$
 			\item une régularisation, qui réduit l'espace d'hypothèses. On utilise par exemple le weight decay avec les réseaux de neurones, qui consiste à pénaliser les grandes valeurs pour les poids.
 		\end{itemize}
 		
-		\dessin{98}
+		\dessinS{98}{.45}
 		
 		La réalisation est la vraie valeur auquel s'ajoute du bruit. Le biais du modèle n'est pas équivalent au biais de l'algorithme d'apprentissage.
 				
 		Exemple de résultats :
 		
-		\dessin{99}
+		\dessinS{99}{.45}
 		
 		Comme attendu, la variance diminue mais le biais augmente.
 		

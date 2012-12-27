@@ -10,7 +10,7 @@ Cette méthode se base sur deux idées :
 \dessin{14}
 Il faut trouver un classificateur linéaire. L'idée va être de trouver celui qui maximise la marge, c'est-à-dire la largeur du bord qui peut être étendue jusqu'à toucher une donnée.
 
-\dessin{15}
+\dessinS{15}{.45}
 
 C'est une méthode intuitivement sûre, avec une borne théorique sur l'erreur : $E(TS) < \mathcal{O}(\frac{1}{\text{margin}})$.
 
@@ -152,7 +152,7 @@ C'est une méthode intuitivement sûre, avec une borne théorique sur l'erreur :
 	$$0 \leq \alpha_k \leq C, \: \forall k = 1, \dots , N \text{ (contrainte de boîte)}$$
 	$$\sum_{i = 1}^N \alpha_i y_i = 0$$
 	
-	\dessin{58}
+	\dessinS{58}{.5}
 	
 	Les points dans la marge correspondent à des $\xi > 0$. La figure du milieu illustre du sur-apprentissage.
 	
@@ -233,7 +233,7 @@ $$= K(o, o) + K(o', o') - 2 K(o, o')$$
 	\item noyau gaussien : $K(x, x') = \exp{\frac{-(x - x')^T(x - x')}{2 \sigma^2}}$
 \end{itemize}
 
-\dessin{60}
+\dessinS{60}{.55}
 
 \section{Méthodes à noyau}
 
@@ -242,8 +242,6 @@ $$= K(o, o) + K(o', o') - 2 K(o, o')$$
 L'approche est modulaire : on découple l'algorithme de la représentation. Beaucoup d'algorithmes peuvent utiliser des noyaux : ridge regression, PCA, k-means, etc. Des noyaux ont été défini pour plusieurs types de données : séries temporelles, images, grpahes, séquences, etc.
 
 Les intérêts principaux des noyaux est que l'on peut travailler efficacement dans des espaces de dimension très élevée (potentiellement infinie) dès qu'un produit scalaire est facile à calculer, et qu'on peut appliquer des algorithmes classiques sur des données en toute généralité, sans être nécessairement vectorielles (par exemple construire un modèle linéaire sur un graphe).
-
-Exemple de la ridge regression : 34 $\rightarrow$ 40 / 45
 
 \section{Forces et faiblesses}
 
