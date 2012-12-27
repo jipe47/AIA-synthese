@@ -173,9 +173,18 @@ La complexité est régulée par le taux d'apprentissage $\eta$ et le nombre d'i
 	Si $\LS$ est linéairement séparable, l'algorithme convergera en un nombre fini d'étape. Sinon, il convergera avec un nombre infini d'étape si $\nu_i \rightarrow 0$.
 	
 	Résultats théoriques de l'algorithme de descente de gradient : 13/21
+	
+	\subsection{Couche de perceptrons}
+	
+	On considère des perceptrons mis côté à côte. ; ils ont tous en entrée tous les attributs des objets et fonctionnent de manière indépendante. Par exemple, on pourrait avoir le réseau suivant qui permet d'effectuer une classification parmi quatre classes ; chaque neurone code un bit de la classe.
+	
+	\dessin{112}
+	
+	Cela ne fonctionne toujours que dans le cas de problèmes linéairement séparables, sinon il faut considérer plusieurs couches afin d'obtenir un modèle non linéaire
 
+\section{Réseaux de neurones}
 
-\section{Couches de perceptrons}
+	
 
 
 
