@@ -184,8 +184,81 @@ La complexité est régulée par le taux d'apprentissage $\eta$ et le nombre d'i
 
 \section{Réseaux de neurones}
 
-	
+Les réseaux de neurones ont le pouvoir de représentation universel : on peut tout représenter (à un $\sigma$ près) pour autant qu'on a suffisamment de neurones et de couches.
 
+Un réseau est composé d'au moins une couche d'entrée et d'une couche de sortie, les couches situées entre les deux sont appelées les couches cachées. Chaque neurone est relié à tous les neurones de la couche précédente.
+
+	\subsection{Classification}
+	
+	On considère généralement trois couches :
+	
+	\begin{enumerate}
+		\item la première peut définir un ensemble d'hyper/demi-plans
+		\item la seconde peut définir des intersections d'hyper/demi-plans
+		\item la troisième peut définir des unions d'intersection
+	\end{enumerate}
+	
+	\dessin{113}
+	
+	\subsection{Régression}
+	
+	On considère deux couches :
+	
+	\begin{itemize}
+		\item la première définit $K$ paramètres d'offset $\beta_i$ et de scale $\alpha_i$ : les réponses sont $f(\alpha_i x + \beta_i)$ avec $i = 1, \dots , K$
+		\item la seconde couche est une linéarisation :
+		
+		$$\yh(x) = b_0 + \sum_{i = 1}^K b_i f(\alpha_i x + \beta_i)$$
+	\end{itemize}
+	
+	\dessin{114}
+	
+	Plus on a de neurones et plus on peut approximer des fonctions continues, avec un $K$ suffisamment grand. La phase d'apprentissage permet d'ajuster les paramètres des fonctions.
+	
+	\subsection{Apprentissage d'un réseau multi-couche}
+	
+	On utilise la propagation arrière des dérivations : on commence l'apprentissage à partir de la dernière couche pour revenir à la première. L'idée est de calculer les dérivations de la fonction d'erreur (au sens des moindres carrés) en partant de la couche de sortie jusqu'à la couche d'entrée, ce qui a pour but de réduire la fonction d'erreur en modifiant les poids.
+	
+	
+\section{Méthodes de régression à base de noyaux}
+	
+Un noyau $K(., .)$ est une fonction qui exprime la similarité de deux objets à travers une valeur numérique. Pour tout noyau $K$ il existe une fonction $\phi$ telle que $K(o, o') = \phi(o) \times \phi(o')$.
+
+\remarque{Les slides 34 jusque 39/45 n'ont pas été traités.}
+
+Lorsqu'on utilise la régression au sens des moindres carrés avec des noyaux, on a un modèle de la forme
+
+$$\begin{pmatrix}
+0 & 1 & \dots & 1 \\ 
+1 &   &   &   \\ 
+\vdots &   & K + \gamma^{-1}l &   \\ 
+1 &   &   &  
+\end{pmatrix} \begin{pmatrix}
+b \\ 
+\alpha_1 \\ 
+\vdots \\ 
+\alpha_N
+\end{pmatrix} = \begin{array}{c}
+0 \\ 
+y_1 \\ 
+\vdots \\ 
+y_N
+\end{array} $$
+
+avec $K$ une matrice définie par $K_{i, j} = K(x_i, x_j)$. Cela revient à écrire
+
+$$\yh(x) = b + \sum_{i = 1}^N \alpha_i K(x, x_i)$$
+
+L'algorithme d'apprentissage va alors utiliser les valeurs de la matrice $K$ et $y_k$ pour déterminer les $\alpha_i$ et $b$. Au final, on n'a pas besoin de connaître $\phi(x)$.
+
+Au niveau de la complexité, on a 
+
+\begin{itemize}
+	\item $N^3$ opérations pour l'apprentissage
+	\item $N$ opérations pour la prédiction
+\end{itemize}
+
+	
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
