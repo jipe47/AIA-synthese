@@ -28,10 +28,34 @@ L'exploration de données se déroulent en plusieurs étapes :
 	\dessinS{2}{.4}
 
 	\section{Protocoles d'apprentissage automatique}
-	
-	% TODO Apprentissage supervisé, non-supervisé, apprentissage par renforcement, apprentissage en mode batch vs apprentissage on-line, apprentissage semi-supervisé et transductif.  Donner un exemple de problème pratique et de méthode pour chaque type de protocole.
-	
-	
+		
+		
+		
+		\subsection{Algorithme d'apprentissage}
+		
+		Un algorithme d'apprentissage est défini par
+
+		\begin{itemize}
+			\item une famille de modèles candidats (un espace d'hypothèses $H$),
+			\item une mesure de la qualité d'un modèle, et
+			\item une stratégie d'optimisation.
+		\end{itemize}
+
+		L'algorithme va ainsi, à partir de l'échantillon d'apprentissage, retourner la fonction $h$ de $H$ de meilleur qualité.
+					
+			\subsubsection{Modes batch et on-line}
+		
+			En mode batch, les échantillons sont fournis et traités ensembles pour construire un modèle. Il n'est pas nécessaire de stocker le modèle mais bien ces exemples. C'est une approche classique pour l'exploitation de données (data mining).
+			
+		En mode online, les échantillons sont fournis et traités un à un pour mettre à jour un modèle. Ici, il faut stocker le modèle (et non les exemples). C'est une approche fortement utilisées pour les systèmes adaptatifs.
+		
+			On peut cependant passer facilement d'un mode à l'autre :
+		
+			\begin{itemize}
+				\item les échantillons peuvent être fournis ensembles, mais exploités un à un
+				\item les échantillons peuvent être fournis un à un, mais sont stockés et exploités ensemble.
+			\end{itemize}
+		
 		\subsection{Apprentissage supervisé}
 		
 		L'apprentissage supervisé consiste, à partir de la base de donnée (learning sample, échantillon de test), à trouver une fonction $f$ qui prend entrée les variables du problème et qui approxime au mieux la sortie :
@@ -46,42 +70,27 @@ L'exploration de données se déroulent en plusieurs étapes :
 
 		Un modèle sera déterministe s'il est parfait, c'est-à-dire s'il a une règle de classification qui ne commet par d'erreur.
 		
-		\subsection{Algorithme d'apprentissage}
-		
-		Un algorithme d'apprentissage est défini par
-
-		\begin{itemize}
-			\item une famille de modèles candidats (un espace d'hypothèses $H$),
-			\item une mesure de la qualité d'un modèle, et
-			\item une stratégie d'optimisation.
-		\end{itemize}
-
-		L'algorithme va ainsi, à partir de l'échantillon d'apprentissage, retourner la fonction $h$ de $H$ de meilleur qualité.
-		
-			\subsubsection{Exemples}
+		\subsubsection{Exemples d'application}
 			
-			% TODO
-			
-			\subsubsection{Modes batch et on-line}
-		
-			En mode batch, les échantillons sont fournis et traités ensembles pour construire un modèle. Il n'est pas nécessaire de stocker le modèle mais bien ces exemples. C'est une approche classique pour l'exploitation de données (data mining).
-			
-		En mode online, les échantillons sont fournis et traités un à un pour mettre à jour un modèle. Ici, il faut stocker le modèle (et non les exemples). C'est une approche fortement utilisées pour les systèmes adaptatifs.
-		
-			On peut cependant passer facilement d'un mode à l'autre :
-		
 			\begin{itemize}
-				\item les échantillons peuvent être fournis ensembles, mais exploités un à un
-				\item les échantillons peuvent être fournis un à un, mais sont stockés et exploités ensemble.
+				\item reconnaissance/labellisation d'images
+				\item détecteur d'injures
+				\item système de recommandation de produit sur un site de vente
 			\end{itemize}
+		
 		
 		\subsection{Apprentissage non-supervisé}
 		
 		L'apprentissage non-supervisé consiste à trouver des régularités dans les données, sans indications sur des entrées et des sorties. On cherche ainsi quels sont les groupes de variables ou d'objets intéressants, et s'il y a des dépendances entre les variables.
 		
-			\subsubsection{Exemples}
+			\subsubsection{Exemples d'application}
 			
-			% TODO
+			\begin{itemize}
+				\item classification de document sur le web
+				\item étude de tremblements de terre
+				\item classification de plantes et d'animaux selon leurs caractéristiques
+				\item marketing : trouver des groupes de clients avec des comportements similaires
+			\end{itemize}
 		
 		\subsection{Apprentissage semi-supervisé}
 		
@@ -97,6 +106,12 @@ L'exploration de données se déroulent en plusieurs étapes :
 		Le but de l'apprentissage non-supervisé est d'exploiter tout type de données, labellisées ou non, et de construire de meilleurs modèles qu'en utilisant seulement un seul de ces types.
 		
 		On utilise pour cela de l'auto-apprentissage (on labellise les données non labellisées avec un modèle entraîné sur les données labellisées) ou des algorithmes semi-supervisés (par exemple le semi-supervised SVM : on énumère tous les labels possibles pour les données non labelisées, on apprend une SVM pour chaque labeling, et on prend celui qui donne la plus grande marge).
+			
+			\subsubsection{Exemples d'application}
+			
+			\begin{itemize}
+				\item ?
+			\end{itemize}
 		
 		\subsection{Apprentissage transductif}
 		
@@ -146,9 +161,12 @@ L'exploration de données se déroulent en plusieurs étapes :
 			
 			L'apprentissage par renforcement pourrait se réduire à de l'apprentissage supervisé si l'action optimale était connue pour chaque état. De plus, l'apprentissage supervisé est utilisé par l'apprentissage par renforcement pour modéliser les dynamiques du système et/ou les fonctions de récompense.
 			
-			\subsubsection{Exemples}
+			\subsubsection{Exemples d'application}
 			
-			% TODO
+			\begin{itemize}
+				\item robotique
+				\item agent dans un jeu
+			\end{itemize}
 		
 		\subsection{Apprentissage actif}
 		
