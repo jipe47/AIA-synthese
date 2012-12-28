@@ -87,7 +87,33 @@ Il faut trouver un classificateur linéaire. L'idée va être de trouver celui q
 
 	$\Vert w \Vert$ devient $\frac{1}{2} \Vert w \Vert^2$ par facilité. Le $\frac{1}{2}$ permet de simplifier lors de la dérivation. Il s'agit d'un problème de programmation quadratique. Il existe une solution seulement si les données sont linéairement séparables, sinon des inéquations ne seront pas satisfaites.
 	
-	Optimisation des contraintes : 10 $\rightarrow$ 17/45
+	%Optimisation des contraintes : 10 $\rightarrow$ 17/45
+	
+	Soient $\alpha_k$, $k = 1, \dots N$ : on a le lagrangien qui doit être minimisé selon $w$ et $b$ et maximisé selon $\alpha$
+	
+	$$\mathcal{L}(w, b, \alpha) = \frac{1}{2} \Vert w \Vert - \sum_{k = 1}^N \alpha_k (y_k (w^Tx_k + b) - 1)$$
+	
+	Si on dérive par rapport à $w$ et $b$, on obtient les conditions optimales suivantes :
+	
+	$$\frac{\vartheta \mathcal{L}}{\vartheta w} = 0 \rightarrow w = \sum_{j = 1}^N \alpha_j y_j x_j$$
+	$$\frac{\vartheta \mathcal{L}}{\vartheta b} = 0 \rightarrow \sum_{k = 1}^N \alpha_j y_j = 0$$
+	
+	Après substitution dans le lagrangien, on a
+	
+	$$\mathcal{L}(w, b, \alpha) = \frac{1}{2} \Vert w \Vert^2 - \sum_{k = 1}^N \alpha_k (y_k (w^Tx_k + b) - 1)$$
+	
+	Les conditions optimales conduisent au problème de maximisation dual :
+	
+	$$\max_{\alpha} \mathcal{W}(\alpha) = \sum_{k = 1}^N \alpha_k - \frac{1}{2} \sum_{i, j = 1}^N \alpha_i \alpha_j y_i y_j x_i^T x_j$$
+	
+	sujet aux $N$ inégalités
+	
+	$$\alpha_k \geq 0, \: \forall k = 1, \dots, N$$
+	
+	et à l'égalité
+	
+	$$\sum_{i = 1}^N \alpha_i y_i = 0$$
+	
 	
 	\subsection{Vecteurs de support}
 	
@@ -112,6 +138,14 @@ Il faut trouver un classificateur linéaire. L'idée va être de trouver celui q
 	$b$ est calculé en exploitant le fait que pour tout $\alpha_k > 0$, on a nécessairement $y_k(wTx_k + b) - 1 = 0$.
 	
 	Borne pour le leave-one-out : 20/45
+	
+	Avoir un petit ensemble de vecteurs de support est efficaces, vu que seuls ces vecteurs $x_k$, leurs poids $\alpha_k$ et les labels de classe $y_k$ doivent être stockés pour classer de nouveaux exemples.
+	
+	Si un vecteur non-support $x'$ est retiré de l'échantillon d'apprentissage ou déplacé (en dehors de la région de la marge), la solution est inchangée.
+	
+	La proportion de vecteurs de support dans l'ensemble d'échantillon donne une borne sur l'erreur du leave-one-out :
+	
+	$$\text{Err}_\text{loo} \leq \frac{\vert \ens{k \vert \alpha_k > 0} \vert}{N}$$
 	
 	\subsection{Soft margin}
 	
