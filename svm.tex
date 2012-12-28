@@ -12,10 +12,6 @@ Il faut trouver un classificateur linéaire. L'idée va être de trouver celui q
 
 \dessinS{15}{.45}
 
-C'est une méthode intuitivement sûre, avec une borne théorique sur l'erreur : $E(TS) < \mathcal{O}(\frac{1}{\text{margin}})$.
-
-65 $\rightarrow$ 74
-
 \section{Machines à support vectoriel linéaire}
 	
 	Soit un $\LS = \ens{(x_k, y_k)}^N_{k = 1}$, avec $y_k \in {-1, 1}$ et $x_k \in \mathbb{R}^n$. On cherche un classificateur de la forme
@@ -117,7 +113,7 @@ C'est une méthode intuitivement sûre, avec une borne théorique sur l'erreur :
 	
 	Borne pour le leave-one-out : 20/45
 	
-	\subsection{Sort margin}
+	\subsection{Soft margin}
 	
 	A cause du bruit ou de données isolées (outliers), les données peuvent ne pas être linéairement séparables dans l'espace des features. 
 	
@@ -218,7 +214,8 @@ $$= K(o, o) + K(o', o') - 2 K(o, o')$$
 
 \begin{itemize}
 	\item noyau constant : $K(o, o') \models 1$
-	\item noyau linéaire défini sur des attributs numériques : $K(o, o') = \mathbf{a}^T(o) \mathbf{a}(o')$
+	\item noyau linéaire défini sur des attributs numériques : $K(o, o') = \mathbf{a}^T(o) \mathbf{a}(o') = \langle \mathbf{a}(o), \mathbf{a}(o')\rangle$ (produit scalaire)
+	\item noyau polynomial : si $d$ est le degré maximum $K(o, o') = (\langle \mathbf{a}(o), \mathbf{a}(o') \rangle + 1)^d$
 	\item noyau de Hamming pour des attributs discrets : $K(o, o') = \sum_{i = 1}^m \delta_{\mathbf{a}_i(o), \mathbf{a}_i(o')}$ (nombre de composantes communes aux deux vecteurs)
 	\item noyau de texte, qui calcule le nombre de sous-chaînes communes dans $o$ et $o'$ (dimension infinie si la taille du texte n'est à priori pas bornée)
 	\item combinaison de noyaux :
@@ -230,7 +227,7 @@ $$= K(o, o) + K(o', o') - 2 K(o, o')$$
 	\end{itemize}
 	
 	\item $K(x, x') = (x^Tx')^2$ (voir 31/45)
-	\item noyau gaussien : $K(x, x') = \exp{\frac{-(x - x')^T(x - x')}{2 \sigma^2}}$
+	\item noyau gaussien/à base radiale : si $\sigma$ est l'étalement de la distribution, $K(x, x') = \exp{\frac{-(x - x')^T(x - x')}{2 \sigma^2}}$
 \end{itemize}
 
 \dessinS{60}{.55}
@@ -239,7 +236,7 @@ $$= K(o, o) + K(o', o') - 2 K(o, o')$$
 
 \dessin{61}
 
-L'approche est modulaire : on découple l'algorithme de la représentation. Beaucoup d'algorithmes peuvent utiliser des noyaux : ridge regression, PCA, k-means, etc. Des noyaux ont été défini pour plusieurs types de données : séries temporelles, images, grpahes, séquences, etc.
+L'approche est modulaire : on découple l'algorithme de la représentation. Beaucoup d'algorithmes peuvent utiliser des noyaux : ridge regression, PCA, k-means, etc. Des noyaux ont été défini pour plusieurs types de données : séries temporelles, images, graphes, séquences, etc.
 
 Les intérêts principaux des noyaux est que l'on peut travailler efficacement dans des espaces de dimension très élevée (potentiellement infinie) dès qu'un produit scalaire est facile à calculer, et qu'on peut appliquer des algorithmes classiques sur des données en toute généralité, sans être nécessairement vectorielles (par exemple construire un modèle linéaire sur un graphe).
 
