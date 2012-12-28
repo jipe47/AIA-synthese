@@ -80,7 +80,7 @@ $$E_{LS}\{Err_{LS}\} = E_{LS}\{E_{x, y} \{L(y, \hat{f}_{LS}(x))\} \}$$
 	
 	$\els{(\ey{y} - \yh)^2}$ est la moyenne sur tous les ensembles d'apprentissage de l'erreur du modèle de Bayes.
 	
-	\dessinS{27}{.5}
+	%\dessinS{27}{.5}
 	
 	Si on continue le raisonnement
 	
@@ -96,19 +96,21 @@ $$E_{LS}\{Err_{LS}\} = E_{LS}\{E_{x, y} \{L(y, \hat{f}_{LS}(x))\} \}$$
 	\end{eqnarray*}
 	
 
-	\dessinS{28}{.5}
+	%\dessinS{28}{.5}
 		
 	$\els{\yh}$ est la moyenne du modèle sur tout l'échantillon $LS$. $(\ey{y} - \els{\yh})^2$ est le biais$^2$, l'erreur entre le modèle de Bayes et le modèle moyen.
 		
-	\dessinS{29}{.5}
+	%\dessinS{29}{.5}
 	
 	$\varls{\yh}$ est l'estimation de la variance, qui est la conséquence de sur-apprentissage. On a que
 	
-	$$E = \vary{y} + \text{biais}^2 + \els{(\yh - \els{\yh})^2}$$
-	
+	\begin{eqnarray*}
+	E & = & \vary{y} + \text{biais}^2 + \els{(\yh - \els{\yh})^2} \\
+     & = & \vary{y} + \text{biais}^2 + \varls{\yh}
+	\end{eqnarray*}
 	\dessinS{30}{.5}
 	
-	$$E = \vary{y} + \text{biais}^2 + \varls{\yh}$$
+	
 	
 	Pour les exemples :
 	
@@ -279,6 +281,13 @@ $$E_{LS}\{Err_{LS}\} = E_{LS}\{E_{x, y} \{L(y, \hat{f}_{LS}(x))\} \}$$
 		
 		\dessinS{38}{.5}
 		
+		
+		\begin{itemize}
+			\item la régression linéaire possède peut de paramètres, donc une petite variance. Par contre, si la classification est non linéaire, on a une variance élevée
+			\item $k$-NN : un petit $k$ implique une variance élevée et un biais modéré. Un grand $k$ implique une petite variance mais un biais plus grand
+			\item réseau de neurones : le biais est petit, mais la variance augmente avec la complexité du modèle
+			\item arbre de régression : le biais est petit, mais la variance est grande.
+		\end{itemize}
 	\section{Techniques de réduction du biais et de la variance}
 	
 	Afin de réduire le biais et la variance, on peut jouer sur les paramètres de l'algorithme d'apprentissage, cependant cela ne suffit pas toujours. On peut alors passer aux méthodes d'ensemble, qui offrent un trade-off biais/variance différent, mais qui font perdre des caractéristiques de la méthode initiale.
