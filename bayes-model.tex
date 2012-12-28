@@ -57,17 +57,24 @@ $$E_{LS}\{Err_{LS}\} = E_{LS}\{E_{x, y} \{L(y, \hat{f}_{LS}(x))\} \}$$
 	
 	On ajoute/retire $\ey{y}$.
 	
-	$$= \els{\ey{(y - \ey{y} + \ey{y} - \yh)^2}}$$
-	
-	$$= \els{\ey{(y - \ey{y})^2}} + \els{\ey{(\ey{y} - \yh)^2}} + \els{\ey{2(y - \ey{y})(\ey{y} - \yh)}}$$
-	
+	\begin{eqnarray*}
+  	E & = & \els{\ey{(y - \ey{y} + \ey{y} - \yh)^2}} \\
+  	 & = & \els{\ey{(y - \ey{y})^2}} \\
+  	 & + & \els{\ey{(\ey{y} - \yh)^2}} \\
+  	 & + & \els{\ey{2(y - \ey{y})(\ey{y} - \yh)}}
+	\end{eqnarray*}
+
 	Car on peut sortir $(\ey{y} - \yh)$, vu que ce sont des constantes.
 	
-	$$= \ey{(y - \ey{y})^2} + \els{(\ey{y} - \yh)^2} + \els{2\ey{(y - \ey{y})(\ey{y} - \yh)}}$$
+	\begin{eqnarray*}
+  	E & = & \ey{(y - \ey{y})^2} \\
+  	 & + & \els{(\ey{y} - \yh)^2} \\
+  	 & + & \els{2\ey{(y - \ey{y})(\ey{y} - \yh)}}
+	\end{eqnarray*}
 	
 	Car $\ey{y - \ey{y}} = \ey{y} - \underbrace{\ey{\ey{y}}}_{\ey{y}}$.
 	
-	$$=\ey{(y - \ey{y})^2} + \els{(\ey{y} - \yh)^2}$$
+	$$E =\ey{(y - \ey{y})^2} + \els{(\ey{y} - \yh)^2}$$
 	
 	$\ey{(y - \ey{y})^2} = \vary{y}$ est la variance, c'est l'erreur résiduelle ; il s'agit de la plus petite erreur que l'on peut atteindre. Il s'agit d'une donnée du problème, on ne peut pas agir dessus.
 	
@@ -77,15 +84,17 @@ $$E_{LS}\{Err_{LS}\} = E_{LS}\{E_{x, y} \{L(y, \hat{f}_{LS}(x))\} \}$$
 	
 	Si on continue le raisonnement
 	
-	$$\els{(\ey{y} - \yh)^2}$$
+	\begin{eqnarray*}
+  	\els{(\ey{y} - \yh)^2} & = & \els{(\ey{y} - \els{\yh} + \els{\yh} - \yh)^2} \\
+  	 & = & \els{(\ey{y} - \els{\yh})^2} \\
+  	 & + & \els{(\els{\yh} - \yh)^2} \\
+  	 & + & \els{2(\ey{y} - \els{\yh})(\els{\yh} - \els{\yh})} \\
+  	 & = & (\ey{y} - \els{\yh})^2 \\
+  	 & + & \els{(\yh - \els{\yh})^2} \\
+  	 & + & 2(\ey{y} - \els{\yh})(\els{\yh} - \els{\yh}) \\
+  	 & = & (\ey{y} - \els{\yh})^2 + \els{(\yh - \els{\yh})^2}
+	\end{eqnarray*}
 	
-	$$ = \els{(\ey{y} - \els{\yh} + \els{\yh} - \yh)^2}$$
-	
-	$$ = \els{(\ey{y} - \els{\yh})^2} + \els{(\els{\yh} - \yh)^2} + \els{2(\ey{y} - \els{\yh})(\els{\yh} - \els{\yh})}$$
-	
-	$$= (\ey{y} - \els{\yh})^2 + \els{(\yh - \els{\yh})^2} + 2(\ey{y} - \els{\yh})(\els{\yh} - \els{\yh})$$
-	
-	$$= (\ey{y} - \els{\yh})^2 + \els{(\yh - \els{\yh})^2}$$
 
 	\dessinS{28}{.5}
 		
