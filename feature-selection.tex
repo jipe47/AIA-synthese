@@ -28,7 +28,7 @@ Trois approches existent dans la sélection de features :
 
 \section{Techniques de filtre}
 
-	L'idée est d'associer un score à chaque feature et de retirer celle dont le score est trop bas.
+	L'idée est d'associer un score à chaque feature et de retirer celles dont le score est trop bas.
 	
 	Généralement, on utilise une fonction de score univariable, comme avec les arbres de décision ou avec des tests statistiques (t-test, chi$^2$, etc). Le nombre optimal de features peut être déterminé par de la validation croisée.
 	
@@ -47,14 +47,14 @@ Trois approches existent dans la sélection de features :
 	
 \section{Techniques embarquées}
 
-Certains algorithmes d'apprentissage supervisé embarquent une sélection de feature ; la recherche d'un sous-ensemble optimal de features se fait dans l'algorithme même.
+Certains algorithmes d'apprentissage supervisé embarquent une sélection de features ; la recherche d'un sous-ensemble optimal de features se fait dans l'algorithme même.
 
 Exemples :
 
 \begin{itemize}
 	\item le splitting des arbres de décision
 	\item les méthodes ensemble à base d'arbre
-	\item les valeurs absolues des points dans une SVM linéaire : $\yh(\xu) = sgn(\sum_i w_i x_i + b)$
+	\item les valeurs absolues des poids dans une SVM linéaire : $\yh(\xu) = sgn(\sum_i w_i x_i + b)$
 \end{itemize}
 
 Avantages et inconvénients :
@@ -87,25 +87,24 @@ Avantages et inconvénients :
 	
 	Si $\lambda$ augmente, les coefficients rétrécissent ; on obtient un classement des variables (celle qui dure le plus longtemps est la plus importante).
 	
-	
-	Cette méthode est plus lente que la ridge regression, car il y a un problème d'optimisation, et on est limité aux méthodes linéaires.
+	Cette méthode est plus lente que la \textit{ridge regression} car il y a un problème d'optimisation, et on est limité aux méthodes linéaires.
 	
 \section{Techniques de wrapper}
 
-On essaie de trouver le sous-ensemble de features qui maximise la qualité du modèle induite par l'algorithme d'apprentissage. Cette qualité est estimée par de la validation croisée  vu que le nombre de sous-ensemble d'un ensemble de $p$ features est de $2^p$, tous les sous-ensembles ne sont pas évalués et des heuristiques sont nécessaires.
+On essaie de trouver le sous-ensemble de features qui maximise la qualité du modèle induite par l'algorithme d'apprentissage. Cette qualité est estimée par de la validation croisée. Vu que le nombre de sous-ensemble d'un ensemble de $p$ features est de $2^p$, tous les sous-ensembles ne sont pas évalués et des heuristiques sont nécessaires.
 
 Plusieurs approches existent :
 
 \begin{itemize}
-	\item forward (ou backward) selection : on ajoute (retire) les variables qui diminue le plus (augmente le moins) l'erreur
+	\item forward (ou backward) selection : on ajoute (retire) les variables qui diminuent le plus (augmentent le moins) l'erreur
 	\item optimisation avec des algorithmes génétiques
 \end{itemize}
 
 Une approche populaire est l'élimination récursive de features. On suppose que l'on dispose d'un algorithme d'apprentissage qui peut ranker les features (ex : SVM, arbres de décision). A partir de l'ensemble complet de features, on itère :
 
 \begin{itemize}
-	\item on apprend un modèle à partir de l'ensemble courrant de features
-	\item on calcule le rank des features avec le modèle
+	\item on apprend un modèle à partir de l'ensemble courant de features
+	\item on calcule le rang des features avec le modèle
 	\item on retire la feature avec le plus petit rank
 \end{itemize}
 
@@ -119,7 +118,7 @@ Avantage et inconvénients :
 	\item[+] l'ensemble de features est taillé sur mesure pour l'algorithme d'apprentissage
 	\item[+] il est possible de trouver des interactions et de supprimer des variables redondantes
 	\item[-] méthode susceptible au sur-apprentissage : il est parfois facile de trouver un petit sous-ensemble de variables bruitées qui donne de très bons résultats
-	\item[-] coûteux, car il faut construite un modèle sur chaque sous-ensemble de variable
+	\item[-] coûteux, car il faut construire un modèle sur chaque sous-ensemble de variables
 \end{itemize}
 
 

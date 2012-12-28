@@ -16,7 +16,7 @@ L'erreur de re-substitution ($\LS$ error) est l'erreur obtenue en appliquant le 
 
 L'erreur de généralisation est l'erreur obtenue sur la prédiction de nouvelles données. Si $\fh_{\LS}$ est la fonction apprise sur un échantillon $\LS$, l'erreur de généralisation est décrite par
 
-$$\exy{L(y, \fh_{\LS}(x))}$$
+$$\exy\ens{L(y, \fh_{\LS}(x))}$$
 
 avec $L(., .)$ une fonction de perte qui mesure la différence entre les arguments.
 
@@ -132,7 +132,7 @@ Cette erreur est à différencier de l'erreur de généralisation attendue (expe
 			\item apprendre un modèle $f_i$ sur cet échantillon
 		\end{itemize}
 		
-		\item pour chaque objet, calculer l'erreur de tous les modèles qui ont été construit sans lui (environ 30\%)
+		\item pour chaque objet, calculer l'erreur de tous les modèles qui ont été construis sans lui (environ 30\%)
 		\item moyenner sur tous les objets
 	\end{itemize}
 	
@@ -163,14 +163,14 @@ Le choix d'une mesure de l'erreur ou de la qualité dépend fortement de l'appli
 
 	\subsection{Méthode test set}
 	
-	Si la base de données est grande, on divise aléatoirement l'ensemble d'apprentissage en trois parties : un ensemble d'apprentissage $\LS$, un ensemble de validation $\VS$ et un un ensemble de test $\TS$ (par exemple 50\%, 25\% et 25\%.
+	Si la base de données est grande, on divise aléatoirement l'ensemble d'apprentissage en trois parties : un ensemble d'apprentissage $\LS$, un ensemble de validation $\VS$ et un ensemble de test $\TS$ (par exemple 50\%, 25\% et 25\%).
 	
 	\dessin{67}
 	
 	La méthode est la suivante :
 	
 	\begin{itemize}
-		\item apprendre les modèles à comparer sur le $\LS$
+		\item apprendre les modèles à comparer sur $\LS$
 		\item sélectionner le meilleur en basant les performances sur $\VS$
 		\item le ré-entraîner sur $\LS + \VS$
 		\item le tester sur $\TS$, afin d'avoir une estimation des performances

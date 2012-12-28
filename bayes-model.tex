@@ -1,4 +1,4 @@
-\chapter{Modèle de Bayes}
+\chapter{Biais et variance}
 
 Dans le cadre de l'apprentissage supervisé, on cherche une fonction $f : \mathcal{X} \rightarrow \mathcal{Y}$ qui minimise l'erreur de généralisation, soit l'espérance
 
@@ -11,7 +11,7 @@ La fonction $L : \mathcal{Y} \times \mathcal{Y} \rightarrow \mathbb{R}$ mesure l
 	\item en régression, $L(y, y') = (y - y')^2$ (erreur quadratique).
 \end{itemize}
 
-Soit la fonction $\hat{f}_{LS}$ apprise à partir de $LS$ à partir d'un algorithme d'apprentissage. Cette fonction (qui donne la prédiction à un certain point) est une variable aléatoire.
+Soit la fonction $\hat{f}_{LS}$ apprise à partir de $\LS$ à partir d'un algorithme d'apprentissage. Cette fonction (qui donne la prédiction à un certain point) est une variable aléatoire.
 
 \dessin{24}
 
@@ -19,7 +19,7 @@ On peut définir l'erreur de généralisation, qui est utile pour caractériser 
 
 $$Err_{LS} = E_{x, y} \{L(y, \hat{f}_{LS}(x))\}$$
 
-Pour un algorithme d'apprentissage donné, l'erreur de généralisation sur des ensembles $LS$ aléatoire de taille $N$ permet de caractériser un algorithme et est donnée par
+Pour un algorithme d'apprentissage donné, l'erreur de généralisation sur des ensembles $\LS$ aléatoires de taille $N$ permet de caractériser un algorithme et est donnée par
 
 $$E_{LS}\{Err_{LS}\} = E_{LS}\{E_{x, y} \{L(y, \hat{f}_{LS}(x))\} \}$$
 
@@ -55,7 +55,7 @@ $$E_{LS}\{Err_{LS}\} = E_{LS}\{E_{x, y} \{L(y, \hat{f}_{LS}(x))\} \}$$
 	
 	$$E = \els{\ey{(y - \yh)^2}}$$
 	
-	On ajoute/retire $\ey{y}$.
+	Si on ajoute et retire $\ey{y}$ et si on distribue le carré, on a
 	
 	\begin{eqnarray*}
   	E & = & \els{\ey{(y - \ey{y} + \ey{y} - \yh)^2}} \\
@@ -76,13 +76,13 @@ $$E_{LS}\{Err_{LS}\} = E_{LS}\{E_{x, y} \{L(y, \hat{f}_{LS}(x))\} \}$$
 	
 	$$E =\ey{(y - \ey{y})^2} + \els{(\ey{y} - \yh)^2}$$
 	
-	$\ey{(y - \ey{y})^2} = \vary{y}$ est la variance, c'est l'erreur résiduelle ; il s'agit de la plus petite erreur que l'on peut atteindre. Il s'agit d'une donnée du problème, on ne peut pas agir dessus.
+	$\ey{(y - \ey{y})^2} = \vary{y}$ est la variance des données, c'est l'erreur résiduelle ; il s'agit de la plus petite erreur que l'on peut atteindre. Il s'agit d'une donnée du problème, on ne peut pas agir dessus.
 	
 	$\els{(\ey{y} - \yh)^2}$ est la moyenne sur tous les ensembles d'apprentissage de l'erreur du modèle de Bayes.
 	
 	%\dessinS{27}{.5}
 	
-	Si on continue le raisonnement
+	Si on suit le même raisonnement
 	
 	\begin{eqnarray*}
   	\els{(\ey{y} - \yh)^2} & = & \els{(\ey{y} - \els{\yh} + \els{\yh} - \yh)^2} \\
@@ -180,7 +180,7 @@ $$E_{LS}\{Err_{LS}\} = E_{LS}\{E_{x, y} \{L(y, \hat{f}_{LS}(x))\} \}$$
 	
 	\section{Problème de régression (complet)}
 	
-	On considère qu'on cherche une fonction $\yh(x)$ à plusieurs entrée, on a une moyenne sur tout l'espace d'entrée.
+	On considère qu'on cherche une fonction $\yh(x)$ à plusieurs entrées, on a une moyenne sur tout l'espace d'entrée.
 	
 	L'erreur devient
 	
@@ -226,15 +226,15 @@ $$E_{LS}\{Err_{LS}\} = E_{LS}\{E_{x, y} \{L(y, \hat{f}_{LS}(x))\} \}$$
 	
 	Le meilleur modèle possible est le modèle de Bayes :
 	
-	$$h_B(\xu) = \text{arg } \text{arg }_c P(y = c \vert \xu)$$
+	$$h_B(\xu) = \text{arg } \max_c P(y = c \vert \xu)$$
 	
 	Le modèle moyen est
 	
-	$$\text{arg } \text{arg }_c P(\yh(\xu) = c \vert \xu)$$
+	$$\text{arg } \max_c P(\yh(\xu) = c \vert \xu)$$
 	
 	Il n'y a pas de décomposition de l'erreur de mauvaise classification moyenne en un biais et une variance, mais on observe les mêmes phénomènes.
 	
-	28 $\rightarrow$ 29
+	Le biais est à peu près une composant de l'erreur qui est systématique et indépendant de l'échantillon d'apprentissage. La variance est l'erreur due à la variabilité du modèle par rapport à l'aspect aléatoire de l'échantillon d'apprentissage.
 	
 	\section{Paramètres influençant le biais et la variance}
 	
@@ -283,7 +283,7 @@ $$E_{LS}\{Err_{LS}\} = E_{LS}\{E_{x, y} \{L(y, \hat{f}_{LS}(x))\} \}$$
 		
 		
 		\begin{itemize}
-			\item la régression linéaire possède peut de paramètres, donc une petite variance. Par contre, si la classification est non linéaire, on a une variance élevée
+			\item la régression linéaire possède peu de paramètres, donc une petite variance. Par contre, si la classification est non linéaire, on a une variance élevée
 			\item $k$-NN : un petit $k$ implique une variance élevée et un biais modéré. Un grand $k$ implique une petite variance mais un biais plus grand
 			\item réseau de neurones : le biais est petit, mais la variance augmente avec la complexité du modèle
 			\item arbre de régression : le biais est petit, mais la variance est grande.

@@ -1,7 +1,7 @@
 \chapter{Méthodes linéaires}
 
 	\section{Introduction}
-	Le but est de trouver un modèle qui est combinaison linéaire des entrées.
+	Le but est de trouver un modèle qui est une combinaison linéaire des entrées.
 
 	\begin{itemize}
 		\item Pour une régression, $y = w_0 + w_1 x_1 + w_2 x_2 + \dots + w_n x_n$
@@ -21,7 +21,7 @@
 	
 	\begin{itemize}
 		\item[+] simple ;
-		\item[+] il existe des variantes rapides et scalable ;
+		\item[+] il existe des variantes rapides et scalables ;
 		\item[+] cette méthode offre des modèles interprétatifs, à travers des poids variables (magnitude et signe) ;
 		\item[-] parfois pas aussi précis que des autres méthodes (non linéaires).
 	\end{itemize}
@@ -61,6 +61,8 @@
 	
 	$$TSE(LS, \wb') = \sum_{i = 1}^N (y(o_i) - \wb'^T\ab'(o_i))^2 = (\yb - A'^T\wb)^T(\yb - A'^T\wb')$$
 	
+	avec
+	
 	$$A' = \begin{array}{c}\left. \underbrace{\begin{pmatrix}
 	1 & 1 & \dots & 1 \\ 
 	a_1(o_1) & a_2(o_1) & \dots & a_N(o_1) \\ 
@@ -71,7 +73,7 @@
 		
 	On cherche $\wb'$ qui minimise
 		
-	$$\TSE(\LS, \wb') = (\yb - A'^T\wb)^T(\yb - A'^T\wb')$$
+	$$\TSE(\LS, \wb') = (\yb - A'^T\wb')^T(\yb - A'^T\wb')$$
 		
 	Le gradient est
 		
@@ -79,7 +81,7 @@
 		
 	Si on résout $\Delta_{w'} TSE(\LS, \wb'*) = 0$, on obtient
 		
-	$$\wb'* = (A'A'^T)^{-1}A'\yb$$
+	$$\wb'^* = (A'A'^T)^{-1}A'\yb$$
 		
 	Il existe cependant plusieurs solutions optimales, ce n'est pas un problème à solution unique. Afin d'avoir une solution unique, on va introduire un terme $\lambda > 0$ de régulation : l'erreur devient
 	
@@ -87,13 +89,13 @@
 	
 	Le gradient devient
 	
-	$$\Delta_{w} TSE(\LS, \lambda, \wb) = -2 A (\yb - A^T\wb) + 2 \lambda \wb$$
+	$$\Delta_{w'} TSE(\LS, \lambda, \wb') = -2 A (\yb - A^T\wb') + 2 \lambda \wb$$
 	
 	La solution optimale devient alors
 	
 	$$\wb^*(\lambda) = (A A^T + \lambda I)^{-1} A \yb$$
 	
-	Cette solution est unique $\forall \lambda > 0$. Augmenter $\lambda$ réduit la variance, car on tient moins compte de $A$ dans $TSE_R$. En revanche, on est moins optimal sur l'échantillon, il y a augmentation de l'erreur quadratique moyenne.
+	Cette solution est unique $\forall \lambda > 0$. Augmenter $\lambda$ réduit la variance, car on tient moins compte de $A'$ dans $TSE_R$. En revanche, on est moins optimal sur l'échantillon, il y a augmentation de l'erreur quadratique moyenne.
 		
 	\dessin{39}
 		
@@ -124,7 +126,7 @@ $$\sum_i (y_i - wx_i)^2$$
 en utilisant une descente de gradient : étant donné un exemple d'entrainement $(x, y)$,
 
 $$\delta \leftarrow y - w^Tx$$
-$$\forall jw_i \leftarrow w_j + \eta \delta x_j$$
+$$w_i \leftarrow w_j + \eta \delta x_j \: \forall j$$
 
 Il s'agit d'un algorithme de type \textit{online}, c'est-à-dire qu'il traite les exemples un à un, alors qu'un algorithme de type \textit{batch} traite tous les exemples en une seule fois.
 
@@ -132,7 +134,7 @@ La complexité est régulée par le taux d'apprentissage $\eta$ et le nombre d'i
 
 	\subsection{Algorithme du perceptron}
 	
-	Pour de la classification binaire, on pose que $c(o) = \pm 1$. On définit $\nu_i$ le taux d'apprentissage.
+	Pour de la classification binaire, on pose que $c(o) = \pm 1$. On définit $\eta_i$ le taux d'apprentissage.
 	
 	\begin{itemize}
 		\item on commence avec un vecteur de poids initial arbitraire, par exemple $\wb_0' = \textbf{0}$.
@@ -141,7 +143,7 @@ La complexité est régulée par le taux d'apprentissage $\eta$ et le nombre d'i
 		\item soit l'objet $o_i$ l'objet à l'étape $i$, $c(o_i)$ est sa classe et $\ab(o_i)$ son vecteur d'attributs
 		\item si l'objet $o_i$ est mal classé, on ajuste le vecteur de poids avec la règle suivante :
 		
-		$$\wb_{i + 1}' = \wb_i' + \nu_i (c(o_i) - g_i(\ab(o_i))) \ab'(o_i)$$
+		$$\wb_{i + 1}' = \wb_i' + \eta_i (c(o_i) - g_i(\ab(o_i))) \ab'(o_i)$$
 	\end{itemize}
 	
 	% Slide 9/21 : vue géométrique, que je n'arrive pas à comprendre
@@ -170,13 +172,13 @@ La complexité est régulée par le taux d'apprentissage $\eta$ et le nombre d'i
 	
 	\subsection{Propriétés}
 	
-	Si $\LS$ est linéairement séparable, l'algorithme convergera en un nombre fini d'étape. Sinon, il convergera avec un nombre infini d'étape si $\nu_i \rightarrow 0$.
+	Si $\LS$ est linéairement séparable, l'algorithme convergera en un nombre fini d'étape. Sinon, il convergera avec un nombre infini d'étape si $\eta_i \rightarrow 0$.
 	
 	Résultats théoriques de l'algorithme de descente de gradient : 13/21
 	
 	\subsection{Couche de perceptrons}
 	
-	On considère des perceptrons mis côté à côte. ; ils ont tous en entrée tous les attributs des objets et fonctionnent de manière indépendante. Par exemple, on pourrait avoir le réseau suivant qui permet d'effectuer une classification parmi quatre classes ; chaque neurone code un bit de la classe.
+	On considère des perceptrons mis côté à côte. Ils ont tous en entrée tous les attributs des objets et fonctionnent de manière indépendante. Par exemple, on pourrait avoir le réseau suivant qui permet d'effectuer une classification parmi quatre classes ; chaque neurone code un bit de la classe.
 	
 	\dessin{112}
 	
@@ -195,7 +197,7 @@ Un réseau est composé d'au moins une couche d'entrée et d'une couche de sorti
 	\begin{enumerate}
 		\item la première peut définir un ensemble d'hyper/demi-plans
 		\item la seconde peut définir des intersections d'hyper/demi-plans
-		\item la troisième peut définir des unions d'intersection
+		\item la troisième peut définir des unions d'intersections
 	\end{enumerate}
 	
 	\dessin{113}

@@ -19,9 +19,12 @@ Il existe deux familles de méthode :
 	
 	$$\yh_{\text{ens}} = \frac{1}{T} \sum_{i = 1}^T \yh_{\LS_i}(\xu)$$
 	
-	Pour rappelle, on a l'erreur moyenne suivante :
-	
-	$$\els{\text{Err}(\xu)} = \eyx{(y - h_B(\xu))^2} + (h_B(\xu) - \els{\yh(\xu)})^2 + \els{(\yh(\xu) - \els{\yh(\xu)})^2}$$
+	Pour rappel, on a l'erreur moyenne suivante :
+	\begin{eqnarray*}
+	\els{\text{Err}(\xu)} & = & \eyx{(y - h_B(\xu))^2} \\
+	 & + & (h_B(\xu) - \els{\yh(\xu)})^2 \\
+	 & + & \els{(\yh(\xu) - \els{\yh(\xu)})^2}
+	\end{eqnarray*}
 	
 	Le biais n'est pas différent par rapport à l'algorithme original. En effet,
 	
@@ -56,7 +59,7 @@ Il existe deux familles de méthode :
 
 	\dessinS{92}{.45}
 	
-	La variance est réduite, mais le biais augmente un peu car la taille effective du bootstrap sample est environ 30\% plus petite que le $\LS$ original ; tous les exemples de départ ne s'y trouvent pas, seulement environ $\approx$ 63.2\%.
+	La variance est réduite, mais le biais augmente un peu car la taille effective du bootstrap sample est environ 30\% plus petite que le $\LS$ original ; tous les exemples de départ ne s'y trouvent pas, seulement environ $\sim$ 63.2\%.
 	
 	\dessinS{100}{.65}
 	
@@ -76,7 +79,7 @@ Il existe deux familles de méthode :
 	
 	\begin{itemize}
 		\item on construit l'arbre sur un bootstrap sample
-		\item au lieu de choisir le meilleur split sur tout les attributs (au nombre de $p$), on sélectionne le meilleur split parmi un sous-ensemble de $k$ attributs
+		\item au lieu de choisir le meilleur split sur tous les attributs (au nombre de $p$), on sélectionne le meilleur split parmi un sous-ensemble de $k$ attributs
 	\end{itemize}
 	
 	Il y a un trade-off biais/variance avec $k$ : plus $k$ est petit et plus la réduction est grande, mais plus haut sera le biais. Faire la moyenne casse le compromis biais/variance habituel.
@@ -92,18 +95,19 @@ Il existe deux familles de méthode :
 
 Supposons que l'on ait $T$ modèles $\ens{\yh_1, \dots , \yh_T}$ et leur moyenne
 
-$$\yh_{\ens{ens}}(\xu) = \frac{1}{T} \sum_i \yh_i(\xu)$$
+$$\yhens(\xu) = \frac{1}{T} \sum_i \yh_i(\xu)$$
 
-
-$$\frac{1}{T} \sum_i \eyx{(y - \yh(\xu))^2} = \frac{1}{T} \sum_i \eyx{(y - \yens(\xu) + \yens(\xu) - \yh_i(\xu))^2}$$
-$$= 
-\frac{1}{T} \sum_i \eyx{(y - \yens(\xu))^2} 
-+ \frac{1}{T} \sum_i \underbrace{\eyx{(\yens(\xu) - \yh_i(\xu))^2)}}_{\star_1}
-+ \underbrace{\frac{1}{T} \sum_i \eyx{\underbrace{(y(\xu) - \yens(\xu))}_{\substack{\text{ne dépend} \\ \text{pas de }i}}
+\begin{eqnarray*}
+\frac{1}{T} \sum_i \eyx{(y - \yh(\xu))^2} & = & \frac{1}{T} \sum_i \eyx{(y - \yens(\xu) + \yens(\xu) - \yh_i(\xu))^2} \\
+& = & \frac{1}{T} \sum_i \eyx{(y - \yens(\xu))^2} \\
+& + & \frac{1}{T} \sum_i \underbrace{\eyx{(\yens(\xu) - \yh_i(\xu))^2)}}_{\star_1} \\
+& + & \underbrace{\frac{1}{T} \sum_i \eyx{\underbrace{(y(\xu) - \yens(\xu))}_{\substack{\text{ne dépend} \\ \text{pas de }i}}
 \underbrace{(\yens(\xu) - \yh_i(\xu))}_{\substack{\text{ne dépend} \\
- \text{pas de } y}}}}_{\eyx{y - \yens(\xu)}\frac{1}{T} \sum_i (\yens(\xu) - \yh_i(\xu)) \star_2}$$
+ \text{pas de } y}}}}_{\eyx{y - \yens(\xu)}\frac{1}{T} \sum_i (\yens(\xu) - \yh_i(\xu)) \star_2} \\
+\end{eqnarray*}
  
  $\star_1$ : on peut supprimer le $\eyx{.}$ car l'intérieur ne dépend pas de $y$. De plus, on a que $\yens = \frac{1}{T} \sum_i \yh_i(\xu)$
+ 
  $\star_2$ : $\yens(\xu)$ ne dépend pas de $i$, donc on peut faire rentrer la somme, et annuler le terme car $\sum_i \yh_i(\xu) = \yens(\xu)$.
  
  Au final, on a
@@ -236,30 +240,32 @@ En classification, $\yh(\xu)$ sera la classe majoritaire dans $\ens{\yh_1(\xu), 
 	\end{tabular} 
 	\end{center}
 	
+	Donc, à chaque itération $i$, on utilise ce qui a été obtenu à l'itération $i - 1$ avec un vecteur $u$, comme on ferait avec une moyenne exponentielle.
+	
 	\subsection{Autres méthodes de boosting}
 	
 	Il existe de nombreux autres algorithmes de boosting (par exemple le gradient boosting).
 	
-	Le boosting sur les arbres de décision/régression améliore très fortement leur précision, cependant on est beaucoup plus sensible au bruit (sur-apprentissage) que les techniques de moyennage).
+	Le boosting sur les arbres de décision/régression améliore très fortement leur précision, cependant on est beaucoup plus sensible au bruit (sur-apprentissage) que les techniques de moyennage.
 	
-	Ainsi, pour que le boosting fonctionne, il faut que les modèles ne soit pas parfaits sur l'échantillon d'apprentissage. Pour les arbres, on peut soit les élaguer (pre-prune ou post-prune avec de la validation croisée), soit limiter le nombre de tests (et spliter d'abord sur les noeuds les plus impures). Il y a encore une fois un trade-off biais/variance qui dépend de la taille de l'arbre.
+	Pour que le boosting fonctionne, il faut que les modèles ne soit pas parfaits sur l'échantillon d'apprentissage. Pour les arbres, on peut soit les élaguer (pre-prune ou post-prune avec de la validation croisée), soit limiter le nombre de tests (et spliter d'abord sur les noeuds les plus impures). Il y a encore une fois un trade-off biais/variance qui dépend de la taille de l'arbre.
 	
 \section{Interprétabilité et efficacité}
 	
-Lorsque les méthodes ensemble sont combinées avec les arbres de décision, elles perdent de l'interprétabilité et de l'efficacité. En revanche, on les utilise toujours pour calculer l'importance des variables, en effectuant la moyenne sur tous les arbres. De plus, les méthodes ensemble peuvent être parallélisée et l'algorithme boosting utilise des petits arbres, ce qui fait que le coût en temps processeur n'est pas important.
+Lorsque les méthodes ensemble sont combinées avec les arbres de décision, ils perdent de l'interprétabilité et de l'efficacité. En revanche, on les utilise toujours pour calculer l'importance des variables, en effectuant la moyenne sur tous les arbres. De plus, les méthodes ensemble peuvent être parallélisée et l'algorithme boosting utilise des petits arbres, ce qui fait que le coût en temps processeur n'est pas important.
 		
 	\dessinS{91}{.5}
 	
 \section{Autres approches d'ensemble}
 
-	\subsection{Moyenne de modèle de Bayes}
+	\subsection{Moyenne de modèles de Bayes}
 	$$P(y \vert x, \LS) = \sum_{u \in \mathcal{H}} P(y \vert h, \LS) P(h \vert \LS)$$
 	
 	$$P(h \vert \LS) \propto P(h) P(\LS \vert h) \propto P(h) \sum_\theta P(\LS \vert \theta, h) P(\theta \vert h)$$
 	
 	\subsection{Stacking}
 	
-	On apprend un modèle qui combine des modèles. Soit $\LS = ens{(x_i, y_i) : i = 1, \dots , N}$ et soit $A^T$ ($t = 0, \dots , T$) $T + 1$ algorithmes d'apprentissage.
+	On apprend un modèle qui combine des modèles. Soit $\LS = \ens{(x_i, y_i) : i = 1, \dots , N}$ et soit $A^T$ ($t = 0, \dots , T$) $T + 1$ algorithmes d'apprentissage.
 	
 	Pour $t = 1, \dots , T$ :
 	
@@ -279,7 +285,7 @@ Lorsque les méthodes ensemble sont combinées avec les arbres de décision, ell
 	
 	\dessin{103}
 	
-	Il faut cependant que les $y_i$ soient différents, par exemple avec de la validation croisée.
+	Lors de la phase d'apprentissage des sous-modèles, il faut que les $y_i$ soient différents, par exemple avec de la validation croisée.
 	
 	\dessin{104}
 	

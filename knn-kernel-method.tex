@@ -6,9 +6,9 @@
 		
 	\dessin{11}
 		
-	Pour ce faire, on trouve les $k$ plus proches voisins, en utilisant une mesure de la distance :
+	Pour se faire, on trouve les $k$ plus proches voisins en utilisant une mesure de la distance :
 	
-	$$d_a(o, o') = (\ab(0) - \ab(o'))^T(\ab(o) - \ab(o')) = \sum_{i = 1}^n(a_i(o) - a_i(o'))^2$$
+	$$d_a(o, o') = (\ab(o) - \ab(o'))^T(\ab(o) - \ab(o')) = \sum_{i = 1}^n(a_i(o) - a_i(o'))^2$$
 	
 	Le plus proche voisin est donné par
 	
@@ -29,7 +29,7 @@
 	
 	Au niveau de la précision, asymptotiquement ($\Leftrightarrow$ lorsque $N \rightarrow \infty$), on est sous-optimal (sauf si le problème est déterministe).
 	
-	De plus, il y a une forte dépendance sur le choix des attributs. On considère alors des points sur les attributs lors du calcul de la distance :
+	De plus, il y a une forte dépendance sur le choix des attributs. On considère alors des poids sur les attributs lors du calcul de la distance :
 	
 	$$d_a^w = \sum_{i = 1}^n w_i (a_i(o) - a_i(o'))^2$$
 	
@@ -37,7 +37,7 @@
 	
 	L'erreur de resubstitution ne sera pas nulle si on considère les points sur la frontière. Ainsi, le point vert à côté des deux rouges sera mal classé si on considère les trois plus proches voisins.
 	
-	\section{Raffinement}
+	\section{Raffinements}
 	
 		\subsection{La méthode $k$-NN}
 		
@@ -76,7 +76,7 @@
 		\subsection{Autres raffinements}
 		
 		\begin{itemize}
-			\item mise au point automatique du vecteur de points $w$
+			\item mise au point automatique du vecteur de poids $w$
 			\item utiliser des fenêtres de Parzen et/ou des méthodes à base de noyaux :
 			
 			$$\yh_K(o) = \sum_{o' \in \LS} y(o') K(o, o')$$

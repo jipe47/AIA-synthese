@@ -69,10 +69,10 @@ Afin de minimiser l'erreur de classification, on associe aux feuilles la classe 
 		Exemple de mesure d'impureté :
 		
 		\begin{itemize}
-			\item \textcolor{green}{entropie de Shannon} : $H(\LS) = \sum_j p_j \log_2 p_j$. Elle mesure l'incertitude, la surprise : une réduction de l'entropie est un gain d'information.
+			\item \textcolor{green}{entropie de Shannon} : $H(\LS) = \sum_j p_j \log_2 p_j$. Elle mesure l'incertitude, la surprise.
 			
 			\item \textcolor{blue}{indice de Gini} : $I(\LS) = \sum_j p_j(1 - p_j)$
-			\item \textcolor{red}{taux d'erreur de mal-classification} : $I(\LS) = 1 - \max_j p_j$. En pratique, ce n'est jamais utilisé, car cette mesure ne fait pas la différence entre des situations différentes.
+			\item \textcolor{red}{taux d'erreur de mal-classification} : $I(\LS) = 1 - \max_j p_j$. En pratique, ce n'est jamais utilisé car cette mesure ne fait pas la différence entre des situations très différentes (une classe pourrait être majoritaire mais dans des proportions différents, 50\% et 90\% par exemple).
 			
 		\end{itemize}
 		
@@ -80,16 +80,16 @@ Afin de minimiser l'erreur de classification, on associe aux feuilles la classe 
 			
 	\subsection{Élagage}
 
-	Le sur-apprentissage survient lorsqu'on considère un arbre trop profond et qu'on tient compte de bruits ou de mauvaises mesures dans les données.
+	Le sur-apprentissage survient lorsqu'on considère un arbre trop profond et qu'on tient compte de bruit ou de mauvaises mesures dans les données.
 	
 	\dessinS{18}{.4}
 	
-	Pour éviter l'overfitting, on a trois façons :
+	Pour éviter l'overfitting, on a trois méthodes :
 	
 	\begin{itemize}
 		\item pre-pruning/pré-élagage : arrêter d'étendre l'arbre plus tôt, avant qu'il n'atteigne le point où il classe parfaitement l'échantillon d'apprentissage ;
 		\item post-pruning/post-élagage : permettre à l'arbre de sur-apprendre et de l'élaguer ensuite ;
-		\item les méthodes Ensemble.
+		\item les méthodes d'ensemble.
 	\end{itemize}
 	
 	
@@ -159,7 +159,7 @@ Afin de minimiser l'erreur de classification, on associe aux feuilles la classe 
 	
 	L'impureté d'un échantillon est définie par la variance de la sortie de cet échantillon :
 	
-	$$I(\LS) = \text{var}_{y \vert \LS} \ens{y} = \text{E}_{y \vert \LS}((y - \text{E}_{y \vert \LS}(y))^2)$$
+	$$I(\LS) = \text{var}_{y \vert \LS} \ens{y} = \text{E}_{y \vert \LS}\ens{(y - \text{E}_{y \vert \LS}(y))^2}$$
 	
 	Le meilleur split est celui qui diminue le plus la variance :
 	
@@ -182,7 +182,7 @@ Afin de minimiser l'erreur de classification, on associe aux feuilles la classe 
 	
 	L'importance d'une variable est calculée par la réduction de l'impureté :
 	
-	$$I(A) = \sum_{\substack{\text{noeuds où} \\ \text{A est testé}}} \vert \LS_{text{noeud}} \vert \Delta I(\LS_{\text{noeud}}, A)$$
+	$$I(A) = \sum_{\substack{\text{noeuds où} \\ \text{A est testé}}} \vert \LS_{\text{noeud}} \vert \Delta I(\LS_{\text{noeud}}, A)$$
 	
 	
 	\section{Avantages et inconvénients}

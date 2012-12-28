@@ -3,8 +3,8 @@
 L'apprentissage consiste à
 
 \begin{itemize}
-	\item améliorer les performances d'un ordinateur dans certaines tâches, avec de l'expérience ;
-	\item extraire un modèle d'un système en se basant sur les observations de ce systèmes dans certaines situations ;
+	\item améliorer les performances d'un ordinateur dans certaines tâches avec de l'expérience ;
+	\item extraire un modèle d'un système en se basant sur les observations de ce système dans certaines situations ;
 	\item créer un modèle, c'est-à-dire une relation entre les variables utilisées pour décrire le système.
 \end{itemize}
 
@@ -14,11 +14,11 @@ L'apprentissage est utilise quand il n'y a pas d'expertise humaine, quand les hu
 
 \dessinS{1}{.4}
 
-L'exploration de données se déroulent en plusieurs étapes :
+L'exploration de données se déroule en plusieurs étapes :
 
 \begin{enumerate}
 	\item Génération de données ;
-	\item Préprocessing : normalisation des valeurs, traitement des valeurs manquantes, sélections d'une composante, etc ;
+	\item Préprocessing : normalisation des valeurs, traitement des valeurs manquantes, sélection de composantes, etc ;
 	\item Apprentissage : développement d'une hypothèse, choix d'un algorithme d'apprentissage, etc ;
 	\item Validation d'hypothèse : validation croisée, déploiement du modèle, etc.
 \end{enumerate}
@@ -28,8 +28,6 @@ L'exploration de données se déroulent en plusieurs étapes :
 	\dessinS{2}{.4}
 
 	\section{Protocoles d'apprentissage automatique}
-		
-		
 		
 		\subsection{Algorithme d'apprentissage}
 		
@@ -58,7 +56,7 @@ L'exploration de données se déroulent en plusieurs étapes :
 		
 		\subsection{Apprentissage supervisé}
 		
-		L'apprentissage supervisé consiste, à partir de la base de donnée (learning sample, échantillon de test), à trouver une fonction $f$ qui prend entrée les variables du problème et qui approxime au mieux la sortie :
+		L'apprentissage supervisé consiste, à partir de la base de donnée (learning sample, échantillon de test), à trouver une fonction $f$ qui prend en entrée les variables du problème et qui approxime au mieux la sortie :
 
 		$$\hat{Y} = f(X_1, X_2, X_3, X_4)$$
 
@@ -75,7 +73,7 @@ L'exploration de données se déroulent en plusieurs étapes :
 			\begin{itemize}
 				\item reconnaissance/labellisation d'images
 				\item détecteur d'injures
-				\item système de recommandation de produit sur un site de vente
+				\item système de recommandation de produits sur un site de vente
 			\end{itemize}
 		
 		
@@ -94,14 +92,14 @@ L'exploration de données se déroulent en plusieurs étapes :
 		
 		\subsection{Apprentissage semi-supervisé}
 		
-		Il faut distinguer deux types de données : celles qui sont labellisées des données non-labellisées. Une donnée non labellisée est une paire entrée-sortie sans valeur de sortir. Elles sont plus faciles à obtenir que des données labellisées car
+		Il faut distinguer deux types de données : celles qui sont labellisées de celles qui ne le sont pas. Une donnée non labellisée est une paire entrée-sortie sans valeur de sortie. Elles sont plus faciles à obtenir que des données labellisées car
 		
 		\begin{itemize}
 			\item les labels peuvent nécessiter une intervention/expertise humaine, qui peut être chère, lente et non fiable
 			\item les labels peuvent nécessiter des équipements spéciaux.
 		\end{itemize}
 		
-		Des données non labellisées se retrouvent dans le domaine biomédical, dans l'analyse du langage, dans le parsage du langage naturel, dans la catégorisation d'image ou dans la mesure de réseau.
+		Des données non labellisées se retrouvent dans le domaine biomédical, dans l'analyse du langage, dans le parsage du langage naturel, dans la catégorisation d'images ou dans la mesure de réseau.
 				
 		Le but de l'apprentissage non-supervisé est d'exploiter tout type de données, labellisées ou non, et de construire de meilleurs modèles qu'en utilisant seulement un seul de ces types.
 		
@@ -136,12 +134,12 @@ L'exploration de données se déroulent en plusieurs étapes :
 			\item des probabilités de récompense $P(r_{t + 1} \vert s_t, a_t)$ 		(processus de décision de Markov).
 		\end{itemize}
 		
-		Si le modèle des dynamiques et e la récompense est connu, on va calculer la politique optimale à adopter par programmation dynamique.
+		Si le modèle des dynamiques et de la récompense est connu, on va calculer la politique optimale à adopter par programmation dynamique.
 		
 		Si le modèle n'est pas connu, deux approches sont possibles :
 		
 		\begin{itemize}
-			\item on base sur un modèle : on apprend d'abord un modèle des dynamiques et on en dérive une politique optimale
+			\item on se base sur un modèle : on apprend d'abord un modèle des dynamiques et on en dérive une politique optimale
 			\item on n'utilise pas de modèle : on apprend directement la politique en se basant sur les observations des trajectoires du système.
 		\end{itemize}
 		
@@ -154,7 +152,7 @@ L'exploration de données se déroulent en plusieurs étapes :
 			\hline 
 			Mode batch & \pbox{7.5cm}{Apprentissage d'un mapping d'une entrée vers une sortie à partir d'observations de paires entrée-sortie} & \pbox{7.5cm}{Apprentissage d'un mapping d'un état vers une action à partir de tripets (état, action, récompense) observés} \\ 
 			\hline 
-			Mode online & \pbox{7.5cm}{(Actif learning) combinaison d'apprentissage supervisé et de sélection (online) d'instances pour labeller} & \pbox{7.5cm}{Combinaison d'apprentissage de politique avec un contrôle du système et avec la génération de trajectoires d'entraînement} \\ 
+			Mode online & \pbox{7.5cm}{(Active learning) combinaison d'apprentissage supervisé et de sélection (online) d'instances pour labeller} & \pbox{7.5cm}{Combinaison d'apprentissage de politique avec un contrôle du système et avec la génération de trajectoires d'entraînement} \\ 
 			\hline 
 			\end{tabular} 
 			\end{center}
@@ -170,7 +168,7 @@ L'exploration de données se déroulent en plusieurs étapes :
 		
 		\subsection{Apprentissage actif}
 		
-		Pour des données non labellisées, on veut trouver (de manière adaptive) dse exemples à labellisées afin d'apprendre un modèle précis. L'espoir est de réduire le nombre d'instances labellisées en utilisant l'apprentissage supervisé de type batch.
+		Pour des données non labellisées, on veut trouver (de manière adaptive) des exemples à labelliser afin d'apprendre un modèle précis. L'espoir est de réduire le nombre d'instances labellisées en utilisant l'apprentissage supervisé de type batch.
 		
 		Généralement, on a une configuration de type online : on choisit les $k$ meilleurs exemples non labellisés, on détermine leurs labels, on met à jour le modèle et on itère.
 		

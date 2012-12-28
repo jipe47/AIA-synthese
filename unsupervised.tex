@@ -43,12 +43,12 @@ Deux composantes sont considérées :
 		\subsubsection{Distance Euclidienne}
 		Elle mesure la différence entre des coordonnées et pénalise les grosses différences. Il s'agit de la racine carrée de la somme des carrés des différences entre les coordonnées :
 		
-		$$d_e(x_1, x_2) = \sqrt{(x_{10}-x_{20})^2 + (x_{11}-x_{21})^2 + \dots}$$
+		$$d_e(x_1, x_2) = \sqrt{(x_{1,0}-x_{2,0})^2 + (x_{1,1}-x_{2,1})^2 + \dots}$$
 		
 		\subsubsection{Distance de Manhattan}
 		Elle mesure la différence entre des coordonnées, mais de manière robuste. Il s'agit de la somme des différences absolues de toutes les coordonnées :
 		
-		$$d_e(x_1, x_2) = \vert x_{10}-x_{20} \vert + \vert x_{11}-x_{21} \vert + \dots$$
+		$$d_e(x_1, x_2) = \vert x_{1,0}-x_{2,0} \vert + \vert x_{1,1}-x_{2,1} \vert + \dots$$
 		
 		\subsubsection{Corrélation}
 		Elle mesure une différence en tenant compte des tendances. La distance entre deux vecteurs est $1 - \rho$, où $\rho$ est la corrélation de Pearson entre les deux vecteurs :
@@ -71,6 +71,8 @@ Deux composantes sont considérées :
 				\item la matrice de distances est mise à jour avec le nouveau cluster qui en remplace deux.
 			\end{itemize}
 		\end{enumerate}
+				
+		\dessinS{45}{.5}
 		
 		\subsubsection{Distance entre deux clusters}
 		
@@ -86,7 +88,6 @@ Deux composantes sont considérées :
 				
 		\dessin{44}
 		
-		\dessinS{45}{.5}
 		
 		\subsubsection{Dendrogramme}
 		
@@ -142,13 +143,13 @@ Deux composantes sont considérées :
 	
 	Cela revient donc à un problème d'optimisation :
 	
-	$$min_{C, \ens{m_k}^K_1} \sum_{k = 1}^K N_k \sum_{C(i) = k} \Vert x_i - m_k Vert^2$$
+	$$min_{C, \ens{m_k}^K_1} \sum_{k = 1}^K N_k \sum_{C(i) = k} \Vert x_i - m_k \Vert^2$$
 	
 	On a deux degrés de liberté : les clusters des points et les centres de masse $m_k$.
 	
 	Si $C$ est fixé, les $m_k$ sont triviaux à calculer. Si les centres de masse sont fixés, on va chercher les plus proches voisins :
 	
-	$$C(i) = argmax_k \Vert x_i - m_k \Vert^2$$
+	$$C(i) = arg \max_k \Vert x_i - m_k \Vert^2$$
 	
 	
 		\subsubsection{Algorithme}
@@ -161,7 +162,7 @@ Deux composantes sont considérées :
 				\item calculer les moyennes des clusters $\ens{m_1 , \dots , m_K}$
 				\item pour ces moyennes, assigner chaque observation à la moyenne de cluster la plus proche :
 				
-				$$C(i) = argmin_{1 \leq k \leq K} \Vert x_i - m_k \Vert^2$$
+				$$C(i) = arg \min_{1 \leq k \leq K} \Vert x_i - m_k \Vert^2$$
 			\end{itemize}
 		\end{enumerate}
 		
@@ -203,7 +204,7 @@ Deux composantes sont considérées :
 		
 		Il s'agit d'une extension des k-means qui permet d'utiliser n'importe quelle mesure de distance. 
 		
-		\dessin{51}
+		\dessinS{51}{.5}
 		
 		Les k-medoids sont par contre beaucoup plus lents : dans le calcul de l'expression, pour chaque cluster, on doit vérifier toutes les paires de point, ce qui donne un algorithme quadratique.
 		
@@ -222,7 +223,7 @@ Deux composantes sont considérées :
 	
 	C'est une méthode similaire au k-means, mais avec des contraintes supplémentaires : les clusters sont donnés sous forme de matrice (à une ou deux dimensions).
 	
-	\dessin{52}
+	\dessinS{52}{.5}
 	
 		\subsubsection{Algorithme}
 		
@@ -330,9 +331,9 @@ Dans tous les cas, on doit pouvoir reconstruire la base de données d'origine à
 	
 	$$\frac{\vartheta}{\vartheta u_1} = 0 \Leftrightarrow Cu_1 - \lambda u_1 = 0 \Leftrightarrow Cu_1 = \lambda u_1$$
 	
-	$u_1$ est un vecteur propre de $C$. La variance est donnée par
+	$u_1$ est un vecteur propre de $C$. Si on multiplie les deux membres à gauche par $u_1^T$, on a
 	
-	$$\rightarrow u_1^TCu_1 = \lambda u_1^Tu_1 = \lambda \Vert u_1 \Vert = \lambda_1$$
+	$$u_1^TCu_1 = \lambda u_1^Tu_1 = \lambda \Vert u_1 \Vert = \lambda_1$$
 	
 	On a donc que $u_1$ est un vecteur propre correspondant à la plus grande valeur propre $\lambda_1$.
 	
@@ -348,20 +349,20 @@ Dans tous les cas, on doit pouvoir reconstruire la base de données d'origine à
 	
 	Avec le multiplicateur lagrangien :
 	
-	$$u_{M + 1}^T Cu_{M + 1} + \lambda_{M + 1} (1 - u_{M + 1}^T u_{M + 1}) + \sum_{i = 1}^M \nu_i u_{M + 1}^T u_i$$
+	$$u_{M + 1}^T Cu_{M + 1} + \lambda_{M + 1} (1 - u_{M + 1}^T u_{M + 1}) + \sum_{i = 1}^M \eta_i u_{M + 1}^T u_i$$
 	
 	On a l'optimum
 	
-	$$0 = 2 C u_{M + 1} - 2 \lambda_{M + 1} u_{M + 1}  +\sum_{i=1}^M \nu_i u_i$$
+	$$0 = 2 C u_{M + 1} - 2 \lambda_{M + 1} u_{M + 1}  +\sum_{i=1}^M \eta_i u_i$$
 	
 	Si on multiplie à gauche par $u_i^T$, on a
 	
-	$$0 = 2u_i^T C u_{M + 1} - 2 \lambda_{M + 1} \underbrace{u_i^T u_{M + 1}}_{0}  +\sum_{i=1}^M \nu_i u_i^T u_i$$
+	$$0 = 2u_i^T C u_{M + 1} - 2 \lambda_{M + 1} \underbrace{u_i^T u_{M + 1}}_{0}  +\sum_{i=1}^M \eta_i u_i^T u_i$$
 	
 	Or, 
 	$$u_i^TCu_{M + 1} = (C^Tu_i)^Tu_{M + 1} = (Cu_i)^T u_{M + 1} = (\lambda_i u_i)^T u_{M + 1} = \lambda_i u_i^T u_{M + 1} = 0$$
 	
-	On a donc que $\nu_i = 0$ et donc
+	On a donc que $\eta_i = 0$ et donc
 	
 	$$C u_{M + 1} = \lambda_{M + 1} u_{M + 1}$$
 	
@@ -375,7 +376,7 @@ Dans tous les cas, on doit pouvoir reconstruire la base de données d'origine à
 	
 	$$arg \max_{u_1, \dots , u_M} \frac{1}{N} \sum_{i = 1}^N \Vert x_j - \xh_j \Vert^2$$
 	
-	\dessin{80}
+	\dessinS{80}{.4}
 	
 	Au final, on obtient un tableau de la forme
 	
@@ -390,7 +391,7 @@ Dans tous les cas, on doit pouvoir reconstruire la base de données d'origine à
 	\end{tabular} 
 	\end{center}
 	
-	Les $u_k$ sont les vecteurs propres de la matrice de covariance, les valeurs propres sont quant à elle les variances de la projection.
+	Les $u_k$ sont les vecteurs propres de la matrice de covariance, les valeurs propres sont quant à elles les variances de la projection.
 	
 	\subsection{Etude des composantes}
 	
@@ -437,7 +438,7 @@ Dans tous les cas, on doit pouvoir reconstruire la base de données d'origine à
 		\subsubsection{Multi-dimensional scaling (MDS)}
 		
 		On cherche des nouvelles coordonnées telles que certaines distances sont respectées (au sens des moindres carrés).
-		\dessin{87}
+		\dessinS{87}{.4}
 		
 \section{Autres méthodes non-supervisées}
 

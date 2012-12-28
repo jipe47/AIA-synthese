@@ -34,7 +34,7 @@ Il faut trouver un classificateur linéaire. L'idée va être de trouver celui q
 	
 	$$\underbrace{\max_{w, b} \underbrace{min \ens{\Vert x - x_k \Vert : w^T x + b = 0, k = 1, \dots , N}}_{\text{point le plus proche de la droite}}}_{\text{maximisation de la marge}}$$
 	
-	On maximise la marge car, intuitivement, c'est une méthode sûr. De plus, il existe des bornes théoriques sur l'erreur de généralisation qui dépend de la marge :
+	On maximise la marge car, intuitivement, c'est une méthode sûre. De plus, il existe des bornes théoriques sur l'erreur de généralisation qui dépend de la marge :
 	
 	$$Err(TS) < \bigoh (\frac{1}{\gamma})$$
 	
@@ -45,14 +45,6 @@ Il faut trouver un classificateur linéaire. L'idée va être de trouver celui q
 	\subsection{Problème d'optimisation}
 	
 	\dessin{56}
-	
-	$w$ est perpendiculaire à la ligne $y(x) = w^Tx + b$ :
-	
-	$$y(x_a) = 0 = y(x_b) \Rightarrow w^T(x_A - x_B) = 0$$
-	
-	Soit $x$ tel que $y(x) = 0$. La distance de l'origine à cette ligne est
-	
-	$$\Vert x \Vert \cos(w, x) = \Vert x \Vert \frac{w^T x}{\Vert w \Vert \: \Vert x \Vert} = \frac{w^Tx}{\Vert w \Vert} = \frac{-b}{\Vert w \Vert}$$
 	
 	Tout point $x$ peut être écrit comme
 	
@@ -66,9 +58,7 @@ Il faut trouver un classificateur linéaire. L'idée va être de trouver celui q
 	Le problème d'optimisation peut alors être écrit comme 
 	
 	$$arg \max_{w, b} \ens{\frac{1}{\Vert w \Vert} \min_n [y_n . (w^T x_n + b)]}$$
-	
-	Si les exemples sont bien classés, $y_n$ et $w^Tx_n + b$ seront du même signe. $y_n$ permet de bien classer les valeurs, sinon on aurait une droite à l'infini (?).
-	
+		
 	La solution n'est pas unique vu que l'hyperplan est inchangé si  on multiplie $w$ et $b$ par une constante $c > 0$ (par exemple, $c (w^Tx + b) = 0$ est aussi une solution). Pour imposer une unicité, on choisit typiquement $\vert w^T x + b \vert = 1$ pour le point $x$ qui est le plus proche de la surface (vecteur de support).
 	
 	Le problème est alors équivalent à maximiser $\frac{1}{\Vert w \Vert}$ (ou à minimiser $\Vert w \Vert$) avec les contraintes
@@ -89,7 +79,7 @@ Il faut trouver un classificateur linéaire. L'idée va être de trouver celui q
 	
 	%Optimisation des contraintes : 10 $\rightarrow$ 17/45
 	
-	Soient $\alpha_k$, $k = 1, \dots N$ : on a le lagrangien qui doit être minimisé selon $w$ et $b$ et maximisé selon $\alpha$
+	Soient $\alpha_k$, $k = 1, \dots N$. On a le lagrangien qui doit être minimisé selon $w$ et $b$ et maximisé selon $\alpha$ :
 	
 	$$\mathcal{L}(w, b, \alpha) = \frac{1}{2} \Vert w \Vert - \sum_{k = 1}^N \alpha_k (y_k (w^Tx_k + b) - 1)$$
 	
@@ -98,11 +88,7 @@ Il faut trouver un classificateur linéaire. L'idée va être de trouver celui q
 	$$\frac{\vartheta \mathcal{L}}{\vartheta w} = 0 \rightarrow w = \sum_{j = 1}^N \alpha_j y_j x_j$$
 	$$\frac{\vartheta \mathcal{L}}{\vartheta b} = 0 \rightarrow \sum_{k = 1}^N \alpha_j y_j = 0$$
 	
-	Après substitution dans le lagrangien, on a
-	
-	$$\mathcal{L}(w, b, \alpha) = \frac{1}{2} \Vert w \Vert^2 - \sum_{k = 1}^N \alpha_k (y_k (w^Tx_k + b) - 1)$$
-	
-	Les conditions optimales conduisent au problème de maximisation dual :
+	Après substitution dans le lagrangien, les conditions optimales conduisent au problème de maximisation dual :
 	
 	$$\max_{\alpha} \mathcal{W}(\alpha) = \sum_{k = 1}^N \alpha_k - \frac{1}{2} \sum_{i, j = 1}^N \alpha_i \alpha_j y_i y_j x_i^T x_j$$
 	
@@ -147,6 +133,10 @@ Il faut trouver un classificateur linéaire. L'idée va être de trouver celui q
 	
 	$$\text{Err}_\text{loo} \leq \frac{\vert \ens{k \vert \alpha_k > 0} \vert}{N}$$
 	
+	\subsection{Rappel du lagrangien}
+	
+	% TODO
+	
 	\subsection{Soft margin}
 	
 	A cause du bruit ou de données isolées (outliers), les données peuvent ne pas être linéairement séparables dans l'espace des features. 
@@ -184,7 +174,7 @@ Il faut trouver un classificateur linéaire. L'idée va être de trouver celui q
 	
 	\dessinS{58}{.5}
 	
-	Les points dans la marge correspondent à des $\xi > 0$. La figure du milieu illustre du sur-apprentissage.
+	Les points dans la marge correspondent à des $\xi_i > 0$. La figure du milieu illustre du sur-apprentissage.
 	
 \section{Kernel trick}
 
@@ -239,15 +229,17 @@ où l'opérateur $\times$ dénote le produit scalaire dans $\mathcal{V}$.
 En général, l'espace $\mathcal{V}$ n'est pas nécessairement de dimension finie.
 
 Le noyau défini un produit scalaire, et donc une norme et une mesure de distance sur $U$, qui est héritée de $\mathcal{V}$ :
-
-$$d^2_U(o, o') = d^2_\mathcal{V}(\phi(o), \phi(o')) = (\phi(o) - \phi(o'))^T(\phi(o) - \phi(o'))$$
-$$= \phi(o) \times \phi(o) + \phi(o') \times \phi(o') - 2 \phi(o) \times \phi(o')$$
-$$= K(o, o) + K(o', o') - 2 K(o, o')$$
+\begin{eqnarray*}
+d^2_U(o, o') & = & d^2_\mathcal{V}(\phi(o), \phi(o')) \\
+ & = & (\phi(o) - \phi(o'))^T(\phi(o) - \phi(o')) \\
+ & = & \phi(o) \times \phi(o) + \phi(o') \times \phi(o') - 2 \phi(o) \times \phi(o') \\
+ & = & K(o, o) + K(o', o') - 2 K(o, o')
+\end{eqnarray*}
 
 \section{Exemple de noyaux}
 
 \begin{itemize}
-	\item noyau constant : $K(o, o') \models 1$
+	\item noyau constant : $K(o, o') = 1$
 	\item noyau linéaire défini sur des attributs numériques : $K(o, o') = \mathbf{a}^T(o) \mathbf{a}(o') = \langle \mathbf{a}(o), \mathbf{a}(o')\rangle$ (produit scalaire)
 	\item noyau polynomial : si $d$ est le degré maximum $K(o, o') = (\langle \mathbf{a}(o), \mathbf{a}(o') \rangle + 1)^d$
 	\item noyau de Hamming pour des attributs discrets : $K(o, o') = \sum_{i = 1}^m \delta_{\mathbf{a}_i(o), \mathbf{a}_i(o')}$ (nombre de composantes communes aux deux vecteurs)
@@ -260,7 +252,7 @@ $$= K(o, o) + K(o', o') - 2 K(o, o')$$
 		\item noyaux polynomiaux : $\sum_{i = 0}^n a_i(K(x, x'))^i$ si $\forall i : a_i \geq 0$
 	\end{itemize}
 	
-	\item $K(x, x') = (x^Tx')^2$ (voir 31/45)
+	\item $K(x, x') = (x^Tx')^2$ (voir slide 31/45 pour plus de détails)
 	\item noyau gaussien/à base radiale : si $\sigma$ est l'étalement de la distribution, $K(x, x') = \exp{\frac{-(x - x')^T(x - x')}{2 \sigma^2}}$
 \end{itemize}
 
@@ -270,7 +262,7 @@ $$= K(o, o) + K(o', o') - 2 K(o, o')$$
 
 \dessin{61}
 
-L'approche est modulaire : on découple l'algorithme de la représentation. Beaucoup d'algorithmes peuvent utiliser des noyaux : ridge regression, PCA, k-means, etc. Des noyaux ont été défini pour plusieurs types de données : séries temporelles, images, graphes, séquences, etc.
+L'approche est modulaire : on découple l'algorithme de la représentation. Beaucoup d'algorithmes peuvent utiliser des noyaux : ridge regression, PCA, k-means, etc. Des noyaux ont été définis pour plusieurs types de données : séries temporelles, images, graphes, séquences, etc.
 
 Les intérêts principaux des noyaux est que l'on peut travailler efficacement dans des espaces de dimension très élevée (potentiellement infinie) dès qu'un produit scalaire est facile à calculer, et qu'on peut appliquer des algorithmes classiques sur des données en toute généralité, sans être nécessairement vectorielles (par exemple construire un modèle linéaire sur un graphe).
 
@@ -278,7 +270,7 @@ Les intérêts principaux des noyaux est que l'on peut travailler efficacement d
 
 \begin{itemize}
 	\item[+] les SVM sont motivées théoriquement
-	\item[+] classifier des plus efficaces
+	\item[+] classificateur des plus efficaces
 	\item[+] implémentations efficaces pour des problèmes larges
 	\item[-] modèles en boîte noire
 	\item[-] le choix d'un bon noyau est difficile et critique pour atteindre une bonne précision
