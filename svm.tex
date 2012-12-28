@@ -135,8 +135,26 @@ Il faut trouver un classificateur linéaire. L'idée va être de trouver celui q
 	
 	\subsection{Rappel du lagrangien}
 	
-	% TODO
+	Supposons que l'on veuille minimiser une fonction $f(x) \in \mathbb{R}$ avec $x \in \mathcal{R}^n$ sujette aux égalités
 	
+	$$e_i(x) = 0, \: i = 1, \dots , p$$
+	
+	et aux inégalités
+	
+	$$e_j(x) \leq 0, \: j = 1, \dots , r$$
+	
+	Le lagrangien est défini par
+	
+	$$\mathcal{L}(x, \alpha, \beta) = f(x) + \alpha^T e(x) + \beta^T i(x), \: \alpha \in \mathbb{R}^p, \: \beta \in \mathcal{R}^r$$
+	
+	Aux optima, les conditions suivantes sont vérifiées :
+	
+	\begin{eqnarray*}
+	\Delta_x \mathcal{L} = 0 & \rightarrow & \Delta_x f(x) = \alpha^T \Delta_x e(x) + \beta^T \Delta_x i(x) = 0 \\
+	\Delta_{\alpha} \mathcal{L} = 0 & \rightarrow & e_i(x) = 0, \: \forall i = 1, \dots , p \\
+	\Delta_\beta \mathcal{L} \leq 0 & \rightarrow & i_j(x) \leq 0, \: \beta_j i_j(x) = 0, \: \beta_j \geq 0, \: \forall j = 1, \dots , r
+	\end{eqnarray*}
+		
 	\subsection{Soft margin}
 	
 	A cause du bruit ou de données isolées (outliers), les données peuvent ne pas être linéairement séparables dans l'espace des features. 
