@@ -14,7 +14,7 @@ Il faut trouver un classificateur linéaire. L'idée va être de trouver celui q
 
 \section{Machines à support vectoriel linéaire}
 	
-	Soit un $\LS = \ens{(x_k, y_k)}^N_{k = 1}$, avec $y_k \in {-1, 1}$ et $x_k \in \mathbb{R}^n$. On cherche un classificateur de la forme
+	Soit un $\LS = \ens{(x_k, y_k)}^N_{k = 1}$, avec $y_k \in [-1, 1]$ et $x_k \in \mathbb{R}^n$. On cherche un classificateur de la forme
 	
 	$$\yh(x) = sgn(w^T x + b)$$
 	
@@ -125,7 +125,7 @@ Il faut trouver un classificateur linéaire. L'idée va être de trouver celui q
 	
 	Borne pour le leave-one-out : 20/45
 	
-	Avoir un petit ensemble de vecteurs de support est efficaces, vu que seuls ces vecteurs $x_k$, leurs poids $\alpha_k$ et les labels de classe $y_k$ doivent être stockés pour classer de nouveaux exemples.
+	Avoir un petit ensemble de vecteurs de support est efficace, vu que seuls ces vecteurs $x_k$, leurs poids $\alpha_k$ et les labels de classe $y_k$ doivent être stockés pour classer de nouveaux exemples.
 	
 	Si un vecteur non-support $x'$ est retiré de l'échantillon d'apprentissage ou déplacé (en dehors de la région de la marge), la solution est inchangée.
 	
@@ -276,7 +276,7 @@ d^2_U(o, o') & = & d^2_\mathcal{V}(\phi(o), \phi(o')) \\
 
 \dessinS{60}{.55}
 
-\section{Méthodes à noyau}
+\section{Méthodes à noyaux}
 
 \dessin{61}
 

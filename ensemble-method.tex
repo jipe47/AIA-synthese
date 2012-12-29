@@ -8,7 +8,7 @@ L'idée est de combiner plusieurs modèles construits avec un algorithme d'appre
 Il existe deux familles de méthode :
 
 \begin{itemize}
-	\item les techniques de moyennage, où la prédiction finale n'est que la moyenne des prédictions, et qui permet de surtout faire diminuer la variance.
+	\item les techniques de moyennage, où la prédiction finale n'est que la moyenne des prédictions, et qui permettent de surtout faire diminuer la variance.
 	\item les algorithmes de boosting, où on crée des modèles séquentiellement afin de diminuer le biais.
 \end{itemize}
 
@@ -168,7 +168,7 @@ En classification, $\yh(\xu)$ sera la classe majoritaire dans $\ens{\yh_1(\xu), 
 		\item on normalise les poids, de façon à ce que $\sum_i w_i = 1$
 	\end{itemize}
 	
-	\dessin{101}
+	\dessinS{101}{.5}
 		
 	\subsection{Boosting aux moindres carrés}
 	
@@ -248,11 +248,11 @@ En classification, $\yh(\xu)$ sera la classe majoritaire dans $\ens{\yh_1(\xu), 
 	
 	Le boosting sur les arbres de décision/régression améliore très fortement leur précision, cependant on est beaucoup plus sensible au bruit (sur-apprentissage) que les techniques de moyennage.
 	
-	Pour que le boosting fonctionne, il faut que les modèles ne soit pas parfaits sur l'échantillon d'apprentissage. Pour les arbres, on peut soit les élaguer (pre-prune ou post-prune avec de la validation croisée), soit limiter le nombre de tests (et spliter d'abord sur les noeuds les plus impures). Il y a encore une fois un trade-off biais/variance qui dépend de la taille de l'arbre.
+	Pour que le boosting fonctionne, il faut que les modèles ne soient pas parfaits sur l'échantillon d'apprentissage. Pour les arbres, on peut soit les élaguer (pre-prune ou post-prune avec de la validation croisée), soit limiter le nombre de tests (et spliter d'abord sur les noeuds les plus impures). Il y a encore une fois un trade-off biais/variance qui dépend de la taille de l'arbre.
 	
 \section{Interprétabilité et efficacité}
 	
-Lorsque les méthodes ensemble sont combinées avec les arbres de décision, ils perdent de l'interprétabilité et de l'efficacité. En revanche, on les utilise toujours pour calculer l'importance des variables, en effectuant la moyenne sur tous les arbres. De plus, les méthodes ensemble peuvent être parallélisée et l'algorithme boosting utilise des petits arbres, ce qui fait que le coût en temps processeur n'est pas important.
+Lorsque les méthodes d'ensemble sont combinées avec les arbres de décision, ils perdent de l'interprétabilité et de l'efficacité. En revanche, on les utilise toujours pour calculer l'importance des variables, en effectuant la moyenne sur tous les arbres. De plus, les méthodes d'ensemble peuvent être parallélisée et l'algorithme boosting utilise des petits arbres, ce qui fait que le coût en temps processeur n'est pas important.
 		
 	\dessinS{91}{.5}
 	

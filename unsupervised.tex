@@ -55,7 +55,7 @@ Deux composantes sont considérées :
 		
 		$$\rho(x_1, x_2) = \frac{cov(x_1, x_2)}{\sigma_{x_1} \sigma_{x_2}} = \frac{\sum_{i = 1}^n (x_{1, i} - \overline{x}_1)(x_{2, i} - \overline{x}_2)}{\sqrt{\sum_{i = 1}^n (x_{1, i} - \overline{x}_1)^2} \sqrt{\sum_{i = 1}^n (x_{2, i} - \overline{x}_2)^2}}$$
 	
-		On a que $\rho \in [-1, 1]$, donc $1 - \rho \in [0, 2]$ : 0 signifie que les données sont fortement corrélées.
+		On a que $\rho \in [-1, 1]$, donc $(1 - \rho) \in [0, 2]$ : 0 signifie que les données sont fortement corrélées.
 	
 	\subsection{Clustering hiérarchique}
 	
@@ -274,7 +274,7 @@ On va chercher à diminuer la dimensionnalité de l'espace des données. On a pl
 
 \begin{itemize}
 	\item une sélection de features : on trouve un sous-ensemble des variables originales : $X_i' = X_j$ pour certains $j$
-	\item une extraction de fetures : on transforme l'espace original en un espace de plus petite dimension : $X_i' = f(X_1, \dots , X_p)$
+	\item une extraction de features : on transforme l'espace original en un espace de plus petite dimension : $X_i' = f(X_1, \dots , X_p)$
 	\item des méthodes linéaires : $f(X_1, \dots , X_p) = w_0 + w_1 X_1 + \dots + w_p X_p$
 \end{itemize}
 
@@ -282,7 +282,7 @@ Dans tous les cas, on doit pouvoir reconstruire la base de données d'origine à
 
 \begin{itemize}
 	\item réduire la dimensionnalité avant de faire passer les données dans d'autres méthodes
-	\item choisir les variables les plus utiles $\Leftrightarrow$ qui apportent le plus d'information
+	\item choisir les variables les plus utiles (qui apportent le plus d'information)
 	\item compresser les données
 	\item visualiser des données multidimensionnelles, pour identifier des groupes d'objets et identifier des \textit{outliers}.
 \end{itemize}
