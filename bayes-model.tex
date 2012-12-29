@@ -31,8 +31,12 @@ $$E_{LS}\{Err_{LS}\} = E_{LS}\{E_{x, y} \{L(y, \hat{f}_{LS}(x))\} \}$$
 	
 	L'estimation qui minimise l'erreur peut être calculée en prenant 
 	
-	$$\frac{\phi}{\phi y'} \ey{(y - y')^2} = 0 \leftrightarrow \ey{-2(y - y')} = 0$$
-	$$\leftrightarrow \ey{y} - \ey{y'} = 0 \leftrightarrow y' = \ey{y}$$
+	\begin{eqnarray*}
+	 & \frac{\phi}{\phi y'} \ey{(y - y')^2} & = 0 \\
+	\Leftrightarrow & \ey{-2(y - y')} & = 0 \\
+	\Leftrightarrow & \ey{y} - \ey{y'} & = 0 \\
+	\Leftrightarrow & y' & = \ey{y}
+	\end{eqnarray*}
 	
 	Dans un modèle de Bayes, l'estimation qui minimise l'erreur est $\ey{y}$, soit la moyenne sur toute la population.
 	
@@ -58,13 +62,18 @@ $$E_{LS}\{Err_{LS}\} = E_{LS}\{E_{x, y} \{L(y, \hat{f}_{LS}(x))\} \}$$
 	Si on ajoute et retire $\ey{y}$ et si on distribue le carré, on a
 	
 	\begin{eqnarray*}
-  	E & = & \els{\ey{(y - \ey{y} + \ey{y} - \yh)^2}} \\
+  	E & = & \els{\ey{(y \textcolor{red}{- \ey{y} + \ey{y}} - \yh)^2}} \\
   	 & = & \els{\ey{(y - \ey{y})^2}} \\
   	 & + & \els{\ey{(\ey{y} - \yh)^2}} \\
   	 & + & \els{\ey{2(y - \ey{y})(\ey{y} - \yh)}}
 	\end{eqnarray*}
 
-	Car on peut sortir $(\ey{y} - \yh)$, vu que ce sont des constantes.
+	Or,
+	
+	\begin{itemize}
+		\item $\els{\ey{(y - \ey{y})^2}} = \ey{(y - \ey{y})^2}$, car aucun terme ne dépend de $\LS$ (il n'y a que $\yh$ qui en dépend) ;
+		\item $\els{\ey{(\ey{y} - \yh)^2}} = \els{(\ey{y} - \yh)^2}$ car $\ey{y}$ et $\yh$ sont des constantes dans l'expression, on peut donc les sortir du $\ey{.}$ qui les englobe.
+	\end{itemize}
 	
 	\begin{eqnarray*}
   	E & = & \ey{(y - \ey{y})^2} \\
@@ -72,7 +81,7 @@ $$E_{LS}\{Err_{LS}\} = E_{LS}\{E_{x, y} \{L(y, \hat{f}_{LS}(x))\} \}$$
   	 & + & \els{2\ey{(y - \ey{y})(\ey{y} - \yh)}}
 	\end{eqnarray*}
 	
-	Car $\ey{y - \ey{y}} = \ey{y} - \underbrace{\ey{\ey{y}}}_{\ey{y}}$.
+	Or, $\ey{y - \ey{y}} = \ey{y} - \underbrace{\ey{\ey{y}}}_{\ey{y}}$, le troisième terme s'annule donc, ce qui conduit à
 	
 	$$E =\ey{(y - \ey{y})^2} + \els{(\ey{y} - \yh)^2}$$
 	
@@ -85,7 +94,7 @@ $$E_{LS}\{Err_{LS}\} = E_{LS}\{E_{x, y} \{L(y, \hat{f}_{LS}(x))\} \}$$
 	Si on suit le même raisonnement
 	
 	\begin{eqnarray*}
-  	\els{(\ey{y} - \yh)^2} & = & \els{(\ey{y} - \els{\yh} + \els{\yh} - \yh)^2} \\
+  	\els{(\ey{y} - \yh)^2} & = & \els{(\ey{y} \textcolor{red}{- \els{\yh} + \els{\yh}} - \yh)^2} \\
   	 & = & \els{(\ey{y} - \els{\yh})^2} \\
   	 & + & \els{(\els{\yh} - \yh)^2} \\
   	 & + & \els{2(\ey{y} - \els{\yh})(\els{\yh} - \els{\yh})} \\
