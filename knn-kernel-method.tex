@@ -6,7 +6,7 @@
 		
 	\dessin{11}
 		
-	Pour se faire, on trouve les $k$ plus proches voisins en utilisant une mesure de la distance :
+	Pour se faire, on trouve les $k$ plus proches voisins en utilisant une mesure de la distance (si $n$ est le nombre de features) :
 	
 	$$d_a(o, o') = (\ab(o) - \ab(o'))^T(\ab(o) - \ab(o')) = \sum_{i = 1}^n(a_i(o) - a_i(o'))^2$$
 	
@@ -23,8 +23,8 @@
 	Au niveau de la complexité :
 	
 	\begin{itemize}
-		\item pour l'apprentissage, il faut stocker $\LS$ : $n \times N$
-		\item pour les tests, il faut calculer $N$ distances, on a donc $N \times n$ calculs à effectuer
+		\item pour l'apprentissage, il faut stocker $\LS$ : $n \times N$ (pour $N$ objets de $n$ features) ;
+		\item pour les tests, il faut calculer $N$ distances, on a donc $N \times n$ calculs à effectuer.
 	\end{itemize}
 	
 	Au niveau de la précision, asymptotiquement ($\Leftrightarrow$ lorsque $N \rightarrow \infty$), on est sous-optimal (sauf si le problème est déterministe).
@@ -51,7 +51,7 @@
 			\item dans le cadre d'une classification, la classe la plus fréquente,
 			\item dans le cadre d'une régression, la valeur moyenne.
 			
-			$$\yh_{kNN}(o) = k^{-1} \sigma_{o' \in kNN_a(o, \LS)} y(o')$$
+			$$\yh_{kNN}(o) = k^{-1} \sum_{o' \in kNN_a(o, \LS)} y(o')$$
 		\end{itemize}
 		
 		$k$ permet de contrôler le sur-apprentissage. Asymptotiquement ($\Leftrightarrow \: N \rightarrow \infty$) : $k(N) \rightarrow \infty$ et $\frac{k(N)}{N} \rightarrow 0$, on a donc une solution optimale (l'erreur est minimisée).
@@ -91,7 +91,7 @@
 		\item[+] peut être adapté pour tout type de données, en changeant la mesure de la distance ;
 		\item[-] choisir une bonne mesure de la distance est un problème compliqué ;
 		\item[-] cet algorithme est très sensible à la présence de bruit ;
-		\item[-] lent.
+		\item[-] lent car il faut calculer $N$ distances par prédiction.
 	\end{itemize}
 	
 	
@@ -134,7 +134,7 @@
 		\item le centre de la classe 1 : $\cb_+ = N_+^{-1} \sum_{o' \in \LS_+} \ab(o')$
 		\item le centre de la classe 2 : $\cb_- = N_-^{-1} \sum_{o' \in \LS_-} \ab(o')$
 		\item classificateur : $\yh(o) = 1$ si $d(\cb_+, \ab(o)) < d(\cb_-, \ab(o))$
-		\item on définit $c = \frac{c_+ + c_)}{2}$ et $\Delta \cb = \cb_+ - \cb_-$
+		\item on définit $c = \frac{c_+ + c_-}{2}$ et $\Delta \cb = \cb_+ - \cb_-$
 	\end{itemize}
 	
 	On a alors

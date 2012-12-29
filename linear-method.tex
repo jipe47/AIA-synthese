@@ -32,20 +32,6 @@
 	
 	$$\yh(o) = w_0 + \sum_{i = 1}^n w_i a_i(o)$$
 	
-	Ce modèle doit être linéaire dans les paramètres, pas nécessairement dans les entrées originales. On a donc, si $\phi$ est une transformation,
-	
-	$$\yh(o) = w_0 + \sum_{i = 1}^n w_i \phi_i(\textbf{a}(o))$$
-	
-	Les entrées peuvent être
-	
-	\begin{itemize}
-		\item des mesures,
-		\item des transformations de mesures (log, racine carrée, etc),
-		\item des extensions, pas exemple $a_2(p) = a^2_1(o)$, et
-		\item des valeurs "dummies".
-	\end{itemize}
-	
-	
 	Si on pose $a_0(o) = 1 \: \forall o$, et si on dénote
 	
 	\begin{itemize}
@@ -59,7 +45,7 @@
 	
 	On a aussi le carré de l'erreur sur tous les objets de $LS$ (Total Square Error), avec $A' = (\ab'^1, \dots , \ab'^N)$
 	
-	$$TSE(LS, \wb') = \sum_{i = 1}^N (y(o_i) - \wb'^T\ab'(o_i))^2 = (\yb - A'^T\wb)^T(\yb - A'^T\wb')$$
+	$$TSE(LS, \wb') = \sum_{i = 1}^N (y(o_i) - \wb'^T\ab'(o_i))^2 = (\yb - A'^T\wb')^T(\yb - A'^T\wb')$$
 	
 	avec
 	
@@ -79,17 +65,17 @@
 		
 	$$\Delta_{w'} TSE(\LS, \wb') = -2 A' (\yb - A'^T\wb')$$
 		
-	Si on résout $\Delta_{w'} TSE(\LS, \wb'*) = 0$, on obtient
+	Si on résout $\Delta_{w'} TSE(\LS, \wb'^*) = 0$, on obtient
 		
 	$$\wb'^* = (A'A'^T)^{-1}A'\yb$$
 		
 	Il existe cependant plusieurs solutions optimales, ce n'est pas un problème à solution unique. Afin d'avoir une solution unique, on va introduire un terme $\lambda > 0$ de régulation : l'erreur devient
 	
-	$$\TSE(\LS, \wb') = (\yb - A'^T\wb)^T(\yb - A'^T\wb') + \lambda \wb^T\wb$$
+	$$\TSE_R(\LS, \wb') = (\yb - A'^T\wb)^T(\yb - A'^T\wb') + \lambda \wb'^T\wb'$$
 	
 	Le gradient devient
 	
-	$$\Delta_{w'} TSE(\LS, \lambda, \wb') = -2 A (\yb - A^T\wb') + 2 \lambda \wb$$
+	$$\Delta_{w'} TSE_R(\LS, \lambda, \wb') = -2 A (\yb - A^T\wb') + 2 \lambda \wb'$$
 	
 	La solution optimale devient alors
 	
@@ -226,8 +212,6 @@ Un réseau est composé d'au moins une couche d'entrée et d'une couche de sorti
 	
 Un noyau $K(., .)$ est une fonction qui exprime la similarité de deux objets à travers une valeur numérique. Pour tout noyau $K$ il existe une fonction $\phi$ telle que $K(o, o') = \phi(o) \times \phi(o')$.
 
-\remarque{Les slides 34 jusque 39/45 n'ont pas été traités.}
-
 Lorsqu'on utilise la régression au sens des moindres carrés avec des noyaux, on a un modèle de la forme
 
 $$\begin{pmatrix}
@@ -240,12 +224,12 @@ b \\
 \alpha_1 \\ 
 \vdots \\ 
 \alpha_N
-\end{pmatrix} = \begin{array}{c}
+\end{pmatrix} = \begin{pmatrix}
 0 \\ 
 y_1 \\ 
 \vdots \\ 
 y_N
-\end{array} $$
+\end{pmatrix} $$
 
 avec $K$ une matrice définie par $K_{i, j} = K(x_i, x_j)$. Cela revient à écrire
 
