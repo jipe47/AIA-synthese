@@ -108,13 +108,14 @@ $$\yhens(\xu) = \frac{1}{T} \sum_i \yh_i(\xu)$$
  
  $\star_1$ : on peut supprimer le $\eyx{.}$ car l'intérieur ne dépend pas de $y$. De plus, on a que $\yens = \frac{1}{T} \sum_i \yh_i(\xu)$
  
- $\star_2$ : $\yens(\xu)$ ne dépend pas de $i$, donc on peut faire rentrer la somme, et annuler le terme car $\sum_i \yh_i(\xu) = \yens(\xu)$.
+ $\star_2$ : $\yens(\xu)$ ne dépend pas de $i$, donc on peut faire rentrer la somme et annuler le terme car $\sum_i \yh_i(\xu) = \yens(\xu)$.
  
  Au final, on a
 
-$$\frac{1}{T}\sum_i \eyx{(y - \yh_i(\xu))^2} = \eyx{(y - \yhens(\xu))^2} + \frac{1}{T} \sum_i (y_i(\xu) - \yhens(\xu))^2$$
-
-$$\Leftrightarrow \eyx{(y - \yhens(\xu))^2} = \frac{1}{T}\sum_i \eyx{(y - \yh_i(\xu))^2} - \frac{1}{T} \sum_i (y_i(\xu) - \yhens(\xu))^2$$
+\begin{eqnarray*}
+& \frac{1}{T}\sum_i \eyx{(y - \yh_i(\xu))^2} & = \eyx{(y - \yhens(\xu))^2} + \frac{1}{T} \sum_i (y_i(\xu) - \yhens(\xu))^2 \\
+\Leftrightarrow & \underbrace{\eyx{(y - \yhens(\xu))^2}}_{\substack{\text{Erreur de la} \\ \text{méthode d'ensemble}}} & = \underbrace{\frac{1}{T}\sum_i \eyx{(y - \yh_i(\xu))^2}}_{\substack{\text{Moyenne des} \\ \text{erreurs des modèles}}} \underbrace{- \frac{1}{T} \sum_i (y_i(\xu) - \yhens(\xu))^2}_{\substack{\text{Gain de la} \\ \text{méthode d'ensemble}}}
+\end{eqnarray*}
 
 Le modèle moyen est donc toujours meilleur que les modèles individuels en moyenne. Ce n'est cependant pas vrai en classification.
 	
