@@ -223,8 +223,10 @@ Le choix d'une mesure de l'erreur ou de la qualité dépend fortement de l'appli
 	
 	On définit alors
 	
-	$$\text{Taux d'erreur (error rate) } = \frac{FP + FN}{N + P}$$
-	$$\text{Précision (accuracy) } = \frac{TP + TN}{N + P} = 1 - \text{ error rate}$$
+	\begin{eqnarray*}
+	\text{Taux d'erreur (error rate)} & = & \frac{FP + FN}{N + P} \\
+	\text{Précision (accuracy)} & = & \frac{TP + TN}{N + P} = 1 - \text{ error rate}
+	\end{eqnarray*}
 	
 	Le taux d'erreur est cependant limité : on n'a pas d'informations sur la distribution des erreurs sur les classes, et il est sensible aux changement dans la distribution des classes dans l'échantillon de test.
 	
@@ -232,9 +234,11 @@ Le choix d'une mesure de l'erreur ou de la qualité dépend fortement de l'appli
 	
 	Dans le cadre de diagnostiques médicaux, on utilise des mesures plus appropriées :
 	
-	$$\text{Sensibilité (sensitivity/recall) } = \frac{TP}{P}$$
-	$$\text{Spécificité (specificity) } = \frac{TN}{TN + FP} = 1 - \frac{FP}{N}$$
-	
+	\begin{eqnarray*}
+	\text{Sensibilité (sensitivity/recall)} & = & \frac{TP}{P} \\
+	\text{Spécificité (specificity)} & = & \frac{TN}{TN + FP} = 1 - \frac{FP}{N} = 1 - \text{ error rate}
+	\end{eqnarray*}
+		
 	La sensibilité permet de détecter le maximum de positif (plus elle est grande et plus on est sûr de détecter les cas positifs), tandis que la spécificité détecte le maximum de négatif. L'avantage de ces mesures est qu'elles ne dépendent pas de la proportion d'objets positifs ou négatifs.
 	
 	Ces mesures peuvent être portées sur une courbe ROC (Receiver operating characteristic). Si la sortie de l'algorithme d'apprentissage est un nombre (par exemple, la probabilité d'appartenir à une classe), on peut utiliser un seuil afin de régler la sensibilité et la spécificité.
@@ -252,10 +256,16 @@ Le choix d'une mesure de l'erreur ou de la qualité dépend fortement de l'appli
 	On utilise d'autre mesures :
 	
 	\begin{itemize}
-		\item la précision : $\frac{TP}{TP + FP}$, la proportion de bonnes prédictions parmi les prédictions positives
-		\item le rappel (recall) : $\frac{TP}{TP + FN}$, la proportion de positifs qui sont détectés
-		\item F-mesure = $\frac{2 * \text{précision} * \text{recall}}{\text{précision} + \text{recall}}$
+		\item la précision, la proportion de bonnes prédictions parmi les prédictions positives
+		\item le \textit{recall}, la proportion de positifs qui sont détectés
+		\item la \textit{f-mesure}
 	\end{itemize}
+	
+	\begin{eqnarray*}
+	\text{Précision} & = & \frac{TP}{TP + FP} \\
+	\text{Recall} & = & \frac{TP}{TP + FN} \\
+	\text{F-mesure} & = & \frac{2 * \text{précision} * \text{recall}}{\text{précision} + \text{recall}}
+	\end{eqnarray*}
 	
 	\dessinS{76}{.5}
 	
