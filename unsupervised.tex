@@ -1,6 +1,6 @@
 \chapter{Apprentissage non supervisé}
 
-Le but de l'apprentissage non supervisé est de trouver des irrégularités dans les données, sans se soucier de la relation entrée-sortie. On recherche ainsi les groupes de variables ou d'objets intéressants, et des dépendances entre les variables.
+Le but de l'apprentissage non supervisé est de trouver des irrégularités dans les données sans se soucier de la relation entrée-sortie. On recherche ainsi les groupes de variables ou d'objets intéressants et des dépendances entre les variables.
 
 Il existe trois grandes familles de problèmes :
 
@@ -28,11 +28,11 @@ Applications :
 
 \begin{itemize}
 	\item marketing : trouver des groupes de clients qui ont un comportement similaire, en se basant sur leurs caractéristiques et les achats précédents
-	\item biologie : classifier de la faune et la flore selon leurs caractéristiques
+	\item biologie : classifier la faune et la flore selon leurs caractéristiques
 	\item web : classification de documents (par exemple des articles de blog)
 \end{itemize}
 
-Deux composantes sont considérées :
+Deux composantes distinctes sont considérées :
 
 \begin{itemize}
 	\item la mesure de distance entre deux objets
@@ -51,7 +51,7 @@ Deux composantes sont considérées :
 		$$d_e(x_1, x_2) = \vert x_{1,0}-x_{2,0} \vert + \vert x_{1,1}-x_{2,1} \vert + \dots$$
 		
 		\subsubsection{Corrélation}
-		Elle mesure une différence en tenant compte des tendances. La distance entre deux vecteurs est $1 - \rho$, où $\rho$ est la corrélation de Pearson entre les deux vecteurs :
+		Elle mesure une différence en tenant compte des tendances. La distance entre deux vecteurs est $(1 - \rho)$, où $\rho$ est la corrélation de Pearson entre les deux vecteurs :
 		
 		$$\rho(x_1, x_2) = \frac{cov(x_1, x_2)}{\sigma_{x_1} \sigma_{x_2}} = \frac{\sum_{i = 1}^n (x_{1, i} - \overline{x}_1)(x_{2, i} - \overline{x}_2)}{\sqrt{\sum_{i = 1}^n (x_{1, i} - \overline{x}_1)^2} \sqrt{\sum_{i = 1}^n (x_{2, i} - \overline{x}_2)^2}}$$
 	
@@ -81,9 +81,16 @@ Deux composantes sont considérées :
 		\begin{itemize}
 			\item \textcolor{red}{Single linkage} : utiliser la plus petite distance entre deux objets du cluster. Cela a tendance à créer des clusters étalés.
 			
+			$$d_S(G, H) = \min_{i \in G, j \in H} d_{ij}$$
+			
 			\item \textcolor{blue}{Complete linkage} : utiliser la plus grande distance entre deux objets du cluster. Cela a tendance à créer des grappes.
 			
+			$$d_C(G, H) = \max_{i \in G, j \in H} d_{ij}$$
+			
 			\item \textcolor{green}{Average distance} : calculer la distance moyenne. On obtient un mix des deux autres mesures ; on a une sorte de distance entre les centres de masse.
+						
+			$$d_A(G, H) = \frac{1}{N_GN_H} \sum_{i \in G} \sum_{j \in H} d_{ij}$$
+			
 		\end{itemize}
 				
 		\dessin{44}
@@ -91,7 +98,7 @@ Deux composantes sont considérées :
 		
 		\subsubsection{Dendrogramme}
 		
-		Cela permet de visualiser le clustering hiérarchique et de déterminer visuellement le nombre de clusters.
+		Cela permet de visualiser le clustering hiérarchique et de déterminer visuellement le nombre de clusters. Les clusters qui sont unis sont combinés par une ligne. La hauteur d'une ligne est la distance entre les clusters.
 		
 		\dessin{46}
 		
@@ -147,7 +154,7 @@ Deux composantes sont considérées :
 	
 	On a deux degrés de liberté : les clusters des points et les centres de masse $m_k$.
 	
-	Si $C$ est fixé, les $m_k$ sont triviaux à calculer. Si les centres de masse sont fixés, on va chercher les plus proches voisins :
+	Si $C$ est fixé (donc si on sait à quel cluster appartient chaque point), les $m_k$ sont triviaux à calculer. Si les centres de masse sont fixés, on va chercher les plus proches voisins :
 	
 	$$C(i) = arg \max_k \Vert x_i - m_k \Vert^2$$
 	
@@ -267,6 +274,8 @@ Deux composantes sont considérées :
 	
 	Du clustering après une sélection de features supervisée doit être évitée, car on retrouvera toujours la classification, vu que c'est le critère utilisé pour sélectionner les variables.
 	
+	\dessinS{115}{.45}
+	
 
 \section{Réduction de dimensionnalité}
 
@@ -293,9 +302,9 @@ Dans tous les cas, on doit pouvoir reconstruire la base de données d'origine à
 	
 	On va chercher une direction (composante principale) afin, après projection des données, de maximiser l'étalement. On peut prendre une deuxième composante, afin de conserver plus d'informations, au cas où on aurait trop d'approximations. Chaque point est ainsi codé par sa distance par rapport à une origine.
 	
-	\dessin{78}
+	\dessinS{78}{.5}
 		
-	\dessin{79}
+	\dessinS{79}{.5}
 	
 	Cette méthode est très efficace quand il y a beaucoup de corrélation entre les variables (donc de la redondance).
 	
@@ -395,7 +404,7 @@ Dans tous les cas, on doit pouvoir reconstruire la base de données d'origine à
 	
 	\subsection{Etude des composantes}
 	
-	\dessin{81}
+	\dessinS{81}{.5}
 	
 	Le poids de chaque variable donne une idée de son importance dans une composante, et peut être utilisé pour de la sélection de features. Pour chaque composantes, on a une mesure du pourcentage de la variance des données initiales qu'elles contiennent.
 	
