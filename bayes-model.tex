@@ -259,14 +259,20 @@ $$E_{LS}\{Err_{LS}\} = E_{LS}\{E_{x, y} \{L(y, \hat{f}_{LS}(x))\} \}$$
 			\subsubsection{Réseaux de neurones}
 		
 			\dessinS{32}{.45}
+			
+			Plus on augmente le nombre de neurones dans la couche cachée et plus on obtient une fonction complexe. Du coup, on tient forcément plus compte de bruit ou d'outliers, ce qui entraîne une augmentation de la variance dans les prédictions. Le biais va diminuer pour la même raison ; on approxime de mieux en mieux la fonction.
 		
 			\subsubsection{Arbres de régression}
 			
 			\dessinS{33}{.45}
 			
+			Le raisonnement est similaire à celui des réseaux de neurones : plus l'arbre est profond et plus on tient compte du bruit de cas isolés dans les données. De ce fait, on aura une erreur de resubstitution (donc le biais) moindre, mais la variance dans les prédictions sera plus grande.
+			
 			\subsubsection{$k$-NN}
 			
 			\dessinS{34}{.45}
+			
+			Plus $k$ est grand et plus on considère des voisins éloignés. Il est logique que la variance diminue, car on considère une fraction de plus en plus grande des données dans le calcul de la prédiction, du coup les prédictions varient de moins en moins (si on considérait tous les points, la prédiction serait la même tout le temps). En revanche, vu qu'on considère des voisins qui ont peu de chance d'être similaires à l'entrée, on aura un plus grand biais.
 		
 		\subsection{Bruit}
 		
