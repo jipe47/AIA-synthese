@@ -114,8 +114,10 @@ $$\yhens(\xu) = \frac{1}{T} \sum_i \yh_i(\xu)$$
 
 \begin{eqnarray*}
 & \frac{1}{T}\sum_i \eyx{(y - \yh_i(\xu))^2} & = \eyx{(y - \yhens(\xu))^2} + \frac{1}{T} \sum_i (y_i(\xu) - \yhens(\xu))^2 \\
-\Leftrightarrow & \underbrace{\eyx{(y - \yhens(\xu))^2}}_{\substack{\text{Erreur de la} \\ \text{méthode d'ensemble}}} & = \underbrace{\frac{1}{T}\sum_i \eyx{(y - \yh_i(\xu))^2}}_{\substack{\text{Moyenne des} \\ \text{erreurs des modèles}}} \underbrace{- \frac{1}{T} \sum_i (y_i(\xu) - \yhens(\xu))^2}_{\substack{\text{Gain de la} \\ \text{méthode d'ensemble}}}
+\Leftrightarrow & \underbrace{\eyx{(y - \yhens(\xu))^2}}_{\substack{\text{Erreur de la} \\ \text{méthode d'ensemble}}} & = \underbrace{\frac{1}{T}\sum_i \eyx{(y - \yh_i(\xu))^2}}_{\substack{\text{Moyenne des} \\ \text{erreurs des modèles}}} - \underbrace{\frac{1}{T} \sum_i (y_i(\xu) - \yhens(\xu))^2}_{\substack{\text{Ambiguïté de la} \\ \text{méthode d'ensemble}}}
 \end{eqnarray*}
+
+L'ambiguïté mesure la variabilité des prédictions des modèles individuels. A moins que tous les modèles ne soient les mêmes, ce terme sera toujours positif. Du coup, plus les sous-modèles sont diversifiés et plus l'ambiguïté sera grande, donc plus la méthode d'ensemble sera efficace.
 
 Le modèle moyen est donc toujours meilleur que les modèles individuels en moyenne. Ce n'est cependant pas vrai en classification.
 	
@@ -255,7 +257,7 @@ En classification, $\yh(\xu)$ sera la classe majoritaire dans $\ens{\yh_1(\xu), 
 	
 Lorsque les méthodes d'ensemble sont combinées avec les arbres de décision, ils perdent de l'interprétabilité et de l'efficacité. En revanche, on les utilise toujours pour calculer l'importance des variables, en effectuant la moyenne sur tous les arbres. De plus, les méthodes d'ensemble peuvent être parallélisées et l'algorithme boosting utilise des petits arbres, ce qui fait que le coût en temps processeur n'est pas important.
 		
-	\dessinS{91}{.5}
+	\dessinS{91}{.45}
 	
 \section{Autres approches d'ensemble}
 

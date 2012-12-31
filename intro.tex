@@ -45,7 +45,7 @@ L'exploration de données se déroule en plusieurs étapes :
 		
 			En mode batch, les échantillons sont fournis et traités ensembles pour construire un modèle. Il n'est pas nécessaire de stocker le modèle mais bien ces exemples. C'est une approche classique pour l'exploitation de données (data mining).
 			
-		En mode online, les échantillons sont fournis et traités un à un pour mettre à jour un modèle. Ici, il faut stocker le modèle (et non les exemples). C'est une approche fortement utilisées pour les systèmes adaptatifs.
+		En mode online, les échantillons sont fournis et traités un à un pour mettre à jour un modèle. Ici, il faut stocker le modèle (et non les exemples). C'est une approche fortement utilisée pour les systèmes adaptatifs.
 		
 			On peut cependant passer facilement d'un mode à l'autre :
 		
@@ -56,11 +56,11 @@ L'exploration de données se déroule en plusieurs étapes :
 		
 		\subsection{Apprentissage supervisé}
 		
-		L'apprentissage supervisé consiste, à partir de la base de donnée (learning sample, échantillon de test), à trouver une fonction $f$ qui prend en entrée les variables du problème et qui approxime au mieux la sortie :
+		L'apprentissage supervisé consiste, à partir d'une base de donnée (learning sample, échantillon de test), à trouver une fonction $f$ qui prend en entrée les variables du problème et qui approxime au mieux la sortie :
 
 		$$\hat{Y} = f(X_1, X_2, X_3, X_4)$$
 
-		Plus formellement, l'apprentissage consiste, à partir d'un échantillon d'apprentissage $\ens{(x_i, y_i) \vert i = 1, \dots , N}$, avec $x_i \in \mathcal{X}$ et $y_i \in \mathcal{Y}$, à trouver une fonction $f : \mathcal{X} \rightarrow \mathcal{Y}$ qui minimise la fonction de probabilité de perte $l : \mathcal{Y} \times \mathcal{Y} \rightarrow \mathbb{R}$ sur la distribution jointe des paires d'entrées sorties : $E_{x, y} \ens{l(f(x), y)}$.
+		Plus formellement, l'apprentissage consiste, à partir d'un échantillon d'apprentissage $\ens{(x_i, y_i) \vert i = 1, \dots , N}$, avec $x_i \in \mathcal{X}$ et $y_i \in \mathcal{Y}$, à trouver une fonction $f : \mathcal{X} \rightarrow \mathcal{Y}$ qui minimise la fonction de probabilité de perte $l : \mathcal{Y} \times \mathcal{Y} \rightarrow \mathbb{R}$ sur la distribution jointe des paires d'entrées-sortie : $E_{x, y} \ens{l(f(x), y)}$.
 
 		Cette fonction de perte $l$ prend en entrée deux sorties $Y$ et retourne 1 si elles sont équivalentes, 0 sinon.
 
@@ -103,19 +103,29 @@ L'exploration de données se déroule en plusieurs étapes :
 				
 		Le but de l'apprentissage semi-supervisé est d'exploiter tout type de données, labellisées ou non, et de construire de meilleurs modèles pas qu'en utilisant seulement un seul de ces types.
 		
-		On utilise pour cela de l'auto-apprentissage (on labellise les données non labellisées avec un modèle entraîné sur les données labellisées) ou des algorithmes semi-supervisés (par exemple le semi-supervised SVM : on énumère tous les labels possibles pour les données non labelisées, on apprend une SVM pour chaque labeling, et on prend celui qui donne la plus grande marge).
+		On a un gain potentiel si on considère les données non labellisées.
+		
+		\dessin{116}
+		
+		L'apprentissage semi-supervisé se fait selon deux méthodes :
+		\begin{itemize}
+			\item de l'auto-apprentissage : on labellise les données non labellisées avec un modèle entraîné sur les données labellisées ;
+			\item des algorithmes semi-supervisés, par exemple le semi-supervised SVM : on énumère tous les labels possibles pour les données non labelisées, on apprend une SVM pour chaque labeling, et on prend celui qui donne la plus grande marge.
+		\end{itemize}
 			
 			\subsubsection{Exemples d'application}
 			
-			\begin{itemize}
-				\item ?
-			\end{itemize}
+			Les problèmes d'apprentissage naturels sont résolus avec des méthodes proches de l'apprentissage semi-supervisé.
+			
+			Par exemple, on peut apprendre à un enfant ce que sont un chien et un chat en lui présentant un chien et un chat d'une race particulière. Lorsqu'il sera confronté à des chiens d'autres races (des données non labellisées), il pourra également, il saura les différencier des chats d'autres races, même s'il ne les a jamais vu.
 		
 		\subsection{Apprentissage transductif}
 		
-		Ce type d'apprentissage est similaire à l'apprentissage supervisé, mais on a accès aux données de test dès le début, ce qu'on exploite plus. On ne veut pas simplement un modèle, on veut aussi calculer des prédictions pour des données non labellisées.
+		Ce type d'apprentissage est similaire à l'apprentissage supervisé, mais on a accès aux données de test dès le début, ce qu'on exploite plus. On ne veut pas un modèle, on veut calculer des prédictions pour des données non labellisées.
 		
 		Pour cela, on utilise de l'apprentissage semi-supervisé en utilisant les données à tester comme données non labellisées  pour obtenir un modèle, et on l'utilise pour faire des prédictions sur les données de test. Il existe également des algorithmes spécifiques qui évitent purement et simplement la construction d'un modèle.
+		
+		A l'opposé, l'apprentissage inductif a pour but de trouver la règle pour associer la sortie à des attributs.
 		
 		\subsection{Apprentissage par renforcement}
 		
@@ -159,6 +169,28 @@ L'exploration de données se déroule en plusieurs étapes :
 			
 			L'apprentissage par renforcement pourrait se réduire à de l'apprentissage supervisé si l'action optimale était connue pour chaque état. De plus, l'apprentissage supervisé est utilisé par l'apprentissage par renforcement pour modéliser les dynamiques du système et/ou les fonctions de récompense.
 			
+			\subsubsection{Algorithme : partitionning transduction}
+			
+			Consider the set of all points to be one large partition.
+While any partition P contains two points with conflicting labels:
+  Partition P into smaller partitions.
+For each partition P:
+  Assign the same label to all of the points in P.
+  
+  			On considère un ensemble contenant tous les points, sous une seule grande partition.
+  			
+  			\begin{itemize}
+  				\item tant qu'au moins une partition $P$ contient deux points de labels différents :
+  				\begin{itemize}
+  					\item partitionner $P$ en des plus petites partitions
+  				\end{itemize}
+  				
+  				\item pour chaque partition $P$ :
+  				\begin{itemize}
+  					\item assigner le même label à tous les points de $P$
+  				\end{itemize}
+  			\end{itemize}
+			
 			\subsubsection{Exemples d'application}
 			
 			\begin{itemize}
@@ -172,7 +204,7 @@ L'exploration de données se déroule en plusieurs étapes :
 		
 		Généralement, on a une configuration de type online : on choisit les $k$ meilleurs exemples non labellisés, on détermine leurs labels, on met à jour le modèle et on itère.
 		
-		Les algorithmes diffèrent dans la façon dont les exemples non labellisés sont choisis.
+		Les algorithmes diffèrent dans la façon dont les exemples non labellisés sont choisis. Des adaptations de SVMs existent et des perceptrons sont utilisés pour de l'apprentissage actif.
 		
 \section{Comparaison des méthodes d'apprentissage supervisé}
 	

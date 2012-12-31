@@ -187,26 +187,28 @@ $$E_{LS}\{Err_{LS}\} = E_{LS}\{E_{x, y} \{L(y, \hat{f}_{LS}(x))\} \}$$
 		
 		Voir slide 20.
 	
-	\section{Problème de régression (complet)}
+		\subsection{Problème de régression (complet)}
 	
-	On considère qu'on cherche une fonction $\yh(x)$ à plusieurs entrées, on a une moyenne sur tout l'espace d'entrée.
+		On considère qu'on cherche une fonction $\yh(x)$ à plusieurs entrées, on a une moyenne sur tout l'espace d'entrée.
 	
-	L'erreur devient
+		L'erreur devient
 	
-	$$E = \els{\exy{(y - \yh(\xu))^2}} = \ex{\els{\eyx{(y - \yh(\xu))^2}}}$$
-	$$= \ex{\varyx{y}} + \ex{\text{biais}^2(\xu)} + \ex{\varls{\yh(\xu)}}$$
+		\begin{eqnarray*}
+		E & = & \els{\exy{(y - \yh(\xu))^2}} = \ex{\els{\eyx{(y - \yh(\xu))^2}}} \\
+		 & = & \ex{\varyx{y}} + \ex{\text{biais}^2(\xu)} + \ex{\varls{\yh(\xu)}}
+		\end{eqnarray*}
 	
-	On a finalement l'erreur suivante :
+		On a finalement l'erreur suivante :
 	
-	$$\els{\eyx{(y - \yh(\xu))^2}} = \text{noise}(\xu) + \text{biais}^2(\xu) + \text{variance}(\xu)$$
+		$$\els{\eyx{(y - \yh(\xu))^2}} = \text{noise}(\xu) + \text{biais}^2(\xu) + \text{variance}(\xu)$$
 	
-	avec
+		avec
 	
-	\begin{itemize}
-		\item $\text{noise}(\xu) = \eyx{(y - h_B(\xu))^2}$, qui quantifie de combien $y$ varie de $h_B(\xu) = \eyx{y}$, le modèle de Bayes
-		\item $\text{biais}^2(\xu) = (h_B(\xu) - \els{\yh(\xu)})^2$, qui mesure l'erreur entre le modèle de Bayes et la moyenne du modèle
-		\item $\text{variance}(\xu) = \els{(\yh - \els{\yh(\xu)})^2}$, qui quantifie de combien $\yh(\xu)$ varie d'un échantillon d'apprentissage à un autre.
-	\end{itemize}
+		\begin{itemize}
+			\item $\text{noise}(\xu) = \eyx{(y - h_B(\xu))^2}$, qui quantifie de combien $y$ varie de $h_B(\xu) = \eyx{y}$, le modèle de Bayes
+			\item $\text{biais}^2(\xu) = (h_B(\xu) - \els{\yh(\xu)})^2$, qui mesure l'erreur entre le modèle de Bayes et la moyenne du modèle
+			\item $\text{variance}(\xu) = \els{(\yh - \els{\yh(\xu)})^2}$, qui quantifie de combien $\yh(\xu)$ varie d'un échantillon d'apprentissage à un autre.
+		\end{itemize}
 	
 		\subsection{Illustration}
 		
@@ -225,8 +227,14 @@ $$E_{LS}\{Err_{LS}\} = E_{LS}\{E_{x, y} \{L(y, \hat{f}_{LS}(x))\} \}$$
 		A noter que ne pas avoir de bruit ne signifie pas qu'il n'y a pas de variance, mais qu'il y en a moins.
 		
 		\dessinS{108}{.3}
-		
-		
+
+		\subsection{Lien entre biais/variance et sous/sur-apprentissage}
+	
+		Un modèle trop simple ne permet pas de capturer toute la complexité des données : on a un biais élevé.
+	
+		Un modèle trop complexe conduit à du sur-apprentissage : on a une variance élevée.
+	
+	
 	\section{Problèmes de classification}
 	
 	L'erreur moyenne de mauvaise classification est

@@ -9,18 +9,21 @@ On aimerait estimer les performances d'un modèle ayant appris sur un ensemble d
 
 
 \section{Erreurs}
+	\subsection{Erreur de resubstitution}
+	
+	L'erreur de re-substitution ($\LS$ error) est l'erreur obtenue en appliquant le modèle à l'échantillon d'apprentissage. Plus le modèle est complexe et plus cette erreur sera proche de 0.
+	
+	Cette erreur est un mauvais indicateur des performances d'un modèle car il est beaucoup trop optimiste.
+	
+	\subsection{Erreur de généralisation}
 
-On peut s'arranger pour qu'un modèle minimise l'erreur de re-substitution, ou l'erreur de généralisation.
+	L'erreur de généralisation est l'erreur obtenue sur la prédiction de nouvelles données. Si $\fh_{\LS}$ est la fonction apprise sur un échantillon $\LS$, l'erreur de généralisation est décrite par
 
-L'erreur de re-substitution ($\LS$ error) est l'erreur obtenue en appliquant le modèle à l'échantillon d'apprentissage. Plus le modèle est complexe et plus cette erreur sera proche de 0.
+	$$\exy\ens{L(y, \fh_{\LS}(x))}$$
 
-L'erreur de généralisation est l'erreur obtenue sur la prédiction de nouvelles données. Si $\fh_{\LS}$ est la fonction apprise sur un échantillon $\LS$, l'erreur de généralisation est décrite par
+	avec $L(., .)$ une fonction de perte qui mesure la différence entre les arguments.
 
-$$\exy\ens{L(y, \fh_{\LS}(x))}$$
-
-avec $L(., .)$ une fonction de perte qui mesure la différence entre les arguments.
-
-Cette erreur est à différencier de l'erreur de généralisation attendue (expected generalization error) sur un $\LS$ aléatoire de taille $N$, décrite par $E_{\LS} \ens{\text{Err}_{\LS}} = \els{\exy{L(y, \fh_{\LS}(x))}}$.
+	Cette erreur est à différencier de l'erreur de généralisation attendue (expected generalization error) sur un $\LS$ aléatoire de taille $N$, décrite par $E_{\LS} \ens{\text{Err}_{\LS}} = \els{\exy{L(y, \fh_{\LS}(x))}}$.
 
 \section{Méthodes d'évaluation}
 	\subsection{Méthode test set}
@@ -303,4 +306,3 @@ Le choix d'une mesure de l'erreur ou de la qualité dépend fortement de l'appli
 		\item algorithmiquement, une mesure dérivable est soumise à une optimisation de gradient (par exemple le taux d'erreur et l'erreur absolue moyenne ne sont pas dérivables, l'AUC n'est pas décomposable)
 		\item le sur-apprentissage : pour l'entraînement, la perte incorpore souvent un terme de pénalité pour la complexité du modèle (ce qui est inutile au moment du test). De plus, certaines mesures sont moins promptes au sur-apprentissage (par exemple la marge).
 	\end{itemize}
-	
