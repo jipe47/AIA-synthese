@@ -166,6 +166,6 @@ pip-log.txt
 *.aux
 *.idx
 *.log
-*.pdf
+#*.pdf
 *.toc
 *.synctex.gz
