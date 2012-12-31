@@ -23,7 +23,7 @@
 		\item[+] simple ;
 		\item[+] il existe des variantes rapides et scalables ;
 		\item[+] cette méthode offre des modèles interprétatifs, à travers des poids variables (magnitude et signe) ;
-		\item[-] parfois pas aussi précis que des autres méthodes (non linéaires).
+		\item[-] parfois pas aussi précis que d'autres méthodes (non linéaires).
 	\end{itemize}
 
 	\section{Ridge regression}
@@ -71,15 +71,15 @@
 		
 	Il existe cependant plusieurs solutions optimales, ce n'est pas un problème à solution unique. Afin d'avoir une solution unique, on va introduire un terme $\lambda > 0$ de régulation : l'erreur devient
 	
-	$$\TSE_R(\LS, \wb') = (\yb - A'^T\wb)^T(\yb - A'^T\wb') + \lambda \wb'^T\wb'$$
+	$$\TSE_R(\LS, \wb') = (\yb - A'^T\wb)^T(\yb - A'^T\wb') + \textcolor{red}{\lambda \wb'^T\wb'}$$
 	
 	Le gradient devient
 	
-	$$\Delta_{w'} TSE_R(\LS, \lambda, \wb') = -2 A (\yb - A^T\wb') + 2 \lambda \wb'$$
+	$$\Delta_{w'} TSE_R(\LS, \lambda, \wb') = -2 A (\yb - A^T\wb') + \textcolor{red}{2 \lambda \wb'}$$
 	
 	La solution optimale devient alors
 	
-	$$\wb^*(\lambda) = (A A^T + \lambda I)^{-1} A \yb$$
+	$$\wb^*(\lambda) = (A A^T + \textcolor{red}{\lambda I})^{-1} A \yb$$
 	
 	Cette solution est unique $\forall \lambda > 0$. Augmenter $\lambda$ réduit la variance, car on tient moins compte de $A'$ dans $TSE_R$. En revanche, on est moins optimal sur l'échantillon, il y a augmentation de l'erreur quadratique moyenne.
 		
@@ -214,6 +214,30 @@ Un noyau $K(., .)$ est une fonction qui exprime la similarité de deux objets à
 
 Lorsqu'on utilise la régression au sens des moindres carrés avec des noyaux, on a un modèle de la forme
 
+$$\yh(x) = w^T \phi(x) + b$$
+
+où on cherche $w$ et $b$ qui minimisent la fonction d'erreur
+
+$$\text{Err}(w, b) = \frac{1}{2} w^T w + \frac{1}{2} \sum_{k = 1}^N \underbrace{(y_k - (w^T \phi(x_k) + b))}_{e_k}^2$$
+
+C'est un problème d'optimisation sous contraintes. En passant par le lagrangien on a
+
+\begin{eqnarray*}
+w & = & \sum_{j = 1}^N \alpha_j \phi(x_j) \\
+\alpha_k & = & y e_k \\
+\sum_{k = 1}^N \alpha_k = 0
+\end{eqnarray*}
+
+On a donc
+
+$$e_k = y_k - (b + \sum_{j = 1}^N \alpha_j K(x_j, x_k))$$
+
+Si on réintroduit $e_k$ dans l'équation 2, on a
+
+$$\yh(x) = b + \sum_{i = 1}^N \alpha_i K(x, x_i)$$
+
+avec $K$ une matrice définie par $K_{i, j} = K(x_i, x_j)$. Cela revient à écrire
+
 $$\begin{pmatrix}
 0 & 1 & \dots & 1 \\ 
 1 &   &   &   \\ 
@@ -231,9 +255,6 @@ y_1 \\
 y_N
 \end{pmatrix} $$
 
-avec $K$ une matrice définie par $K_{i, j} = K(x_i, x_j)$. Cela revient à écrire
-
-$$\yh(x) = b + \sum_{i = 1}^N \alpha_i K(x, x_i)$$
 
 L'algorithme d'apprentissage va alors utiliser les valeurs de la matrice $K$ et $y_k$ pour déterminer les $\alpha_i$ et $b$. Au final, on n'a pas besoin de connaître $\phi(x)$.
 
