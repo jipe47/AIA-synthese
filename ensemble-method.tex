@@ -71,7 +71,7 @@ Il existe deux familles de méthode :
 	
 	La variance est généralement diminuée (grâce à la moyenne), mais le biais augmente un peu à cause de la perturbation.
 	
-	Exemples : le bagging perturbe l'échantillon d'apprentissage, les réseaux de neurones peuvent être initialisés avec des poids aléatoires, random forests
+	Exemples : le bagging perturbe l'échantillon d'apprentissage, les réseaux de neurones peuvent être initialisés avec des poids aléatoires, random forests.
 	
 \section{Random Forests}
 
@@ -84,7 +84,7 @@ Il existe deux familles de méthode :
 	
 	Il y a un trade-off biais/variance avec $k$ : plus $k$ est petit et plus la réduction est grande, mais plus haut sera le biais. Faire la moyenne casse le compromis biais/variance habituel.
 	
-	Le fait d'effectuer des choix aléatoires fait que l'arbre ne dépend pas de l'échantillon d'apprentissage
+	Le fait d'effectuer des choix aléatoires fait que l'arbre ne dépend pas de l'échantillon d'apprentissage.
 	
 	\dessinS{93}{.5}
 	
@@ -186,9 +186,11 @@ En classification, $\yh(\xu)$ sera la classe majoritaire dans $\ens{\yh_1(\xu), 
 	\begin{itemize}
 		\item pour $i = 1$ jusque $N$, on calcule les résiduels :
 		
-		$$r_i \leftarrow r_1 - \yh_{t - 1}(x_i)$$
+		$$r_i \leftarrow r_i - \yh_{t - 1}(x_i)$$
 		
 		\item on construit un arbre de régression sur l'échantillon d'apprentissage
+		
+		$$\ens{(x_i, r_i) : i = 1, \dots , N}$$
 	\end{itemize}
 	
 	On retourne ensuite le modèle définit par
