@@ -7,7 +7,6 @@ Cette méthode se base sur deux idées :
 	\item le "noyautage" de l'espace d'entrée.
 \end{enumerate}
 
-\dessin{14}
 Il faut trouver un classificateur linéaire. L'idée va être de trouver celui qui maximise la marge, c'est-à-dire la largeur du bord qui peut être étendue jusqu'à toucher une donnée.
 
 \dessinS{15}{.45}
@@ -21,8 +20,6 @@ Il faut trouver un classificateur linéaire. L'idée va être de trouver celui q
 	qui classifie $\LS$ correctement, c'est-à-dire qui minimise
 	
 	$$\sum_{k = 1}^N1(y_k \neq \yh(x_k))$$
-	
-	\dessin{62}
 	
 	\subsection{Hyperplan de marge maximale}
 	
@@ -38,7 +35,7 @@ Il faut trouver un classificateur linéaire. L'idée va être de trouver celui q
 	
 	$$Err(TS) < \bigoh (\frac{1}{\gamma})$$
 	
-	où $\gamma$ est la marge. Cependant, ces marges ne sont pas souvent atteintes. En pratique, une SVM fonctionne très bien.
+	où $\gamma$ est la marge. Cependant, ces marges ne sont pas souvent atteintes. En pratique, une SVM fonctionne très bien. A noter qu'on a toujours deux points qui sont les plus proches de la droite. C'est toujours le cas, sinon on pourrait encore augmenter la marge.
 	
 	Cet algorithme conduit à un problème d'optimisation convexe, où la solution peut être écrite uniquement en terme de produits scalaires.
 	
@@ -48,34 +45,34 @@ Il faut trouver un classificateur linéaire. L'idée va être de trouver celui q
 	
 	Tout point $x$ peut être écrit comme
 	
+	Supposons un hyperplan séparateur (ligne rouge) et un vecteur de support $x$. Ce dernier peut s'écrire	
+	
 	$$x = x_{\perp} + r \frac{w}{\Vert w \Vert}$$
 	
-	où $x_{\perp}$ est la projection de $x$ et $\vert r \vert$ la distance entre $x$ et la ligne. En multipliant les deux membres par $w^T$, on obtient
+	où $x_{\perp}$ est la projection de $x$ sur l'hyperplan et $\vert r \vert$ la distance entre $x$ et l'hyperplan. $r$ est donc la marge. En multipliant les deux membres par $w^T$, on obtient
 	
 	$$w^Tx = \underbrace{w^T x_{\perp}}_{\substack{-b\\ \text{car } x_{\perp} \text{ est sur} \\ \text{la droite}}} + r \frac{\overbrace{w^T w}^{\Vert w \Vert2}}{\Vert w \Vert}$$
 	$$\Leftrightarrow r = \frac{w^Tx + b}{\Vert w \Vert} = \frac{y(x)}{\Vert w \Vert}$$
 	
-	Le problème d'optimisation peut alors être écrit comme 
+	Le problème d'optimisation qui consiste à maximiser la marge peut alors être écrit comme 
 	
-	$$arg \max_{w, b} \ens{\frac{1}{\Vert w \Vert} \min_n [y_n . (w^T x_n + b)]}$$
+	$$arg \max_{w, b} \ens{\frac{1}{\Vert w \Vert} \min_{n} [y_n . (w^T x_n + b)]}$$
 		
-	La solution n'est pas unique vu que l'hyperplan est inchangé si  on multiplie $w$ et $b$ par une constante $c > 0$ (par exemple, $c (w^Tx + b) = 0$ est aussi une solution). Pour imposer une unicité, on choisit typiquement $\vert w^T x + b \vert = 1$ pour le point $x$ qui est le plus proche de la surface (vecteur de support).
+	La solution n'est pas unique vu que l'hyperplan est inchangé si  on multiplie $w$ et $b$ par une constante $c > 0$ (par exemple, $c (w^Tx + b) = 0$ est aussi une solution). 
 	
-	Le problème est alors équivalent à maximiser $\frac{1}{\Vert w \Vert}$ (ou à minimiser $\Vert w \Vert$) avec les contraintes
+	Pour imposer une unicité et pour normaliser, on choisit typiquement $\vert w^T x + b \vert = 1$ pour le point $x$ qui est le plus proche de la surface, autrement dit pour le vecteur de support. On a alors que pour tous les points $k = 1, \dots , N$ :
 	
-	$$y_k(w^T x_k + b) \geq 1, \: \forall k = 1, \dots , N$$
+	$$y_k(w^T x_k + w_0) \geq 1$$
 	
-	On a deux points qui sont les plus proches de la droite. C'est toujours le cas, sinon on pourrait encore augmenter la marge.
-	
-	Le problème de la SVM est équivalent à
-	
+	Grâce à cette normalisation, la marge vaut désormais $\frac{1}{\Vert w \Vert}$, qu'il faut maximiser (ou minimiser $\Vert w \Vert$) avec $N$ contraintes
+		
 	$$\min_{w, b} \varepsilon(w, b) = \frac{1}{2} \Vert w \Vert^2$$
 	
 	sujet aux $N$ contraintes
 	
 	$$y_k(w^T x_k + b) \geq 1, \: \forall k = 1, \dots , N$$
 
-	$\Vert w \Vert$ devient $\frac{1}{2} \Vert w \Vert^2$ par facilité. Le $\frac{1}{2}$ permet de simplifier lors de la dérivation. Il s'agit d'un problème de programmation quadratique. Il existe une solution seulement si les données sont linéairement séparables, sinon des inéquations ne seront pas satisfaites.
+	$\Vert w \Vert$ devient $\frac{1}{2} \Vert w \Vert^2$ par facilité (le $\frac{1}{2}$ permet de simplifier lors de la dérivation). Il s'agit d'un problème de programmation quadratique. Il existe une solution seulement si les données sont linéairement séparables, sinon des inéquations ne seront pas satisfaites.
 	
 	%Optimisation des contraintes : 10 $\rightarrow$ 17/45
 	
@@ -85,8 +82,10 @@ Il faut trouver un classificateur linéaire. L'idée va être de trouver celui q
 	
 	Si on dérive par rapport à $w$ et $b$, on obtient les conditions optimales suivantes :
 	
-	$$\frac{\vartheta \mathcal{L}}{\vartheta w} = 0 \rightarrow w = \sum_{j = 1}^N \alpha_j y_j x_j$$
-	$$\frac{\vartheta \mathcal{L}}{\vartheta b} = 0 \rightarrow \sum_{k = 1}^N \alpha_j y_j = 0$$
+	\begin{eqnarray*}
+	\frac{\vartheta \mathcal{L}}{\vartheta w} = 0 & \Leftrightarrow & \sum_{j = 1}^N \alpha_j y_j x_j = w \\
+	\frac{\vartheta \mathcal{L}}{\vartheta b} = 0 & \Leftrightarrow & \sum_{k = 1}^N \alpha_j y_j = 0
+	\end{eqnarray*}
 	
 	Après substitution dans le lagrangien, les conditions optimales conduisent au problème de maximisation dual :
 	
@@ -111,27 +110,31 @@ Il faut trouver un classificateur linéaire. L'idée va être de trouver celui q
 	
 	$$\alpha_k (y_k (w^T x_k + b) - 1) = 0, \: \forall k = 1, \dots , N$$
 	
-	$\alpha_k = 0$ si la contrainte est satisfaite comme une inégalité stricte $y_k (w^T x_k + b) > 1$, car c'est la façon de maximiser $\mathcal{L}$.
+	\begin{itemize}
+		\item $\alpha_k = 0$ si la contrainte est satisfaite comme une inégalité stricte $y_k (w^T x_k + b) > 1$, car c'est la façon de maximiser $\mathcal{L}$.
+		
+		\item $\alpha_k > 0$ si la contrainte est satisfaite comme une égalité $y_k(w^Tx_k + b) = 1$, auquel cas $x_k$ est le vecteur de support.
+	\end{itemize}
 	
-	$\alpha_k > 0$ si la contrainte est satisfaite comme une égalité $y_k(w^Tx_k + b) = 1$, auquel cas $x_k$ est le vecteur de support.
+	Les seuls points pour lesquelles les contraintes du lagrangie sont actives sont donc les points tels que $y_k (w^T x_k + b) = 1$, autrement dit les vecteurs de support : seuls eux définissent l'hyperplan optimal.
 	
 	Une fois que les valeurs optimales de $\alpha$ ont été déterminées, le modèle final peut être écrit comme
 	
 	$$\yh(x) = sgn(\sum_{i= 1}^N y_i \alpha_i x_i^T x + b)$$
 	
-	où les valeurs de $\alpha_k$ différentes de 0 (strictement positives) correspondent aux vecteurs de support. On a une sorte de KNN, mais on ne tient compte que des points sur la frontière, qui définissent les vecteurs de support.
+	où les valeurs de $\alpha_k$ différentes de 0 (strictement positives) correspondent aux vecteurs de support.
 	
-	$b$ est calculé en exploitant le fait que pour tout $\alpha_k > 0$, on a nécessairement $y_k(wTx_k + b) - 1 = 0$.
+	$b$ est calculé en exploitant le fait que pour tout $\alpha_k > 0$, on a nécessairement $y_k(w^Tx_k + b) - 1 = 0$.
 	
-	Borne pour le leave-one-out : 20/45
+	%Borne pour le leave-one-out : 20/45
 	
 	Avoir un petit ensemble de vecteurs de support est efficace, vu que seuls ces vecteurs $x_k$, leurs poids $\alpha_k$ et les labels de classe $y_k$ doivent être stockés pour classer de nouveaux exemples.
 	
-	Si un vecteur non-support $x'$ est retiré de l'échantillon d'apprentissage ou déplacé (en dehors de la région de la marge), la solution est inchangée.
+	Si un vecteur non-support $x'$ est retiré de l'échantillon d'apprentissage ou déplacé (en dehors de la région de la marge), la solution est inchangée. De même, elle ne change pas si on ajoute des points qui ne sont pas des vecteurs de support : les SVMs sont peu sensibles aux changements du $\LS$.
 	
 	La proportion de vecteurs de support dans l'ensemble d'échantillon donne une borne sur l'erreur du leave-one-out :
 	
-	$$\text{Err}_\text{loo} \leq \frac{\vert \ens{k \vert \alpha_k > 0} \vert}{N}$$
+	$$\text{Err}_\text{loo} \leq \frac{\vert \ens{k \vert \alpha_k > 0} \vert}{N} = \frac{\sharp \text{ vecteur de support}}{N}$$
 	
 	\subsection{Rappel du lagrangien}
 	
@@ -187,32 +190,38 @@ Il faut trouver un classificateur linéaire. L'idée va être de trouver celui q
 	
 	s.t.
 	
-	$$0 \leq \alpha_k \leq C, \: \forall k = 1, \dots , N \text{ (contrainte de boîte)}$$
+	$$0 \leq \alpha_k \leq \textcolor{red}{C}, \: \forall k = 1, \dots , N \text{ (contraintes de boîte)}$$
 	$$\sum_{i = 1}^N \alpha_i y_i = 0$$
 	
 	\dessinS{58}{.5}
 	
 	Les points dans la marge correspondent à des $\xi_i > 0$. La figure du milieu illustre du sur-apprentissage.
 	
-\section{Kernel trick}
-
-% Transparent passé : 24/45
+\section{Noyaux dans les SVMs}
 
 Les données d'apprentissage peuvent ne pas être linéairement séparables dans l'espace d'entrée. On considère alors un mapping non linéaire $\phi$ vers un nouvel espace de features.
 
 \dessin{59}
 
+L'hyperplan est donc défini par
+
+$$y(x) = w^T \phi(x) + w_0$$
+
 Le problème dual devient
 
 $$\max_\alpha \mathcal{W}(\alpha) = \sum_{k = 1}^N \alpha_k - \frac{1}{2} \sum_{i, j = 1}^N \alpha_i \alpha_j y_i y_j \phi(x_i)^T \phi(x_j)$$
 
-Plutôt que de définir le mapping $\phi$, on peut directement définir le produit scalaire $\phi^T(x) \phi(x')$, ce qui rend le mapping implicite.
+Plutôt que de définir le mapping $\phi$, on peut directement définir le produit scalaire $K(x, x') = \phi(x)^T \phi(x')$, ce qui rend le mapping implicite.
 
 Il est possible de caractériser mathématiquement les fonctions $K(x, x')$ définies sur des paires d'objets : cette fonction est appelée un noyau (positif ou de Mercer). Il peut cependant être difficile de trouver une mesure de la similarité entre $x$ et $x'$.
 
-Le kernel trick est que n'importe quel algorithme qui utilise les données avec uniquement des produits vectoriels peut se baser sur ce mapping implicite, en remplaçant $x^Tx'$ par $K(x, x')$. Dans le cas du SVM, on a
+L'hyperplan séparateur est alors défini par
 
-$$\yh(x) = sgn(\sum_{k = 1}^N y_k \alpha_k \phi(x_k)^T\phi(x) + b) = sgn(\sum_{k = 1}^N y_k \alpha_k K(x, x_k) + b)$$
+$$y(x) = \sum_{k = 1}^N \alpha_k y_k K(x_k, x) + w_0$$
+
+Le modèle devient alors
+
+$$\yh(x) = sgn(\sum_{k = 1}^N y_k \alpha_k K(x, x_k) + b)$$
 
 où les $\alpha_k$ peuvent être déterminés en résolvant le problème de maximisation quadratique 
 
@@ -226,6 +235,17 @@ et la contrainte d'égalité
 
 $$\sum_{i = 1}^N \alpha_i y_i = 0$$
 
+\section{Kernel trick}
+
+Le kernel trick est que n'importe quel algorithme qui utilise les données avec uniquement des produits scalaires peut se baser sur ce mapping implicite, en remplaçant $x^Tx'$ par $K(x, x')$. 
+
+Les avantages sont que
+
+\begin{itemize}
+	\item on a un calcul moins coûteux qu'un produit scalaire en grande dimension
+	\item la transformation $\phi$ est implicite
+\end{itemize}
+
 \section{Notion mathématique du noyau}
 
 Soit $U$ un ensemble d'objets non vide. Un noyau positif est une fonction $K(., .)$
@@ -236,7 +256,7 @@ telle que pour tout $N \in \mathbb{N}$ et pour tout $o_1, \dots , o_N \in U$, la
 
 $$K : K_{i, j} = K(o_i, o_j)$$
 
-est symétrique et définie semi-positive.
+est symétrique et définie semi-positive, c'est-à-dire que ses valeurs propres sont positives, ou bien que $z^T K z \geq 0, \: \forall z \in \mathbb{R}^n$.
 
 Pour tout noyau positif $K$ défini sur $U$, il existe un espace de produit scalaire $\mathcal{V}$ et une fonction $\phi(.) : U \rightarrow \mathcal{V}$ tel que
 
@@ -284,10 +304,10 @@ L'approche est modulaire : on découple l'algorithme de la représentation. Beau
 
 Les intérêts principaux des noyaux est que l'on peut travailler efficacement dans des espaces de dimension très élevée (potentiellement infinie) dès qu'un produit scalaire est facile à calculer, et qu'on peut appliquer des algorithmes classiques sur des données en toute généralité, sans être nécessairement vectorielles (par exemple construire un modèle linéaire sur un graphe).
 
-\section{Forces et faiblesses}
+\section{Forces et faiblesses des SVMs}
 
 \begin{itemize}
-	\item[+] les SVM sont motivées théoriquement
+	\item[+] les SVMs sont motivées théoriquement
 	\item[+] classificateur des plus efficaces
 	\item[+] implémentations efficaces pour des problèmes larges
 	\item[-] modèles en boîte noire
