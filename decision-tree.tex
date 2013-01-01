@@ -159,7 +159,7 @@ Afin de minimiser l'erreur de classification, on associe aux feuilles la classe 
 	
 	L'impureté d'un échantillon est définie par la variance de la sortie de cet échantillon :
 	
-	$$I(\LS) = \text{var}_{y \vert \LS} \ens{y} = \text{E}_{y \vert \LS}\ens{(y - \text{E}_{y \vert \LS}(y))^2}$$
+	$$I(\LS) = \text{var}_{y \vert \LS} \ens{y} = \text{E}_{y \vert \LS}\ens{(y - \text{E}_{y \vert \LS}\ens{y})^2}$$
 	
 	Le meilleur split est celui qui diminue le plus la variance :
 	
@@ -167,14 +167,14 @@ Afin de minimiser l'erreur de classification, on associe aux feuilles la classe 
 
 	L'élagage fonctionne de la même façon que pour les arbres de classification, si ce n'est que dans le post-pruning, c'est l'arbre qui minimise l'erreur quadratique sur $\VS$ qui est sélectionné.
 	
-	En pratique, le pruning est plus important en régression car les arbres complets sont beaucoup plus complexes ; souvent, tous les objets ont une sortie différence, du coup l'arbre complet a autant de feuilles qu'il y a d'objets dans l'échantillon d'apprentissage.
+	En pratique, le pruning est plus important en régression car les arbres complets sont beaucoup plus complexes ; souvent, tous les objets ont une sortie différente, du coup l'arbre complet a autant de feuilles qu'il y a d'objets dans l'échantillon d'apprentissage.
 
 
 \section{Interprétabilité et sélection d'attribut}
 	
 	Un arbre de décision est très interprétable, il peut être converti facilement en un ensemble de règles "si \dots alors".
 	
-	Si certains attributs ne sont pas nécessaire pour la classification, il n'apparaitront pas dans l'arbre (élagé/pruned). C'est important si la mesure de certaines variables est coûteuse.
+	Si certains attributs ne sont pas nécessaires pour la classification, il n'apparaitront pas dans l'arbre (élagé/pruned). C'est important si la mesure de certaines variables est coûteuse.
 	
 	Les arbres de décision sont souvent utilisés comme pre-processing pour d'autres algorithmes d'apprentissage, qui souffrent de variables inutiles.
 	
@@ -202,7 +202,7 @@ Afin de minimiser l'erreur de classification, on associe aux feuilles la classe 
 	
 	Le modèle pour un arbre $t$ est ainsi
 	
-	$$f_t(x) = \sum_{i = 1} y(x_i)^N K_t(x_i, x)$$
+	$$f_t(x) = \sum_{i = 1}^N y(x_i) K_t(x_i, x)$$
 	
 	Pour un ensemble $T$ de $M$ arbres, le noyau est égal à la moyenne du nombre de fois que les deux objets arrivent dans une même feuille :
 	
