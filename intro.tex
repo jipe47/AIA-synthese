@@ -56,7 +56,7 @@ L'exploration de données se déroule en plusieurs étapes :
 		
 		\subsection{Apprentissage supervisé}
 		
-		L'apprentissage supervisé consiste, à partir d'une base de donnée (learning sample, échantillon de test), à trouver une fonction $f$ qui prend en entrée les variables du problème et qui approxime au mieux la sortie :
+		L'apprentissage supervisé consiste, à partir d'une base de données (learning sample, échantillon de test), à trouver une fonction $f$ qui prend en entrée les variables du problème et qui approxime au mieux la sortie :
 
 		$$\hat{Y} = f(X_1, X_2, X_3, X_4)$$
 
@@ -117,7 +117,7 @@ L'exploration de données se déroule en plusieurs étapes :
 			
 			Les problèmes d'apprentissage naturels sont résolus avec des méthodes proches de l'apprentissage semi-supervisé.
 			
-			Par exemple, on peut apprendre à un enfant ce que sont un chien et un chat en lui présentant un chien et un chat d'une race particulière. Lorsqu'il sera confronté à des chiens d'autres races (des données non labellisées), il pourra également, il saura les différencier des chats d'autres races, même s'il ne les a jamais vu.
+			Par exemple, on peut apprendre à un enfant ce que sont un chien et un chat en lui présentant un chien et un chat d'une race particulière. Lorsqu'il sera confronté à des chiens d'autres races (des données non labellisées), il saura les différencier des chats d'autres races, même s'il ne les a jamais vu.
 		
 		\subsection{Apprentissage transductif}
 		
@@ -171,12 +171,6 @@ L'exploration de données se déroule en plusieurs étapes :
 			
 			\subsubsection{Algorithme : partitionning transduction}
 			
-			Consider the set of all points to be one large partition.
-While any partition P contains two points with conflicting labels:
-  Partition P into smaller partitions.
-For each partition P:
-  Assign the same label to all of the points in P.
-  
   			On considère un ensemble contenant tous les points, sous une seule grande partition.
   			
   			\begin{itemize}
