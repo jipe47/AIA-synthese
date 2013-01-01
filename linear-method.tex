@@ -35,15 +35,19 @@
 	Si on pose $a_0(o) = 1 \: \forall o$, et si on dénote
 	
 	\begin{itemize}
-		\item $\ab'(o_i) = (a_0(o_i), a_1(o_i), \dots , a_n(o_i))^T$, et
+		\item $\ab'(o) = (a_0(o), a_1(o), \dots , a_n(o))^T$, et
 		\item $\wb' = (w_0, w_1, \dots , w_n)^T$,
 	\end{itemize}
 	
-	On a le carré de l'erreur (Square Error) sur un échantillon $i$ :
+	On a 
+	
+	$$\yh(o) = \wb'^T\ab'(o)$$
+	
+	Le carré de l'erreur (Square Error) sur un échantillon $i$ peut s'écrire :
 	
 	$$SE(o_i, \wb') = (y(o_i) - \yh(o_i))^2 = (y(o_i) - \wb'^T\ab'(o_i))^2$$
 	
-	On a aussi le carré de l'erreur sur tous les objets de $LS$ (Total Square Error), avec $A' = (\ab'^1, \dots , \ab'^N)$
+	On a aussi le carré de l'erreur sur tous les objets de $LS$ (Total Square Error), avec $A' = (\ab'_1, \dots , \ab'_N)$
 	
 	$$TSE(LS, \wb') = \sum_{i = 1}^N (y(o_i) - \wb'^T\ab'(o_i))^2 = (\yb - A'^T\wb')^T(\yb - A'^T\wb')$$
 	
@@ -66,10 +70,15 @@
 	$$\Delta_{w'} TSE(\LS, \wb') = -2 A' (\yb - A'^T\wb')$$
 		
 	Si on résout $\Delta_{w'} TSE(\LS, \wb'^*) = 0$, on obtient
+	
+	\begin{eqnarray*}
+	& 0 = & -A'y + 2A'A'^T\wb' \\
+	\Leftrightarrow & 2A'y = & 2A'A'^T\wb' \\
+	\Leftrightarrow & \wb'^* = & (A'A'^T)^{-1}A'\yb
+	\end{eqnarray*}
 		
-	$$\wb'^* = (A'A'^T)^{-1}A'\yb$$
 		
-	Il existe cependant plusieurs solutions optimales, ce n'est pas un problème à solution unique. Afin d'avoir une solution unique, on va introduire un terme $\lambda > 0$ de régulation : l'erreur devient
+	Il existe cependant plusieurs solutions optimales, ce n'est pas un problème à solution unique. Afin d'avoir une solution unique, on va introduire un terme $\lambda > 0$ de régulation : l'erreur régulée vaut
 	
 	$$\TSE_R(\LS, \wb') = (\yb - A'^T\wb)^T(\yb - A'^T\wb') + \textcolor{red}{\lambda \wb'^T\wb'}$$
 	
@@ -124,12 +133,12 @@ La complexité est régulée par le taux d'apprentissage $\eta$ et le nombre d'i
 	
 	\begin{itemize}
 		\item on commence avec un vecteur de poids initial arbitraire, par exemple $\wb_0' = \textbf{0}$.
-		\item on considère chaque éléments de $\LS$ dans une séquence cyclique ou aléatoire
+		\item on considère chaque élément de $\LS$ dans une séquence cyclique ou aléatoire
 		
 		\item soit l'objet $o_i$ l'objet à l'étape $i$, $c(o_i)$ est sa classe et $\ab(o_i)$ son vecteur d'attributs
 		\item si l'objet $o_i$ est mal classé, on ajuste le vecteur de poids avec la règle suivante :
 		
-		$$\wb_{i + 1}' = \wb_i' + \eta_i (c(o_i) - g_i(\ab(o_i))) \ab'(o_i)$$
+		$$\wb_{i + 1}' = \wb_i' + \eta_i (c(o_i) - g(\ab(o_i))) \ab'(o_i)$$
 	\end{itemize}
 	
 	% Slide 9/21 : vue géométrique, que je n'arrive pas à comprendre
@@ -145,11 +154,20 @@ La complexité est régulée par le taux d'apprentissage $\eta$ et le nombre d'i
 	\begin{itemize}
 		\item une sigmoïde :
 		
-		$$sigmoid(x) = \frac{1}{1 + \exp{-x}}$$
+		$$sigmoid(x) = \frac{1}{1 + \exp(-x)}$$
+		
+		\dessin{118}
 		
 		\item une tangente hyperbolique :
 		
-		$$tanh(x) = \frac{\exp{x} - \exp{-x}}{\exp{x} + \exp{-x}}$$
+		$$tanh(x) = \frac{\exp(x) - \exp(-x)}{\exp(x) + \exp(-x)}$$
+		
+		\dessin{117}
+		
+		\item la fonction $sgn$
+		
+		\dessin{119}
+		
 	\end{itemize}
 	
 	\subsection{Descente de gradient}
@@ -164,7 +182,7 @@ La complexité est régulée par le taux d'apprentissage $\eta$ et le nombre d'i
 	
 	\subsection{Couche de perceptrons}
 	
-	On considère des perceptrons mis côté à côte. Ils ont tous en entrée tous les attributs des objets et fonctionnent de manière indépendante. Par exemple, on pourrait avoir le réseau suivant qui permet d'effectuer une classification parmi quatre classes ; chaque neurone code un bit de la classe.
+	On considère des perceptrons mis côte à côte. Ils ont tous en entrée tous les attributs des objets et fonctionnent de manière indépendante. Par exemple, on pourrait avoir le réseau suivant qui permet d'effectuer une classification parmi quatre classes ; chaque neurone code un bit de la classe.
 	
 	\dessin{112}
 	
@@ -206,6 +224,24 @@ Un réseau est composé d'au moins une couche d'entrée et d'une couche de sorti
 	\subsection{Apprentissage d'un réseau multi-couche}
 	
 	On utilise la propagation arrière des dérivations : on commence l'apprentissage à partir de la dernière couche pour revenir à la première. L'idée est de calculer les dérivations de la fonction d'erreur (au sens des moindres carrés) en partant de la couche de sortie jusqu'à la couche d'entrée, ce qui a pour but de réduire la fonction d'erreur en modifiant les poids.
+	
+	On a l'algorithme suivant pour un réseau de trois couches : % From http://en.wikipedia.org/wiki/Backpropagation
+	
+	\begin{itemize}
+		\item initialiser les poids du réseau (généralement aléatoirement)
+		\item tant que les exemples ne sont pas correctement classés ou qu'un critère n'est pas satisfait :
+		
+		\begin{itemize}
+			\item pour chaque exemple $e$ de l'ensemble d'apprentissage
+				\begin{itemize}
+					\item soit $o$ la sortie du réseau de neurone pour l'entrée $e$ (forward pass) et $t$ la "vrai" sortie de $e$ (donnée de l'ensemble d'apprentissage)
+					\item calculer l'erreur $t - o$
+					\item calculer les deltas pour tous les poids des synapses qui vont de la couche cachée à la couche de sortie (backward pass)
+					\item calculer les deltas pour tous les poids des synapses qui vont de la couche d'entrée vers la couche cachée (backward pass continued)
+					\item mettre à jour les poids du réseau
+				\end{itemize}
+		\end{itemize}
+	\end{itemize}
 	
 	
 \section{Méthodes de régression à base de noyaux}
