@@ -47,7 +47,7 @@
 	
 	$$SE(o_i, \wb') = (y(o_i) - \yh(o_i))^2 = (y(o_i) - \wb'^T\ab'(o_i))^2$$
 	
-	On a aussi le carré de l'erreur sur tous les objets de $LS$ (Total Square Error), avec $A' = (\ab'_1, \dots , \ab'_N)$
+	On a aussi le carré de l'erreur sur tous les objets de $LS$ (Total Square Error), avec $A' = (\ab'_1, \dots , \ab'_N)$ et $\yb = (y(o_1), y(o_2), \dots , y(o_N))$ :
 	
 	$$TSE(LS, \wb') = \sum_{i = 1}^N (y(o_i) - \wb'^T\ab'(o_i))^2 = (\yb - A'^T\wb')^T(\yb - A'^T\wb')$$
 	
@@ -69,12 +69,12 @@
 		
 	$$\Delta_{w'} TSE(\LS, \wb') = -2 A' (\yb - A'^T\wb')$$
 		
-	Si on résout $\Delta_{w'} TSE(\LS, \wb'^*) = 0$, on obtient
+	Si on résout $\Delta_{w'} TSE(\LS, \wb') = 0$, on obtient
 	
 	\begin{eqnarray*}
-	& 0 = & -A'y + 2A'A'^T\wb' \\
-	\Leftrightarrow & 2A'y = & 2A'A'^T\wb' \\
-	\Leftrightarrow & \wb'^* = & (A'A'^T)^{-1}A'\yb
+	& 0 = & -2A'\yb + 2A'A'^T\wb' \\
+	\Leftrightarrow & 2A'\yb = & 2A'A'^T\wb' \\
+	\Leftrightarrow & \wb' = & (A'A'^T)^{-1}A'\yb
 	\end{eqnarray*}
 		
 		
@@ -84,11 +84,11 @@
 	
 	Le gradient devient
 	
-	$$\Delta_{w'} TSE_R(\LS, \lambda, \wb') = -2 A (\yb - A^T\wb') + \textcolor{red}{2 \lambda \wb'}$$
+	$$\Delta_{w'} TSE_R(\LS, \lambda, \wb') = -2 A' (\yb - A'^T\wb') + \textcolor{red}{2 \lambda \wb'}$$
 	
 	La solution optimale devient alors
 	
-	$$\wb^*(\lambda) = (A A^T + \textcolor{red}{\lambda I})^{-1} A \yb$$
+	$$\wb^*(\lambda) = (A' A'^T + \textcolor{red}{\lambda I})^{-1} A \yb$$
 	
 	Cette solution est unique $\forall \lambda > 0$. Augmenter $\lambda$ réduit la variance, car on tient moins compte de $A'$ dans $TSE_R$. En revanche, on est moins optimal sur l'échantillon, il y a augmentation de l'erreur quadratique moyenne.
 		
