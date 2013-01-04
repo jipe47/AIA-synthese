@@ -98,23 +98,23 @@ Supposons que l'on ait $T$ modèles $\ens{\yh_1, \dots , \yh_T}$ et leur moyenne
 $$\yhens(\xu) = \frac{1}{T} \sum_i \yh_i(\xu)$$
 
 \begin{eqnarray*}
-\frac{1}{T} \sum_i \eyx{(y - \yh(\xu))^2} & = & \frac{1}{T} \sum_i \eyx{(y - \yens(\xu) + \yens(\xu) - \yh_i(\xu))^2} \\
-& = & \frac{1}{T} \sum_i \eyx{(y - \yens(\xu))^2} \\
-& + & \frac{1}{T} \sum_i \underbrace{\eyx{(\yens(\xu) - \yh_i(\xu))^2)}}_{\star_1} \\
-& + & \underbrace{\frac{1}{T} \sum_i \eyx{\underbrace{(y(\xu) - \yens(\xu))}_{\substack{\text{ne dépend} \\ \text{pas de }i}}
-\underbrace{(\yens(\xu) - \yh_i(\xu))}_{\substack{\text{ne dépend} \\
- \text{pas de } y}}}}_{\eyx{y - \yens(\xu)}\frac{1}{T} \sum_i (\yens(\xu) - \yh_i(\xu)) \star_2} \\
+\frac{1}{T} \sum_i \eyx{(y - \yh(\xu))^2} & = & \frac{1}{T} \sum_i \eyx{(y - \yhens(\xu) + \yhens(\xu) - \yh_i(\xu))^2} \\
+& = & \frac{1}{T} \sum_i \eyx{(y - \yhens(\xu))^2} \\
+& + & \frac{1}{T} \sum_i \underbrace{\eyx{(\yhens(\xu) - \yh_i(\xu))^2)}}_{\star_1} \\
+& + & \underbrace{\frac{1}{T} \sum_i \eyx{\underbrace{(y(\xu) - \yhens(\xu))}_{\substack{\text{ne dépend} \\ \text{pas de }i}}
+\underbrace{(\yhens(\xu) - \yh_i(\xu))}_{\substack{\text{ne dépend} \\
+ \text{pas de } y}}}}_{\eyx{y - \yhens(\xu)}\frac{1}{T} \sum_i (\yhens(\xu) - \yh_i(\xu)) \star_2} \\
 \end{eqnarray*}
  
- $\star_1$ : on peut supprimer le $\eyx{.}$ car l'intérieur ne dépend pas de $y$. De plus, on a que $\yens = \frac{1}{T} \sum_i \yh_i(\xu)$
+ $\star_1$ : on peut supprimer le $\eyx{.}$ car l'intérieur ne dépend pas de $y$. De plus, on a que $\yhens = \frac{1}{T} \sum_i \yh_i(\xu)$
  
- $\star_2$ : $\yens(\xu)$ ne dépend pas de $i$, donc on peut faire rentrer la somme et annuler le terme car $\sum_i \yh_i(\xu) = \yens(\xu)$.
+ $\star_2$ : $\yhens(\xu)$ ne dépend pas de $i$, donc on peut faire rentrer la somme et annuler le terme car $\sum_i \yh_i(\xu) = \yhens(\xu)$.
  
  Au final, on a
 
 \begin{eqnarray*}
-& \frac{1}{T}\sum_i \eyx{(y - \yh_i(\xu))^2} & = \eyx{(y - \yhens(\xu))^2} + \frac{1}{T} \sum_i (y_i(\xu) - \yhens(\xu))^2 \\
-\Leftrightarrow & \underbrace{\eyx{(y - \yhens(\xu))^2}}_{\substack{\text{Erreur de la} \\ \text{méthode d'ensemble}}} & = \underbrace{\frac{1}{T}\sum_i \eyx{(y - \yh_i(\xu))^2}}_{\substack{\text{Moyenne des} \\ \text{erreurs des modèles}}} - \underbrace{\frac{1}{T} \sum_i (y_i(\xu) - \yhens(\xu))^2}_{\substack{\text{Ambiguïté de la} \\ \text{méthode d'ensemble}}}
+& \frac{1}{T}\sum_i \eyx{(y - \yh_i(\xu))^2} & = \eyx{(y - \yhens(\xu))^2} + \frac{1}{T} \sum_i (\yh_i(\xu) - \yhens(\xu))^2 \\
+\Leftrightarrow & \underbrace{\eyx{(y - \yhens(\xu))^2}}_{\substack{\text{Erreur de la} \\ \text{méthode d'ensemble}}} & = \underbrace{\frac{1}{T}\sum_i \eyx{(y - \yh_i(\xu))^2}}_{\substack{\text{Moyenne des} \\ \text{erreurs des modèles}}} - \underbrace{\frac{1}{T} \sum_i (\yh_i(\xu) - \yhens(\xu))^2}_{\substack{\text{Ambiguïté de la} \\ \text{méthode d'ensemble}}}
 \end{eqnarray*}
 
 L'ambiguïté mesure la variabilité des prédictions des modèles individuels. A moins que tous les modèles ne soient les mêmes, ce terme sera toujours positif. Du coup, plus les sous-modèles sont diversifiés et plus l'ambiguïté sera grande, donc plus la méthode d'ensemble sera efficace.
