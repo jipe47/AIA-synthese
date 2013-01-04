@@ -72,7 +72,7 @@ Afin de minimiser l'erreur de classification, on associe aux feuilles la classe 
 			\item \textcolor{green}{entropie de Shannon} : $H(\LS) = \sum_j p_j \log_2 p_j$. Elle mesure l'incertitude, la surprise.
 			
 			\item \textcolor{blue}{indice de Gini} : $I(\LS) = \sum_j p_j(1 - p_j)$
-			\item \textcolor{red}{taux d'erreur de mal-classification} : $I(\LS) = 1 - \max_j p_j$. En pratique, ce n'est jamais utilisé car cette mesure ne fait pas la différence entre des situations très différentes (une classe pourrait être majoritaire mais dans des proportions différentes, 51\% et 90\% par exemple).
+			\item \textcolor{red}{taux d'erreur de mal-classification} : $I(\LS) = 1 - \max_j p_j$. En pratique, ce n'est jamais utilisé car cette mesure ne fait pas la différence entre des situations très différentes. Par exemple, une classification où on passe d'un score de 90\% à 100\% est bien plus intéressante qu'une classification qui passe de 50\% à 60\%, pourtant la différence d'impureté sera la même.
 			
 		\end{itemize}
 		
@@ -128,7 +128,7 @@ Afin de minimiser l'erreur de classification, on associe aux feuilles la classe 
 			\item reduced error pruning : à chaque étape, on retire le noeud qui diminue le plus l'erreur sur $\VS$
 			\item cost-complexity pruning : on définit un critère de coût-complexité :
 			
-			$$\text{Error}_{\GS}(T) + \alpha \text{ Complexity}(T)$$
+			$$\text{Error}_{\VS}(T) + \alpha \text{ Complexity}(T)$$
 			
 			On construit la séquence d'arbres qui minimise ce critère en augmentant $\alpha$.
 		\end{itemize}
@@ -229,4 +229,4 @@ Afin de minimiser l'erreur de classification, on associe aux feuilles la classe 
 	
 	Le modèle est alors
 	
-	$$f_T(x) = \sum_{i = 1}^N y(x_i) K_T(x_i, x)$$
+	$$f_T(x) = \frac{1}{N} \sum_{i = 1}^N y(x_i) K_T(x_i, x)$$
