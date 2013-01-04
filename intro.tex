@@ -84,7 +84,7 @@ L'exploration de données se déroule en plusieurs étapes :
 			\subsubsection{Exemples d'application}
 			
 			\begin{itemize}
-				\item classification de document sur le web
+				\item classification de documents sur le web
 				\item étude de tremblements de terre
 				\item classification de plantes et d'animaux selon leurs caractéristiques
 				\item marketing : trouver des groupes de clients avec des comportements similaires
@@ -127,6 +127,23 @@ L'exploration de données se déroule en plusieurs étapes :
 		
 		A l'opposé, l'apprentissage inductif a pour but de trouver la règle pour associer la sortie à des attributs.
 		
+		\subsubsection{Algorithme : partitionning transduction}
+			
+  		On considère un ensemble contenant tous les points, sous une seule grande partition.
+  			
+  		\begin{itemize}
+  			\item tant qu'au moins une partition $P$ contient deux points de labels différents :
+  			\begin{itemize}
+  				\item partitionner $P$ en des plus petites partitions
+  			\end{itemize}
+  				
+  			\item pour chaque partition $P$ :
+  			\begin{itemize}
+  				\item assigner le même label à tous les points de $P$
+  			\end{itemize}
+  		\end{itemize}
+
+		
 		\subsection{Apprentissage par renforcement}
 		
 		Il s'agit d'un apprentissage basé sur des interactions :
@@ -160,7 +177,7 @@ L'exploration de données se déroule en plusieurs étapes :
 			\hline 
 			  & Supervisé & Renforcement \\ 
 			\hline 
-			Mode batch & \pbox{7.5cm}{Apprentissage d'un mapping d'une entrée vers une sortie à partir d'observations de paires entrée-sortie} & \pbox{7.5cm}{Apprentissage d'un mapping d'un état vers une action à partir de tripets (état, action, récompense) observés} \\ 
+			Mode batch & \pbox{7.5cm}{Apprentissage d'un mapping d'une entrée vers une sortie à partir d'observations de paires entrée-sortie} & \pbox{7.5cm}{Apprentissage d'un mapping d'un état vers une action à partir de triplets (état, action, récompense) observés} \\ 
 			\hline 
 			Mode online & \pbox{7.5cm}{(Active learning) combinaison d'apprentissage supervisé et de sélection (online) d'instances pour labeller} & \pbox{7.5cm}{Combinaison d'apprentissage de politique avec un contrôle du système et avec la génération de trajectoires d'entraînement} \\ 
 			\hline 
@@ -168,23 +185,7 @@ L'exploration de données se déroule en plusieurs étapes :
 			\end{center}
 			
 			L'apprentissage par renforcement pourrait se réduire à de l'apprentissage supervisé si l'action optimale était connue pour chaque état. De plus, l'apprentissage supervisé est utilisé par l'apprentissage par renforcement pour modéliser les dynamiques du système et/ou les fonctions de récompense.
-			
-			\subsubsection{Algorithme : partitionning transduction}
-			
-  			On considère un ensemble contenant tous les points, sous une seule grande partition.
-  			
-  			\begin{itemize}
-  				\item tant qu'au moins une partition $P$ contient deux points de labels différents :
-  				\begin{itemize}
-  					\item partitionner $P$ en des plus petites partitions
-  				\end{itemize}
-  				
-  				\item pour chaque partition $P$ :
-  				\begin{itemize}
-  					\item assigner le même label à tous les points de $P$
-  				\end{itemize}
-  			\end{itemize}
-			
+						
 			\subsubsection{Exemples d'application}
 			
 			\begin{itemize}
@@ -194,7 +195,7 @@ L'exploration de données se déroule en plusieurs étapes :
 		
 		\subsection{Apprentissage actif}
 		
-		Pour des données non labellisées, on veut trouver (de manière adaptive) des exemples à labelliser afin d'apprendre un modèle précis. L'espoir est de réduire le nombre d'instances labellisées en utilisant l'apprentissage supervisé de type batch.
+		Pour des données non labellisées, on veut trouver (de manière adaptative) des exemples à labelliser afin d'apprendre un modèle précis. L'espoir est de réduire le nombre d'instances labellisées en utilisant l'apprentissage supervisé de type batch.
 		
 		Généralement, on a une configuration de type online : on choisit les $k$ meilleurs exemples non labellisés, on détermine leurs labels, on met à jour le modèle et on itère.
 		
