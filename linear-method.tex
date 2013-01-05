@@ -47,7 +47,7 @@
 	
 	$$SE(o_i, \wb') = (y(o_i) - \yh(o_i))^2 = (y(o_i) - \wb'^T\ab'(o_i))^2$$
 	
-	On a aussi le carré de l'erreur sur tous les objets de $LS$ (Total Square Error), avec $A' = (\ab'_1, \dots , \ab'_N)$ et $\yb = (y(o_1), y(o_2), \dots , y(o_N))$ :
+	On a aussi le carré de l'erreur sur tous les objets de $LS$ (Total Square Error), avec $A' = (\ab'^1, \dots , \ab'^N)$ et $\yb = (y(o_1), y(o_2), \dots , y(o_N))$ :
 	
 	$$TSE(LS, \wb') = \sum_{i = 1}^N (y(o_i) - \wb'^T\ab'(o_i))^2 = (\yb - A'^T\wb')^T(\yb - A'^T\wb')$$
 	
@@ -55,9 +55,9 @@
 	
 	$$A' = \begin{array}{c}\left. \underbrace{\begin{pmatrix}
 	1 & 1 & \dots & 1 \\ 
-	a_1(o_1) & a_2(o_1) & \dots & a_N(o_1) \\ 
+	a_1(o_1) & a_1(o_2) & \dots & a_1(o_N) \\ 
 	\vdots & \dots & \dots & \vdots \\ 
-	a_1(o_n) & a_2(o_n) & \dots & a_N(o_n)
+	a_n(o_1) & a_n(o_2) & \dots & a_n(o_N)
 	\end{pmatrix}}_{N}\right\} n + 1\end{array} $$
 	
 		
