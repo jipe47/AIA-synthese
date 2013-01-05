@@ -1,6 +1,6 @@
 \chapter{Méthodes d'ensemble}
 
-Pour une méthode donnée, il y a généralement un trade-off à faire entre le biais et la variance. Il est possible d'améliorer le modèle (par exemple avec du pruning pour les arbres de décision), mais ce n'est pas toujours possible. Le but des méthodes d'ensemble est de modifier de trade-off, quitte à perdre des features de la méthode initiale.
+Pour une méthode donnée, il y a généralement un trade-off à faire entre le biais et la variance. Il est possible d'améliorer le modèle (par exemple avec du pruning pour les arbres de décision), mais ce n'est pas toujours possible. Le but des méthodes d'ensemble est de modifier le trade-off, quitte à perdre des features de la méthode initiale.
 
 
 L'idée est de combiner plusieurs modèles construits avec un algorithme d'apprentissage afin d'améliorer la précision. Les arbres de décision sont souvent utilisés pour des raisons d'efficacité.
@@ -98,17 +98,20 @@ Supposons que l'on ait $T$ modèles $\ens{\yh_1, \dots , \yh_T}$ et leur moyenne
 $$\yhens(\xu) = \frac{1}{T} \sum_i \yh_i(\xu)$$
 
 \begin{eqnarray*}
-\frac{1}{T} \sum_i \eyx{(y - \yh(\xu))^2} & = & \frac{1}{T} \sum_i \eyx{(y - \yhens(\xu) + \yhens(\xu) - \yh_i(\xu))^2} \\
-& = & \frac{1}{T} \sum_i \eyx{(y - \yhens(\xu))^2} \\
-& + & \frac{1}{T} \sum_i \underbrace{\eyx{(\yhens(\xu) - \yh_i(\xu))^2)}}_{\star_1} \\
+\frac{1}{T} \sum_i \eyx{(y - \yh_i(\xu))^2} & = & \frac{1}{T} \sum_i \eyx{(y - \yhens(\xu) + \yhens(\xu) - \yh_i(\xu))^2} \\
+& = & \underbrace{\frac{1}{T} \sum_i \eyx{(y - \yhens(\xu))^2}}_{\star_1} \\
+& + & \frac{1}{T} \sum_i \underbrace{\eyx{(\yhens(\xu) - \yh_i(\xu))^2)}}_{\star_2} \\
 & + & \underbrace{\frac{1}{T} \sum_i \eyx{\underbrace{(y(\xu) - \yhens(\xu))}_{\substack{\text{ne dépend} \\ \text{pas de }i}}
 \underbrace{(\yhens(\xu) - \yh_i(\xu))}_{\substack{\text{ne dépend} \\
- \text{pas de } y}}}}_{\eyx{y - \yhens(\xu)}\frac{1}{T} \sum_i (\yhens(\xu) - \yh_i(\xu)) \star_2} \\
+ \text{pas de } y}}}}_{\eyx{y - \yhens(\xu)}\frac{1}{T} \sum_i (\yhens(\xu) - \yh_i(\xu)) \star_3} \\
 \end{eqnarray*}
- 
- $\star_1$ : on peut supprimer la somme car l'intérieur ne dépend pas de $y$.
- $\star_2$ : $\yhens(\xu)$ ne dépend pas de $i$, donc on peut faire rentrer la somme et annuler le terme car $\sum_i \yh_i(\xu) = \yhens(\xu)$.
- 
+
+\begin{itemize}
+	\item[$\star_1$] on peut supprimer la somme car l'intérieur ne dépend pas de $i$. Cela permet de simplifier le $\frac{1}{T}$.
+	\item[$\star_2$] on peut supprimer $\eyx{.}$ car l'intérieur ne dépend pas de $y$.
+	\item[$\star_3$] $\yhens(\xu)$ ne dépend pas de $i$, donc on peut faire rentrer la somme et annuler le terme car $\frac{1}{T} \sum_i \yh_i(\xu) = \yhens(\xu)$.
+\end{itemize}
+  
  Au final, on a
 
 \begin{eqnarray*}
