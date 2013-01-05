@@ -103,18 +103,17 @@ $$\yhens(\xu) = \frac{1}{T} \sum_i \yh_i(\xu)$$
 & + & \frac{1}{T} \sum_i \underbrace{\eyx{(\yhens(\xu) - \yh_i(\xu))^2)}}_{\star_1} \\
 & + & \underbrace{\frac{1}{T} \sum_i \eyx{\underbrace{(y(\xu) - \yhens(\xu))}_{\substack{\text{ne dépend} \\ \text{pas de }i}}
 \underbrace{(\yhens(\xu) - \yh_i(\xu))}_{\substack{\text{ne dépend} \\
- \text{pas de } y}}}}_{\eyx{y - \yhens(\xu)}\frac{1}{T} \sum_i (\yens(\xu) - \yh_i(\xu)) \star_2} \\
+ \text{pas de } y}}}}_{\eyx{y - \yhens(\xu)}\frac{1}{T} \sum_i (\yhens(\xu) - \yh_i(\xu)) \star_2} \\
 \end{eqnarray*}
  
  $\star_1$ : on peut supprimer la somme car l'intérieur ne dépend pas de $y$.
- 
- $\star_2$ : $\yens(\xu)$ ne dépend pas de $i$, donc on peut faire rentrer la somme et annuler le terme car $\sum_i \yh_i(\xu) = \yens(\xu)$.
+ $\star_2$ : $\yhens(\xu)$ ne dépend pas de $i$, donc on peut faire rentrer la somme et annuler le terme car $\sum_i \yh_i(\xu) = \yhens(\xu)$.
  
  Au final, on a
 
 \begin{eqnarray*}
-& \frac{1}{T}\sum_i \eyx{(y - \yh_i(\xu))^2} & = \eyx{(y - \yhens(\xu))^2} + \frac{1}{T} \sum_i (y_i(\xu) - \yhens(\xu))^2 \\
-\Leftrightarrow & \underbrace{\eyx{(y - \yhens(\xu))^2}}_{\substack{\text{Erreur de la} \\ \text{méthode d'ensemble}}} & = \underbrace{\frac{1}{T}\sum_i \eyx{(y - \yh_i(\xu))^2}}_{\substack{\text{Moyenne des} \\ \text{erreurs des modèles}}} - \underbrace{\frac{1}{T} \sum_i (y_i(\xu) - \yhens(\xu))^2}_{\substack{\text{Ambiguïté de la} \\ \text{méthode d'ensemble}}}
+& \frac{1}{T}\sum_i \eyx{(y - \yh_i(\xu))^2} & = \eyx{(y - \yhens(\xu))^2} + \frac{1}{T} \sum_i (\yh_i(\xu) - \yhens(\xu))^2 \\
+\Leftrightarrow & \underbrace{\eyx{(y - \yhens(\xu))^2}}_{\substack{\text{Erreur de la} \\ \text{méthode d'ensemble}}} & = \underbrace{\frac{1}{T}\sum_i \eyx{(y - \yh_i(\xu))^2}}_{\substack{\text{Moyenne des} \\ \text{erreurs des modèles}}} - \underbrace{\frac{1}{T} \sum_i (\yh_i(\xu) - \yhens(\xu))^2}_{\substack{\text{Ambiguïté de la} \\ \text{méthode d'ensemble}}}
 \end{eqnarray*}
 
 L'ambiguïté mesure la variabilité des prédictions des modèles individuels. A moins que tous les modèles ne soient les mêmes, ce terme sera toujours positif. Du coup, plus les sous-modèles sont diversifiés et plus l'ambiguïté sera grande, donc plus la méthode d'ensemble sera efficace.
