@@ -252,25 +252,39 @@ Lorsqu'on utilise la régression au sens des moindres carrés avec des noyaux, o
 
 $$\yh(x) = w^T \phi(x) + b$$
 
-où on cherche $w$ et $b$ qui minimisent la fonction d'erreur
+où on cherche $w$ et $b$ qui minimisent la fonction d'erreur (avec $\gamma > 0$)
 
-$$\text{Err}(w, b) = \frac{1}{2} w^T w + \frac{1}{2} \sum_{k = 1}^N \underbrace{(y_k - (w^T \phi(x_k) + b))^2}_{e_k}$$
+$$\text{Err}(w, b) = \frac{1}{2} w^T w + \frac{1}{2} \gamma \sum_{k = 1}^N (y_k - (w^T \phi(x_k) + b))^2$$
 
-C'est un problème d'optimisation sous contraintes. En passant par le lagrangien on a
+C'est un problème d'optimisation sans contraintes. On peut le reformuler avec des contraintes :
+
+$$\min_{w, b, e} \epsilon(w,b,e) = \frac{1}{2} w^T w + \frac{1}{2} \gamma \sum_{k = 1}^N e_k^2$$
+
+sujet au $N$ contraintes d'égalité
+
+$$e_k = (y_k - (w^T \phi(x_k) + b), \: k = 1, \dots , N$$
+
+Le lagrangien est
+
+$$\mathcal{L}(w, b, e, \alpha) = \frac{1}{2} w^T w + \frac{1}{2} \gamma \sum_{k = 1}^N e_k^2 - \sum_{k = 1}^N \alpha_k (w^T \phi(x_k) + b + e_k - y_k)$$
+
+En annulant toutes les dérivés, on obtient
 
 \begin{eqnarray*}
-w & = & \sum_{j = 1}^N \alpha_j \phi(x_j) \\
-\alpha_k & = & y e_k \\
-\sum_{k = 1}^N \alpha_k & = & 0
+\frac{\vartheta \mathcal{L}}{\vartheta w} & \Leftrightarrow & w = \sum_{j = 1}^N \alpha_j \phi(x_j) \\
+\frac{\vartheta \mathcal{L}}{\vartheta b} & \Leftrightarrow & \sum_{k = 1}^N \alpha_k = 0 \\
+\frac{\vartheta \mathcal{L}}{\vartheta e_k} & \Leftrightarrow & \alpha_k = \gamma e_k , \: k = 1, \dots , N\\
+\frac{\vartheta \mathcal{L}}{\vartheta \alpha_k} & \Leftrightarrow &  w^T \phi(x_k) + b + e_k - y_k = 0, \: k = 1, \dots , N
 \end{eqnarray*}
 
-On a donc
+En substituant $w$ de la première équation dans la dernière, on peut exprimer $e_k$ :
 
-$$e_k = y_k - (b + \sum_{j = 1}^N \alpha_j K(x_j, x_k))$$
+$$e_k = y_k - b - \sum_{j = 1}^N \alpha_j \phi(x_j)^T\phi(x_k) = y_k - b - \sum_{j = 1}^N \alpha_j K(x_j, x_k)$$
 
-Si on réintroduit $e_k$ dans l'équation 2, on a
+On peut alors éliminer $e_k$ de la troisième équation. On doit alors résoudre les équations suivantes pour déterminer $\alpha_1, \dots , \alpha_N$ et $b$ :
 
-$$\yh(x) = b + \sum_{i = 1}^N \alpha_i K(x, x_i)$$
+$$\sum_{k = 1}^N \alpha_N = 0$$
+$$\alpha_k = \gamma e_k = \gamma (y_k - b - \sum_{j = 1}^N \alpha_j K(x_j, x_k))$$
 
 avec $K$ une matrice définie par $K_{i, j} = K(x_i, x_j)$. Cela revient à écrire
 
@@ -291,15 +305,13 @@ y_1 \\
 y_N
 \end{pmatrix} $$
 
+Le modèle sera donc
+
+$$\yh(x) = b + \sum_{i = 1}^N \alpha_i K(x, x_i)$$
 
 L'algorithme d'apprentissage va alors utiliser les valeurs de la matrice $K$ et $y_k$ pour déterminer les $\alpha_i$ et $b$. Au final, on n'a pas besoin de connaître $\phi(x)$.
 
-Au niveau de la complexité, on a 
-
-\begin{itemize}
-	\item $N^3$ opérations pour l'apprentissage
-	\item $N$ opérations pour la prédiction
-\end{itemize}
+Au niveau de la complexité, on a $N^3$ opérations pour l'apprentissage et $N$ opérations pour la prédiction.
 
 	
 
