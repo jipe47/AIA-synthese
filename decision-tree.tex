@@ -44,7 +44,7 @@ Afin de minimiser l'erreur de classification, on associe aux feuilles la classe 
 	
 	\subsection{Recherche du meilleur attribut}
 	
-	Pour trouver le meilleur attribut, il faut définir un score afin d'évaluer les séparations possibles. Ce score devra favoriser la séparation en classe, afin de réduire la profondeur de l'arbre.
+	Pour trouver le meilleur attribut, il faut définir un score afin d'évaluer les séparations possibles. Ce score devra favoriser la séparation en classes, afin de réduire la profondeur de l'arbre.
 	
 	\dessin{17}
 	
@@ -72,7 +72,7 @@ Afin de minimiser l'erreur de classification, on associe aux feuilles la classe 
 			\item \textcolor{green}{entropie de Shannon} : $H(\LS) = \sum_j p_j \log_2 p_j$. Elle mesure l'incertitude, la surprise.
 			
 			\item \textcolor{blue}{indice de Gini} : $I(\LS) = \sum_j p_j(1 - p_j)$
-			\item \textcolor{red}{taux d'erreur de mal-classification} : $I(\LS) = 1 - \max_j p_j$. En pratique, ce n'est jamais utilisé car cette mesure ne fait pas la différence entre des situations très différentes (une classe pourrait être majoritaire mais dans des proportions différents, 50\% et 90\% par exemple).
+			\item \textcolor{red}{taux d'erreur de mal-classification} : $I(\LS) = 1 - \max_j p_j$. En pratique, ce n'est jamais utilisé car cette mesure ne fait pas la différence entre des situations très différentes. Par exemple, une classification où on passe d'un score de 90\% à 100\% est bien plus intéressante qu'une classification qui passe de 50\% à 60\%, pourtant la différence d'impureté sera la même.
 			
 		\end{itemize}
 		
@@ -128,7 +128,7 @@ Afin de minimiser l'erreur de classification, on associe aux feuilles la classe 
 			\item reduced error pruning : à chaque étape, on retire le noeud qui diminue le plus l'erreur sur $\VS$
 			\item cost-complexity pruning : on définit un critère de coût-complexité :
 			
-			$$\text{Error}_{\GS}(T) + \alpha \text{ Complexity}(T)$$
+			$$\text{Error}_{\VS}(T) + \alpha \text{ Complexity}(T)$$
 			
 			On construit la séquence d'arbres qui minimise ce critère en augmentant $\alpha$.
 		\end{itemize}
@@ -141,10 +141,29 @@ Afin de minimiser l'erreur de classification, on associe aux feuilles la classe 
 	Deux solutions :
 	\begin{itemize}
 		\item pré-discrétiser, assigner des valeurs symboliques à des ranges (par exemple "froid" si la température est inférieure à 70$\,^{\circ}$F, "normal" si entre 70 et 75$\,^{\circ}$F, "chaud" si plus de 75$\,^{\circ}$F) ;
-		\item discrétiser durant l'opération de construction de l'arbre.
-		
+		\item discrétiser durant l'opération de construction de l'arbre, en prenant le seuil qui maximise l'impureté.
 		\dessin{20}
 	\end{itemize}
+	
+	\subsection{Attributs à plusieurs valeurs}
+	
+	Effectuer un split sur un attribut à plusieurs valeur n'est pas une bonne chose car il y a trop de fragmentation et la réduction d'impureté est souvent trop grande. Dès lors, on peut
+	
+	\begin{itemize}
+		\item n'autoriser que les splits binaires
+		\item dans le critère de choix du meilleur attribut, pénaliser les valeurs multiples
+	\end{itemize}
+	
+	\subsection{Valeurs d'attribut manquantes}
+	
+	On peut soit
+	\begin{itemize}
+		\item assigner la valeur la plus fréquente dans $\LS$
+		\item assigner la valeur la plus fréquente dans l'arbre
+		\item assigner une probabilité à chaque valeur possible
+	\end{itemize}
+	
+
 	
 	Slides 38 $\rightarrow$ 44 : variables numériques, attributs à plusieurs valeurs, valeurs d'attribut manquantes.
 	
@@ -210,4 +229,4 @@ Afin de minimiser l'erreur de classification, on associe aux feuilles la classe 
 	
 	Le modèle est alors
 	
-	$$f_T(x) = \sum_{i = 1}^N y(x_i) K_T(x_i, x)$$
+	$$f_T(x) = \frac{1}{N} \sum_{i = 1}^N y(x_i) K_T(x_i, x)$$

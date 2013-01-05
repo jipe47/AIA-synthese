@@ -21,11 +21,18 @@ On aimerait estimer les performances d'un modèle ayant appris sur un ensemble d
 
 	$$\exy\ens{L(y, \fh_{\LS}(x))}$$
 
-	avec $L(., .)$ une fonction de perte qui mesure la différence entre les arguments.
+	avec $L(., .)$ une fonction de perte qui mesure la différence entre les arguments. L'erreur de généralisation est utilisée pour l'évaluation et la sélection de modèle.
 
-	Cette erreur est à différencier de l'erreur de généralisation attendue (expected generalization error) sur un $\LS$ aléatoire de taille $N$, décrite par $E_{\LS} \ens{\text{Err}_{\LS}} = \els{\exy{L(y, \fh_{\LS}(x))}}$.
+	Cette erreur est à différencier de l'erreur de généralisation attendue (expected generalization error) sur un $\LS$ aléatoire de taille $N$, décrite par 
+	
+	$$E_{\LS} \ens{\text{Err}_{\LS}} = \els{\exy{L(y, \fh_{\LS}(x))}}$$
+	
+	Cette dernière à pour but de décrire le comportement d'un algorithme.
 
 \section{Méthodes d'évaluation}
+
+	La validation croisée a pour but de prédire les performances d'un modèle avec des données d'apprentissage lorsque des nouvelles données explicites ne sont pas disponibles.
+	
 	\subsection{Méthode test set}
 
 	On suppose qu'on dispose de beaucoup de données, que $N$ est grand. On divise la base de données en deux parties, une qui servira d'ensemble d'apprentissage et l'autre d'ensemble de test (par ex 70\%, 30\%). La méthode est la suivante :
@@ -113,7 +120,7 @@ On aimerait estimer les performances d'un modèle ayant appris sur un ensemble d
 
 	Le choix d'un algorithme se fait en comparant leur taux d'erreur avec une méthode de type cross-validation sur des sous-échantillons. Ensuite, l'algorithme avec le plus petit taux est utilisé comme modèle prédicatif sur toutes les données.
 
-	L'utilisation intensive de la méthode CV peut entraîner du sur-apprentissage. En effet, plus on compare de modèles complexes, plus on a une chance d'en trouver un qui convient pour les données. La solution pour éviter cela est de réserver un ensemble de test additionnel (ou de les générer), et de l'utiliser pour tester les performances du modèle final.
+	L'utilisation intensive de la méthode CV peut entraîner du sur-apprentissage. En effet, plus on compare des modèles complexes, plus on a une chance d'en trouver un qui convient pour les données. La solution pour éviter cela est de réserver un ensemble de test additionnel (ou de les générer), et de l'utiliser pour tester les performances du modèle final.
 	
 	\subsection{Bootstrap}
 	
@@ -182,7 +189,7 @@ Le choix d'une mesure de l'erreur ou de la qualité dépend fortement de l'appli
 	
 	$\VS$ permet de sélectionner le modèle. Une fois que c'est fait, on réapprend sur $\LS$ et $\VS$ et on teste sur $\TS$. Le choix de la meilleure méthode (apprise sur $\LS$ et testée sur $\VS$) n'entraîne pas de sur-apprentissage, mais il y a tout de même un risque s'il y a trop de méthodes à tester (on en aurait une qui donne des bons résultats par coup de chance), ce qui pourrait donner une grosse erreur sur $\TS$. La solution est d'ajouter une nouvelle boucle de validation croisée ; tout choix d'échantillon peut créer un biais.
 	
-	\subsection{Validation croisée}
+	\subsection{K-fold}
 	
 	On utilise deux étapes de validation croisée en k-fold.
 	

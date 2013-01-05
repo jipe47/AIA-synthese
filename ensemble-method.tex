@@ -106,8 +106,7 @@ $$\yhens(\xu) = \frac{1}{T} \sum_i \yh_i(\xu)$$
  \text{pas de } y}}}}_{\eyx{y - \yhens(\xu)}\frac{1}{T} \sum_i (\yhens(\xu) - \yh_i(\xu)) \star_2} \\
 \end{eqnarray*}
  
- $\star_1$ : on peut supprimer le $\eyx{.}$ car l'intérieur ne dépend pas de $y$. De plus, on a que $\yhens = \frac{1}{T} \sum_i \yh_i(\xu)$
- 
+ $\star_1$ : on peut supprimer la somme car l'intérieur ne dépend pas de $y$.
  $\star_2$ : $\yhens(\xu)$ ne dépend pas de $i$, donc on peut faire rentrer la somme et annuler le terme car $\sum_i \yh_i(\xu) = \yhens(\xu)$.
  
  Au final, on a
@@ -149,8 +148,8 @@ En classification, $\yh(\xu)$ sera la classe majoritaire dans $\ens{\yh_1(\xu), 
 	A chaque étape, Adaboost augmente les poids dans le cas où l'échantillon est mal classé par le modèle, ainsi l'algorithme se focalise sur les cas compliqués de l'échantillon d'apprentissage. $\beta_i$ sera ainsi plus petit si le modèle commet beaucoup d'erreurs. Par exemple,
 	
 	\begin{itemize}
-		\item si l'exemple est mal classé, $w_i \rightarrow w_i \exp{\beta}$
-		\item si l'exemple est bien classé, $w_i \rightarrow w_i . 1$
+		\item si l'exemple est mal classé, $w_i \leftarrow w_i \exp{\beta}$
+		\item si l'exemple est bien classé, $w_i \leftarrow w_i . 1$
 	\end{itemize}
 	
 	On a l'algorithme suivant : il prend en entrée un algorithme d'apprentissage et un échantillon d'apprentissage $\ens{(x_i, y_i) : i = 1, \dots , N}$. On initialise les poids $w_i = \frac{1}{N}$, $i = 1 , \dots , N$.
@@ -175,11 +174,10 @@ En classification, $\yh(\xu)$ sera la classe majoritaire dans $\ens{\yh_1(\xu), 
 		
 	\subsection{Boosting aux moindres carrés}
 	
-	Cet algorithme de boosting est conçu pour les régression. Il prend en entrée un algorithme d'apprentissage et un échantillon d'apprentissage $\ens{(x_i, y_i) : i = 1, \dots , N}$. On initialise de la façon suivante :
+	Cet algorithme de boosting est conçu pour les régressions. Il prend en entrée un algorithme d'apprentissage et un échantillon d'apprentissage $\ens{(x_i, y_i) : i = 1, \dots , N}$. On initialise de la façon suivante :
 	
 	$$\yh_0(x) = \frac{1}{N} \sum_i y_i$$
 	$$r_i = y_i, \: i = 1, \dots , N$$
-	
 	
 	Pour $t = 1$ jusque $T$ :
 	
@@ -286,7 +284,7 @@ Lorsque les méthodes d'ensemble sont combinées avec les arbres de décision, i
 	
 	Soit $\LS^0 = \ens{(x_i^0, y_i)}$ avec $x_i^0 = (y_i^t)^T_{t = 1}$ : on retourne $\yh = A^0(\LS^0)$.
 	
-	Il s'agit d'une généralisation du boosting, dont le modèle est une combinaison linéaire des osus-modèles. L'algorithme d'apprentissage s'entraîne sur les sorties des sous-modèles.
+	Il s'agit d'une généralisation du boosting, dont le modèle est une combinaison linéaire des sous-modèles. L'algorithme d'apprentissage s'entraîne sur les sorties des sous-modèles.
 	
 	\dessin{103}
 	
@@ -296,6 +294,6 @@ Lorsque les méthodes d'ensemble sont combinées avec les arbres de décision, i
 	
 \section{Conclusion}
 
-Les méthodes d'ensemble sont très efficaces pour réduire le biais et/ou la variance, en transformant une méthode pas si bonne en une méthode très compétitive. Adaboost avec des arbres est considéré comme un des meilleurs algorithme de classification.
+Les méthodes d'ensemble sont très efficaces pour réduire le biais et/ou la variance, en transformant une méthode pas si bonne en une méthode très compétitive. Adaboost avec des arbres est considéré comme un des meilleurs algorithmes de classification.
 
 L'interprétabilité et l'efficacité du modèle sont difficiles à préserver si on veut réduire la variance significativement.

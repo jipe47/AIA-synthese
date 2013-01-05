@@ -42,9 +42,7 @@ Il faut trouver un classificateur linéaire. L'idée va être de trouver celui q
 	\subsection{Problème d'optimisation}
 	
 	\dessin{56}
-	
-	Tout point $x$ peut être écrit comme
-	
+		
 	Supposons un hyperplan séparateur (ligne rouge) et un vecteur de support $x$. Ce dernier peut s'écrire	
 	
 	$$x = x_{\perp} + r \frac{w}{\Vert w \Vert}$$
@@ -62,7 +60,7 @@ Il faut trouver un classificateur linéaire. L'idée va être de trouver celui q
 	
 	Pour imposer une unicité et pour normaliser, on choisit typiquement $\vert w^T x + b \vert = 1$ pour le point $x$ qui est le plus proche de la surface, autrement dit pour le vecteur de support. On a alors que pour tous les points $k = 1, \dots , N$ :
 	
-	$$y_k(w^T x_k + w_0) \geq 1$$
+	$$y_k(w^T x_k + b) \geq 1$$
 	
 	Grâce à cette normalisation, la marge vaut désormais $\frac{1}{\Vert w \Vert}$, qu'il faut maximiser (ou minimiser $\Vert w \Vert$) avec $N$ contraintes
 		
@@ -78,13 +76,13 @@ Il faut trouver un classificateur linéaire. L'idée va être de trouver celui q
 	
 	Soient $\alpha_k$, $k = 1, \dots N$. On a le lagrangien qui doit être minimisé selon $w$ et $b$ et maximisé selon $\alpha$ :
 	
-	$$\mathcal{L}(w, b, \alpha) = \frac{1}{2} \Vert w \Vert - \sum_{k = 1}^N \alpha_k (y_k (w^Tx_k + b) - 1)$$
+	$$\mathcal{L}(w, b, \alpha) = \frac{1}{2} \Vert w \Vert^2 - \sum_{k = 1}^N \alpha_k (y_k (w^Tx_k + b) - 1)$$
 	
 	Si on dérive par rapport à $w$ et $b$, on obtient les conditions optimales suivantes :
 	
 	\begin{eqnarray*}
 	\frac{\vartheta \mathcal{L}}{\vartheta w} = 0 & \Leftrightarrow & \sum_{j = 1}^N \alpha_j y_j x_j = w \\
-	\frac{\vartheta \mathcal{L}}{\vartheta b} = 0 & \Leftrightarrow & \sum_{k = 1}^N \alpha_j y_j = 0
+	\frac{\vartheta \mathcal{L}}{\vartheta b} = 0 & \Leftrightarrow & \sum_{j = 1}^N \alpha_j y_j = 0
 	\end{eqnarray*}
 	
 	Après substitution dans le lagrangien, les conditions optimales conduisent au problème de maximisation dual :
@@ -144,7 +142,7 @@ Il faut trouver un classificateur linéaire. L'idée va être de trouver celui q
 	
 	et aux inégalités
 	
-	$$e_j(x) \leq 0, \: j = 1, \dots , r$$
+	$$i_j(x) \leq 0, \: j = 1, \dots , r$$
 	
 	Le lagrangien est défini par
 	
@@ -205,7 +203,7 @@ Les données d'apprentissage peuvent ne pas être linéairement séparables dans
 
 L'hyperplan est donc défini par
 
-$$y(x) = w^T \phi(x) + w_0$$
+$$y(x) = w^T \phi(x) + b$$
 
 Le problème dual devient
 
@@ -217,7 +215,7 @@ Il est possible de caractériser mathématiquement les fonctions $K(x, x')$ déf
 
 L'hyperplan séparateur est alors défini par
 
-$$y(x) = \sum_{k = 1}^N \alpha_k y_k K(x_k, x) + w_0$$
+$$y(x) = \sum_{k = 1}^N \alpha_k y_k K(x_k, x) + b$$
 
 Le modèle devient alors
 

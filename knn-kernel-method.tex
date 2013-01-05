@@ -135,7 +135,7 @@
 	\begin{itemize}
 		\item le centre de la classe 1 : $\cb_+ = N_+^{-1} \sum_{o' \in \LS_+} \ab(o')$
 		\item le centre de la classe 2 : $\cb_- = N_-^{-1} \sum_{o' \in \LS_-} \ab(o')$
-		\item classificateur : $\yh(o) = 1$ si $d(\cb_+, \ab(o)) < d(\cb_-, \ab(o))$
+		\item classificateur : $\yh(o) = 1$ si $d(\cb_+, \ab(o)) < d(\cb_-, \ab(o))$, $-1$ sinon
 		\item on définit $c = \frac{c_+ + c_-}{2}$ et $\Delta \cb = \cb_+ - \cb_-$
 	\end{itemize}
 	
@@ -143,7 +143,9 @@
 	
 	$$\yh(o) = sgn((\ab(o) - \cb)^T \Delta \cb)$$
 	
-	ou alors
+	\dessin{120}
+	
+	En distribuant $\Delta \cb$ et en substituant les valeurs de $\cb$, $\cb_+$ et $\cb_-$, on a l'expression à base de produit scalaires
 	
 	$$\yh(o) = sgn(N_+^{-1} \sum_{o' \in \LS_+} \ab^T(o')\ab(o) - N_-^{-1} \sum_{o' \in \LS_-}\ab^T(o') \ab(o) + b)$$
 	
