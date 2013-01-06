@@ -271,10 +271,10 @@ $$\mathcal{L}(w, b, e, \alpha) = \frac{1}{2} w^T w + \frac{1}{2} \gamma \sum_{k 
 En annulant toutes les dérivés, on obtient
 
 \begin{eqnarray*}
-\frac{\vartheta \mathcal{L}}{\vartheta w} & \Leftrightarrow & w = \sum_{j = 1}^N \alpha_j \phi(x_j) \\
-\frac{\vartheta \mathcal{L}}{\vartheta b} & \Leftrightarrow & \sum_{k = 1}^N \alpha_k = 0 \\
-\frac{\vartheta \mathcal{L}}{\vartheta e_k} & \Leftrightarrow & \alpha_k = \gamma e_k , \: k = 1, \dots , N\\
-\frac{\vartheta \mathcal{L}}{\vartheta \alpha_k} & \Leftrightarrow &  w^T \phi(x_k) + b + e_k - y_k = 0, \: k = 1, \dots , N
+\frac{\vartheta \mathcal{L}}{\vartheta w} = 0 & \Leftrightarrow & w = \sum_{j = 1}^N \alpha_j \phi(x_j) \\
+\frac{\vartheta \mathcal{L}}{\vartheta b} = 0 & \Leftrightarrow & \sum_{k = 1}^N \alpha_k = 0 \\
+\frac{\vartheta \mathcal{L}}{\vartheta e_k} = 0 & \Leftrightarrow & \alpha_k = \gamma e_k , \: k = 1, \dots , N\\
+\frac{\vartheta \mathcal{L}}{\vartheta \alpha_k} = 0 & \Leftrightarrow &  w^T \phi(x_k) + b + e_k - y_k = 0, \: k = 1, \dots , N
 \end{eqnarray*}
 
 En substituant $w$ de la première équation dans la dernière, on peut exprimer $e_k$ :
@@ -283,7 +283,7 @@ $$e_k = y_k - b - \sum_{j = 1}^N \alpha_j \phi(x_j)^T\phi(x_k) = y_k - b - \sum_
 
 On peut alors éliminer $e_k$ de la troisième équation. On doit alors résoudre les équations suivantes pour déterminer $\alpha_1, \dots , \alpha_N$ et $b$ :
 
-$$\sum_{k = 1}^N \alpha_N = 0$$
+$$\sum_{k = 1}^N \alpha_k = 0$$
 $$\alpha_k = \gamma e_k = \gamma (y_k - b - \sum_{j = 1}^N \alpha_j K(x_j, x_k))$$
 
 avec $K$ une matrice définie par $K_{i, j} = K(x_i, x_j)$. Cela revient à écrire
