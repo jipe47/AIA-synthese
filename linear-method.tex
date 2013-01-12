@@ -47,7 +47,7 @@
 	
 	$$SE(o_i, \wb') = (y(o_i) - \yh(o_i))^2 = (y(o_i) - \wb'^T\ab'(o_i))^2$$
 	
-	On a aussi le carré de l'erreur sur tous les objets de $LS$ (Total Square Error), avec $A' = (\ab'^1, \dots , \ab'^N)$ et $\yb = (y(o_1), y(o_2), \dots , y(o_N))$ :
+	On a aussi le carré de l'erreur sur tous les objets de $LS$ (Total Square Error), avec $A' = (\ab'(o_1), \dots , \ab'(o_N))$ et $\yb = (y(o_1), y(o_2), \dots , y(o_N))$ :
 	
 	$$TSE(LS, \wb') = \sum_{i = 1}^N (y(o_i) - \wb'^T\ab'(o_i))^2 = (\yb - A'^T\wb')^T(\yb - A'^T\wb')$$
 	
@@ -60,6 +60,7 @@
 	a_n(o_1) & a_n(o_2) & \dots & a_n(o_N)
 	\end{pmatrix}}_{N}\right\} n + 1\end{array} $$
 	
+	\remarque{Ici devrait une étape qui permet de transformer $A$ en une matrice de covariance (voir transparents 10/19 $\rightarrow$ 15/19 sur la régression linéaire.}
 		
 	On cherche $\wb'$ qui minimise
 		
@@ -76,9 +77,8 @@
 	\Leftrightarrow & 2A'\yb = & 2A'A'^T\wb' \\
 	\Leftrightarrow & \wb' = & (A'A'^T)^{-1}A'\yb
 	\end{eqnarray*}
-		
-		
-	Il existe cependant plusieurs solutions optimales, ce n'est pas un problème à solution unique. Afin d'avoir une solution unique, on va introduire un terme $\lambda > 0$ de régulation : l'erreur régulée vaut
+	
+	Le problème est que la matrice $A$ est mal conditionnée, notamment elle peut conduire à plusieurs solutions. Pour mieux conditionner le problème, on va introduire un terme $\lambda > 0$ de régulation : l'erreur régulée vaut
 	
 	$$\TSE_R(\LS, \wb') = (\yb - A'^T\wb)^T(\yb - A'^T\wb') + \textcolor{red}{\lambda \wb'^T\wb'}$$
 	
