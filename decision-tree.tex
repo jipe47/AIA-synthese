@@ -210,19 +210,3 @@ Afin de minimiser l'erreur de classification, on associe aux feuilles la classe 
 		\item[-] souvent pas aussi précis que d'autres méthodes.
 	\end{itemize}
 	
-
-	\section{Noyau associé à un arbre}
-	
-	On peut définir un noyau facilement : $K_t(x, x') = 1$ si, lorsqu'on parcourt l'arbre $t$, $x$ et $x'$ arrivent dans la même feuille, $0$ sinon.
-	
-	Le modèle pour un arbre $t$ est ainsi
-	
-	$$f_t(x) = \sum_{i = 1}^N y(x_i) K_t(x_i, x)$$
-	
-	Pour un ensemble $T$ de $M$ arbres, le noyau est égal à la moyenne du nombre de fois que les deux objets arrivent dans une même feuille :
-	
-	$$K_T(x, x') = \frac{1}{M} \sum_{j = 1}^M K_{t_j}(x, x')$$
-	
-	Le modèle est alors
-	
-	$$f_T(x) = \frac{1}{N} \sum_{i = 1}^N y(x_i) K_T(x_i, x)$$

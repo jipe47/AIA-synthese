@@ -128,6 +128,14 @@
 	
 	$$\yh_{\mathcal{T}}(o) = \sum_{o' \in \LS} y(o') \ab_{\mathcal{T}}^T(o) \ab_{\mathcal{T}}(o')$$
 	
+	Si on considère un ensemble d'arbre, le noyau a pour valeur le nombre moyen de fois qu'un objet arrive dans un noeud : pour un ensemble $T$ de $M$ arbres, on a
+	
+	$$K_T(x, x') = \frac{1}{M} \sum_{j = 1}^M K_{\mathcal{T}_j}(x, x')$$
+	
+	Le modèle est alors
+	
+	$$\yh_T(o) = \frac{1}{N} \sum_{o' \in \LS} y(o') K_T(o, o')$$
+	
 	\section{Relation entre les méthodes linéaires et à base de noyaux}
 	
 	On considère un problème de classification et on définit $y(o) = 1$ si $c(o) = c_1$ et $y(o) = -1$ si $c(o) = c_2$. On peut construire un
